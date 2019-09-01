@@ -6,6 +6,7 @@ import com.pinyougou.sellergoods.service.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -16,6 +17,18 @@ public class BrandController {
 
     @Reference
     private BrandService brandService;
+
+    /**
+     * 分页查询品牌数据
+     * @param pageNum 页号
+     * @param pageSize 页大小
+     * @return 品牌列表
+     */
+    @GetMapping("/testPage")
+    public List<TbBrand> testPage(@RequestParam(defaultValue = "1")Integer pageNum,
+                                  @RequestParam(defaultValue = "10")Integer pageSize){
+        return brandService.testPage(pageNum, pageSize);
+    }
 
     /**
      * 查询所有品牌数据
