@@ -1,9 +1,6 @@
 package com.pinyougou.pojo;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Table(name = "tb_brand")
@@ -13,6 +10,7 @@ public class TbBrand implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    //@Column(name = "abc")
     private String name;
 
     private String firstChar;
@@ -41,5 +39,14 @@ public class TbBrand implements Serializable {
 
     public void setFirstChar(String firstChar) {
         this.firstChar = firstChar;
+    }
+
+    @Override
+    public String toString() {
+        return "TbBrand{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", firstChar='" + firstChar + '\'' +
+                '}';
     }
 }
