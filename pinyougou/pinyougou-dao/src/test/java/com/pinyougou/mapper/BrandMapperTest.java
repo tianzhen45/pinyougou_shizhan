@@ -1,6 +1,7 @@
 package com.pinyougou.mapper;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.pinyougou.pojo.TbBrand;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -99,6 +100,11 @@ public class BrandMapperTest {
         example.orderBy("id").desc();
         //sql-->select * from tb_brand where first_char ='c' order by desc limit 2,2
         List<TbBrand> list = brandMapper.selectByExample(example);
+
+        PageInfo<TbBrand> pageInfo = new PageInfo<>(list);
+        System.out.println("总记录数为：" + pageInfo.getTotal());
+        System.out.println("总页数为：" + pageInfo.getPages());
+
         for (TbBrand tbBrand : list) {
             System.out.println(tbBrand);
         }
