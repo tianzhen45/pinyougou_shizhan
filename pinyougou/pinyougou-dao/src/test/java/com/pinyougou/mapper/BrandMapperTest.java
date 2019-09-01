@@ -2,12 +2,14 @@ package com.pinyougou.mapper;
 
 import com.github.pagehelper.PageHelper;
 import com.pinyougou.pojo.TbBrand;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -100,6 +102,29 @@ public class BrandMapperTest {
         for (TbBrand tbBrand : list) {
             System.out.println(tbBrand);
         }
+    }
+
+    @Test
+    public void insertList(){
+        //批量插入
+        List<TbBrand> list = new ArrayList<>();
+        TbBrand brand = new TbBrand();
+        brand.setFirstChar("t");
+        brand.setName("test1");
+        list.add(brand);
+
+        TbBrand brand2 = new TbBrand();
+        brand2.setFirstChar("t");
+        brand2.setName("test2");
+        list.add(brand2);
+
+        brandMapper.insertList(list);
+    }
+
+    @Test
+    public void deleteByIds(){
+        //批量删除
+        brandMapper.deleteByIds("24, 25");
     }
 
 
