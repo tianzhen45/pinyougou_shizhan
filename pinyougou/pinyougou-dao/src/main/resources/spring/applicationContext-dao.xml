@@ -38,9 +38,7 @@ http://www.springframework.org/schema/context/spring-context.xsd">
         <property name="basePackage" value="com.pinyougou.mapper"/>
         <property name="properties">
             <value>
-                mappers=tk.mybatis.mapper.common.Mapper,
-                tk.mybatis.mapper.additional.insert.InsertListMapper,
-                tk.mybatis.mapper.common.ids.DeleteByIdsMapper
+                mappers=com.pinyougou.mapper.BaseMapper
             </value>
         </property>
     </bean>

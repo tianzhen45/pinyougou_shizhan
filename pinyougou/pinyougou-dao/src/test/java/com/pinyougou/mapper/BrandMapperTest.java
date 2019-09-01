@@ -124,7 +124,7 @@ public class BrandMapperTest {
     @Test
     public void deleteByIds(){
         //批量删除
-        brandMapper.deleteByIds("24, 25");
+        brandMapper.deleteByIds("26, 27");
     }
 
 
