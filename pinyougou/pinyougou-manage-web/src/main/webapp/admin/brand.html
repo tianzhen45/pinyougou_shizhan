@@ -41,6 +41,9 @@
             </div>
             <div class="box-tools pull-right">
                 <div class="has-feedback">
+                    品牌名称：<input v-model="searchEntity.name"> 品牌首字母：<input v-model="searchEntity.firstChar">
+                    <button @click="searchList(1)" type="button" class="btn btn-default" title="查询"><i class="fa fa-trash-o"></i> 查询</button>
+                    {{searchEntity}}
 
                 </div>
             </div>
@@ -130,7 +133,9 @@
             //实体
             entity: {},
             //选择了的id数组
-            ids: []
+            ids: [],
+            //查询条件对象
+            searchEntity:{}
         },
         //方法
         methods: {
@@ -182,9 +187,16 @@
                 //设置页号
                 this.pageNum = curPage;
 
-                axios.get("../brand/findPage.do?pageNum=" + this.pageNum + "&pageSize=" + this.pageSize).then(function (response) {
+                /*axios.get("../brand/findPage.do?pageNum=" + this.pageNum + "&pageSize=" + this.pageSize).then(function (response) {
                     //response.data 分页信息对象PageInfo
                     app.entityList = response.data.list;
+                    app.total = response.data.total;
+                });*/
+                axios.post("../brand/search.do?pageNum="+this.pageNum+"&pageSize=" + this.pageSize,this.searchEntity).then(function (response) {
+                    //response.data 分页信息对象PageInfo
+                    //记录列表
+                    app.entityList = response.data.list;
+                    //符合本次查询的总记录数
                     app.total = response.data.total;
                 });
             }

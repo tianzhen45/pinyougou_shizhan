@@ -110,4 +110,18 @@ public class BrandController {
         }
         return Result.fail("删除品牌失败！");
     }
+
+    /**
+     * 根据分页信息和查询条件分页模糊查询品牌数据
+     * @param pageNum 页号
+     * @param pageSize 页大小
+     * @param brand 查询条件
+     * @return 分页信息对象
+     */
+    @PostMapping("/search")
+    public PageInfo<TbBrand> search(@RequestParam(defaultValue = "1")Integer pageNum,
+                                    @RequestParam(defaultValue = "10")Integer pageSize,
+                                    @RequestBody TbBrand brand){
+        return brandService.search(pageNum, pageSize, brand);
+    }
 }
