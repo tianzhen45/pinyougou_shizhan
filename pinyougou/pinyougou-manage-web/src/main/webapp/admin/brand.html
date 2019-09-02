@@ -89,22 +89,22 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 id="myModalLabel">品牌编辑</h3>
+                    <h3 id="myModalLabel">品牌编辑</h3>{{entity}}
                 </div>
                 <div class="modal-body">
                     <table class="table table-bordered table-striped" width="800px">
                         <tr>
                             <td>品牌名称</td>
-                            <td><input class="form-control" placeholder="品牌名称"></td>
+                            <td><input v-model="entity.name" class="form-control" placeholder="品牌名称"></td>
                         </tr>
                         <tr>
                             <td>首字母</td>
-                            <td><input class="form-control" placeholder="首字母"></td>
+                            <td><input v-model="entity.firstChar" class="form-control" placeholder="首字母"></td>
                         </tr>
                     </table>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-success" data-dismiss="modal" aria-hidden="true">保存</button>
+                    <button @click="save()" class="btn btn-success" data-dismiss="modal" aria-hidden="true">保存</button>
                     <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
                 </div>
             </div>
@@ -126,11 +126,26 @@
             //页大小
             pageSize:10,
             //当前页号
-            pageNum: 1
+            pageNum: 1,
+            //实体
+            entity:{}
 
         },
         //方法
         methods: {
+            //保存数据
+            save: function(){
+              axios.post("../brand/add.do", this.entity).then(function (response) {
+                  //操作结果
+                  if(response.data.success){
+                      //保存成功；刷新列表
+                      app.searchList(1);
+                  } else {
+                      //保存失败，则提示
+                      alert(response.data.message);
+                  }
+              });
+            },
             //分页查询
             searchList: function (curPage) {
                 //设置页号
