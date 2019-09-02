@@ -124,33 +124,37 @@
             //总记录数
             total: 0,
             //页大小
-            pageSize:10,
+            pageSize: 10,
             //当前页号
             pageNum: 1,
             //实体
-            entity:{}
+            entity: {}
 
         },
         //方法
         methods: {
             //根据id查询
             findOne: function (id) {
-                axios.get("../brand/findOne/"+id+".do").then(function (response) {
+                axios.get("../brand/findOne/" + id + ".do").then(function (response) {
                     app.entity = response.data;
                 });
             },
             //保存数据
-            save: function(){
-              axios.post("../brand/add.do", this.entity).then(function (response) {
-                  //操作结果
-                  if(response.data.success){
-                      //保存成功；刷新列表
-                      app.searchList(1);
-                  } else {
-                      //保存失败，则提示
-                      alert(response.data.message);
-                  }
-              });
+            save: function () {
+                var method = "add";
+                if (this.entity.id != null) {
+                    method = "update";
+                }
+                axios.post("../brand/"+method+".do", this.entity).then(function (response) {
+                    //操作结果
+                    if (response.data.success) {
+                        //保存成功；刷新列表
+                        app.searchList(1);
+                    } else {
+                        //保存失败，则提示
+                        alert(response.data.message);
+                    }
+                });
             },
             //分页查询
             searchList: function (curPage) {
