@@ -18,6 +18,16 @@ public class BrandController {
     private BrandService brandService;
 
     /**
+     * 根据主键查询
+     * @param id 品牌id
+     * @return 品牌
+     */
+    @GetMapping("/findOne/{id}")
+    public TbBrand findOne(@PathVariable Long id){
+        return brandService.findOne(id);
+    }
+
+    /**
      * 新增品牌数据
      * @param brand 品牌数据
      * @return 操作结果
