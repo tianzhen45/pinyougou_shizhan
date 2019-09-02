@@ -94,4 +94,20 @@ public class BrandController {
         //return brandService.queryAll();
         return brandService.findAll();
     }
+
+    /**
+     * 批量删除品牌
+     * @param ids 品牌id数组
+     * @return 操作结果
+     */
+    @GetMapping("/delete")
+    public Result delete(Long[] ids){
+        try {
+            brandService.deleteByIds(ids);
+            return Result.ok("删除品牌成功！");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Result.fail("删除品牌失败！");
+    }
 }

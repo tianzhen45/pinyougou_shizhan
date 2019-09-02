@@ -34,7 +34,7 @@
                 <div class="form-group form-inline">
                     <div class="btn-group">
                         <button @click="entity={}" type="button" class="btn btn-default" title="新建" data-toggle="modal" data-target="#editModal"><i class="fa fa-file-o"></i> 新建</button>
-                        <button type="button" class="btn btn-default" title="删除"><i class="fa fa-trash-o"></i> 删除</button>
+                        <button @click="deleteList()" type="button" class="btn btn-default" title="删除"><i class="fa fa-trash-o"></i> 删除</button>
                         <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i class="fa fa-refresh"></i> 刷新</button>
                     </div>
                 </div>
@@ -61,7 +61,7 @@
                 </thead>
                 <tbody>
                 <tr v-for="entity in entityList">
-                    <td><input type="checkbox"></td>
+                    <td><input v-model="ids" :value="entity.id" type="checkbox"></td>
                     <td>{{entity.id}}</td>
                     <td>{{entity.name}}</td>
                     <td>{{entity.firstChar}}</td>
@@ -89,7 +89,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 id="myModalLabel">品牌编辑</h3>{{entity}}
+                    <h3 id="myModalLabel">品牌编辑</h3>
                 </div>
                 <div class="modal-body">
                     <table class="table table-bordered table-striped" width="800px">
@@ -128,11 +128,32 @@
             //当前页号
             pageNum: 1,
             //实体
-            entity: {}
-
+            entity: {},
+            //选择了的id数组
+            ids: []
         },
         //方法
         methods: {
+            //批量删除
+            deleteList: function () {
+                if (this.ids.length == 0) {
+                    alert("请先选择要删除的记录！");
+                    return;
+                }
+                //确认是否要删除
+                //confirm 如果点击 确定 则返回true
+                if(confirm("确定要删除选中了的那些记录吗？")){
+                    axios.get("../brand/delete.do?ids=" + this.ids).then(function (response) {
+                        if(response.data.success){
+                            app.searchList(1);
+                            //清空选择的id
+                            app.ids = [];
+                        } else {
+                            alert(response.data.message);
+                        }
+                    });
+                }
+            },
             //根据id查询
             findOne: function (id) {
                 axios.get("../brand/findOne/" + id + ".do").then(function (response) {
@@ -145,7 +166,7 @@
                 if (this.entity.id != null) {
                     method = "update";
                 }
-                axios.post("../brand/"+method+".do", this.entity).then(function (response) {
+                axios.post("../brand/" + method + ".do", this.entity).then(function (response) {
                     //操作结果
                     if (response.data.success) {
                         //保存成功；刷新列表
