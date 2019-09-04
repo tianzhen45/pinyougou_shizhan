@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.pinyougou.pojo.TbSpecification;
 import com.pinyougou.sellergoods.service.SpecificationService;
 import com.pinyougou.vo.Result;
+import com.pinyougou.vo.Specification;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/specification")
@@ -15,14 +16,14 @@ public class SpecificationController {
     private SpecificationService specificationService;
 
     /**
-     * 新增
-     * @param specification 实体
+     * 新增规格和选项列表
+     * @param specification 规格vo（规格和选项列表）
      * @return 操作结果
      */
     @PostMapping("/add")
-    public Result add(@RequestBody TbSpecification specification){
+    public Result add(@RequestBody Specification specification){
         try {
-            specificationService.add(specification);
+            specificationService.addSpecification(specification);
 
             return Result.ok("新增成功");
         } catch (Exception e) {

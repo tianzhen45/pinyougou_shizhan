@@ -3,6 +3,7 @@ package com.pinyougou.sellergoods.service;
 import com.github.pagehelper.PageInfo;
 import com.pinyougou.pojo.TbSpecification;
 import com.pinyougou.service.BaseService;
+import com.pinyougou.vo.Specification;
 
 import java.util.List;
 
@@ -16,4 +17,9 @@ public interface SpecificationService extends BaseService<TbSpecification> {
      */
     PageInfo<TbSpecification> search(Integer pageNum, Integer pageSize, TbSpecification specification);
 
+    /**
+     * 新增规格和选项列表
+     * @param specification 规格vo（规格和选项列表）
+     */
+    void addSpecification(Specification specification);
 }
