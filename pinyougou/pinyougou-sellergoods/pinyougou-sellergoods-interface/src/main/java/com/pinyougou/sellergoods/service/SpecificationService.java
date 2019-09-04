@@ -22,4 +22,11 @@ public interface SpecificationService extends BaseService<TbSpecification> {
      * @param specification 规格vo（规格和选项列表）
      */
     void addSpecification(Specification specification);
+
+    /**
+     * 根据主键查询
+     * @param id 主键
+     * @return 规格vo
+     */
+    Specification findSpecificationById(Long id);
 }
