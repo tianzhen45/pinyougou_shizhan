@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping("/brand")
 @RestController //将本类中的所有方法的返回结果都当做输出内容输出到浏览器
@@ -16,6 +17,15 @@ public class BrandController {
 
     @Reference
     private BrandService brandService;
+
+    /**
+     * 查询所有品牌列表；格式为：[{id:'1',text:'联想'},{id:'2',text:'华为'}]
+     * @return 品牌列表；格式为：[{id:'1',text:'联想'},{id:'2',text:'华为'}]
+     */
+    @GetMapping("/selectOptionList")
+    public List<Map<String, String>> selectOptionList(){
+        return brandService.selectOptionList();
+    }
 
     /**
      * 根据主键查询
