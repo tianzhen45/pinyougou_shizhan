@@ -44,13 +44,13 @@ public class SpecificationController {
 
     /**
      * 修改
-     * @param specification 实体
+     * @param specification 规格vo
      * @return 操作结果
      */
     @PostMapping("/update")
-    public Result update(@RequestBody TbSpecification specification){
+    public Result update(@RequestBody Specification specification){
         try {
-            specificationService.update(specification);
+            specificationService.updateSpecification(specification);
             return Result.ok("修改成功");
         } catch (Exception e) {
             e.printStackTrace();
