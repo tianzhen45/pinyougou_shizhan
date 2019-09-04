@@ -17,10 +17,26 @@ var app = new Vue({
         //选择了的id数组
         ids: [],
         //查询条件对象
-        searchEntity:{}
+        searchEntity:{},
+        //全选的复选框
+        checkAll: false
     },
     //方法
     methods: {
+        //选择全部
+        selectAll: function () {
+            if (!this.checkAll) {
+                this.ids = [];
+                //选中
+                for (let i = 0; i < this.entityList.length; i++) {
+                    var entity = this.entityList[i];
+                    this.ids.push(entity.id);
+                }
+            } else {
+                //将所有的选择反选
+                this.ids = [];
+            }
+        },
         //批量删除
         deleteList: function () {
             if (this.ids.length == 0) {
@@ -68,6 +84,7 @@ var app = new Vue({
         searchList: function (curPage) {
             //设置页号
             this.pageNum = curPage;
+            this.ids = [];
 
             /*axios.get("../brand/findPage.do?pageNum=" + this.pageNum + "&pageSize=" + this.pageSize).then(function (response) {
                 //response.data 分页信息对象PageInfo
@@ -81,6 +98,22 @@ var app = new Vue({
                 //符合本次查询的总记录数
                 app.total = response.data.total;
             });
+        }
+    },
+    //监控数据属性的变化
+    watch:{
+        ids:{
+            //开启深度监控；可以监控里面具体元素的改变
+            deep: true,
+            //处理方法
+            handler: function (newValue, oldValue) {
+                console.log(newValue);
+                if (this.ids.length != this.entityList.length) {
+                    this.checkAll = false;
+                } else {
+                    this.checkAll = true;
+                }
+            }
         }
     },
     //钩子函数

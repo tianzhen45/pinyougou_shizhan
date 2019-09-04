@@ -36,6 +36,7 @@
                         <button @click="entity={}" type="button" class="btn btn-default" title="新建" data-toggle="modal" data-target="#editModal"><i class="fa fa-file-o"></i> 新建</button>
                         <button @click="deleteList()" type="button" class="btn btn-default" title="删除"><i class="fa fa-trash-o"></i> 删除</button>
                         <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i class="fa fa-refresh"></i> 刷新</button>
+                        {{ids}}|{{checkAll}}
                     </div>
                 </div>
             </div>
@@ -53,7 +54,7 @@
                 <thead>
                 <tr>
                     <th class="" style="padding-right:0px">
-                        <input id="selall" type="checkbox" class="icheckbox_square-blue">
+                        <input @click="selectAll()" v-model="checkAll" id="selall" type="checkbox" class="icheckbox_square-blue">
                     </th>
                     <th class="sorting_asc">品牌ID</th>
                     <th class="sorting">品牌名称</th>
