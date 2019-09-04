@@ -30,9 +30,9 @@ public class SpecificationServiceImpl extends BaseServiceImpl<TbSpecification> i
         Example.Criteria criteria = example.createCriteria();
 
         //模糊查询
-        /**if (StringUtils.isNotBlank(specification.getProperty())) {
-            criteria.andLike("property", "%" + specification.getProperty() + "%");
-        }*/
+        if (StringUtils.isNotBlank(specification.getSpecName())) {
+            criteria.andLike("specName", "%" + specification.getSpecName() + "%");
+        }
 
         List<TbSpecification> list = specificationMapper.selectByExample(example);
         return new PageInfo<>(list);
