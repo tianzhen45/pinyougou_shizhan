@@ -30,9 +30,9 @@ public class TypeTemplateServiceImpl extends BaseServiceImpl<TbTypeTemplate> imp
         Example.Criteria criteria = example.createCriteria();
 
         //模糊查询
-        /**if (StringUtils.isNotBlank(typeTemplate.getProperty())) {
-            criteria.andLike("property", "%" + typeTemplate.getProperty() + "%");
-        }*/
+        if (StringUtils.isNotBlank(typeTemplate.getName())) {
+            criteria.andLike("name", "%" + typeTemplate.getName() + "%");
+        }
 
         List<TbTypeTemplate> list = typeTemplateMapper.selectByExample(example);
         return new PageInfo<>(list);
