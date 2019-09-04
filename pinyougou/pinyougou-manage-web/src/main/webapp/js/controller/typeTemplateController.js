@@ -42,6 +42,7 @@ var app = new Vue({
         },
         //添加属性
         addTableRow: function(){
+            //vue.js中的指令只对对象
             this.entity.customAttributeItems.push({});
         },
         searchList: function (curPage) {
