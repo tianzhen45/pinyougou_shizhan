@@ -6,6 +6,7 @@ import com.pinyougou.service.BaseService;
 import com.pinyougou.vo.Specification;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SpecificationService extends BaseService<TbSpecification> {
     /**
@@ -41,4 +42,10 @@ public interface SpecificationService extends BaseService<TbSpecification> {
      * @param ids 主键数组
      */
     void deleteSpecificationByIds(Long[] ids);
+
+    /**
+     * 查询所有规格列表；格式为：[{id:'1',text:'屏幕尺寸'},{id:'2',text:'机身大小'}]
+     * @return 规格列表；格式为：[{id:'1',text:'屏幕尺寸'},{id:'2',text:'机身大小'}]
+     */
+    List<Map<String, String>> selectOptionList();
 }
