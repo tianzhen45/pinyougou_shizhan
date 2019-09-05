@@ -44,14 +44,19 @@ http://www.springframework.org/schema/security/spring-security.xsd">
     <!--密码加密方式-->
     <beans:bean id="passwordEncoder" class="org.springframework.security.crypto.password.NoOpPasswordEncoder"/>
 
+    <!--动态认证授权类-->
+    <beans:bean id="userDetailService" class="com.pinyougou.shop.service.impl.UserDetailServiceImpl"/>
+
     <!--配置认证管理器-->
     <authentication-manager>
-        <authentication-provider>
+        <authentication-provider user-service-ref="userDetailService">
             <password-encoder ref="passwordEncoder"/>
+            <!--
             <user-service>
                 <user name="admin" authorities="ROLE_SELLER" password="123456"/>
                 <user name="itcast" authorities="ROLE_SELLER" password="123456"/>
-            </user-service>
+            </user-service>-->
+
         </authentication-provider>
     </authentication-manager>
 
