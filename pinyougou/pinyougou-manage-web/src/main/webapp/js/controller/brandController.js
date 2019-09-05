@@ -84,7 +84,6 @@ var app = new Vue({
         searchList: function (curPage) {
             //设置页号
             this.pageNum = curPage;
-            this.ids = [];
 
             /*axios.get("../brand/findPage.do?pageNum=" + this.pageNum + "&pageSize=" + this.pageSize).then(function (response) {
                 //response.data 分页信息对象PageInfo
@@ -107,11 +106,10 @@ var app = new Vue({
             deep: true,
             //处理方法
             handler: function (newValue, oldValue) {
-                console.log(newValue);
-                if (this.ids.length != this.entityList.length) {
-                    this.checkAll = false;
-                } else {
+                if (this.ids.length == this.entityList.length && this.entityList.length>0) {
                     this.checkAll = true;
+                } else {
+                    this.checkAll = false;
                 }
             }
         }
