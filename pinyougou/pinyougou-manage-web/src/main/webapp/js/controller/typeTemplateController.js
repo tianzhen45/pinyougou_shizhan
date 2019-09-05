@@ -23,6 +23,20 @@ var app = new Vue({
         specificationList: []
     },
     methods: {
+        //将列表json格式字符串转换为某个其对象中的属性值拼接返回
+        jsonToString: function (jsonArrayStr, key) {
+            var str = "";
+            var jsonArray = JSON.parse(jsonArrayStr);
+            for (let i = 0; i < jsonArray.length; i++) {
+                const obj = jsonArray[i];
+                if (str.length > 0) {
+                    str += "，" + obj[key];
+                } else {
+                    str = obj[key];
+                }
+            }
+            return str;
+        },
         //获取格式化的品牌列表；格式为：[{id:'1',text:'联想'},{id:'2',text:'华为'}]
         findBrandList: function(){
             axios.get("../brand/selectOptionList.do").then(function (response) {
