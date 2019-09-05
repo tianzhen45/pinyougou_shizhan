@@ -50,7 +50,8 @@ http://www.springframework.org/schema/security/spring-security.xsd http://dubbo.
     </http>
 
     <!--密码加密方式-->
-    <beans:bean id="passwordEncoder" class="org.springframework.security.crypto.password.NoOpPasswordEncoder"/>
+    <!--<beans:bean id="passwordEncoder" class="org.springframework.security.crypto.password.NoOpPasswordEncoder"/>-->
+    <beans:bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 
     <!--动态认证授权类-->
     <beans:bean id="userDetailService" class="com.pinyougou.shop.service.impl.UserDetailServiceImpl"/>
