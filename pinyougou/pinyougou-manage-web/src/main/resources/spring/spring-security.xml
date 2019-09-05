@@ -34,6 +34,9 @@ http://www.springframework.org/schema/security/spring-security.xsd">
 
         <!--禁止跨站请求访问-->
         <csrf disabled="true"/>
+
+        <!--退出-->
+        <logout/>
     </http>
 
     <!--密码加密方式-->
