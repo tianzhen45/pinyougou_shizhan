@@ -7,12 +7,26 @@ import com.pinyougou.sellergoods.service.ItemCatService;
 import com.pinyougou.vo.Result;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequestMapping("/itemCat")
 @RestController
 public class ItemCatController {
 
     @Reference
     private ItemCatService itemCatService;
+
+    /**
+     * 根据分类id查询分类列表
+     * @param parentId 父分类id
+     * @return 分类列表
+     */
+    @GetMapping("/findByParentId")
+    public List<TbItemCat> findByParentId(@RequestParam(defaultValue = "0")Long parentId){
+        TbItemCat param = new TbItemCat();
+        param.setParentId(parentId);
+        return itemCatService.findByWhere(param);
+    }
 
     /**
      * 新增
