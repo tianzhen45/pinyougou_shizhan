@@ -255,7 +255,7 @@ var goodsControllerMixin = {
             axios.post("../goods/" + method + ".do", this.entity).then(function (response) {
                 if (response.data.success) {
                     alert(response.data.message);
-                    editor.html("");
+                    //editor.html("");
                     //location.href = "goods.html";
                 } else {
                     alert(response.data.message);

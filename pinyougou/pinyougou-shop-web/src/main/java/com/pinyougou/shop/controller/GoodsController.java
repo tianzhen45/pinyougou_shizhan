@@ -4,25 +4,32 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageInfo;
 import com.pinyougou.pojo.TbGoods;
 import com.pinyougou.sellergoods.service.GoodsService;
+import com.pinyougou.vo.Goods;
 import com.pinyougou.vo.Result;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/goods")
 @RestController
 public class GoodsController {
 
-    @Reference
+    @Reference(retries = 0, timeout = 10000)
     private GoodsService goodsService;
 
     /**
      * 新增
-     * @param goods 实体
+     * @param goods 商品vo（基本、描述、sku列表）
      * @return 操作结果
      */
     @PostMapping("/add")
-    public Result add(@RequestBody TbGoods goods){
+    public Result add(@RequestBody Goods goods){
         try {
-            goodsService.add(goods);
+            //设置商家
+            String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+            goods.getGoods().setSellerId(sellerId);
+            //未审核
+            goods.getGoods().setAuditStatus("0");
+            goodsService.addGoods(goods);
 
             return Result.ok("新增成功");
         } catch (Exception e) {
