@@ -103,6 +103,8 @@ public class GoodsServiceImpl extends BaseServiceImpl<TbGoods> implements GoodsS
             tbItem.setStatus("0");
             //isDefault：1默认
             tbItem.setIsDefault("1");
+            //库存；默认9999
+            tbItem.setNum(9999);
 
             setItemValue(tbItem, goods);
 
