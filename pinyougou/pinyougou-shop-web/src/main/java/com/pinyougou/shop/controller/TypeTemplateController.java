@@ -7,12 +7,25 @@ import com.pinyougou.sellergoods.service.TypeTemplateService;
 import com.pinyougou.vo.Result;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 @RequestMapping("/typeTemplate")
 @RestController
 public class TypeTemplateController {
 
     @Reference
     private TypeTemplateService typeTemplateService;
+
+    /**
+     * 根据分类模板id查询分类模板对应的规格及其选项
+     * @param id 分类模板id
+     * @return 规格及其选项列表
+     */
+    @GetMapping("/findSpecList")
+    public List<Map> findSpecList(Long id){
+        return typeTemplateService.findSpecList(id);
+    }
 
     /**
      * 新增
