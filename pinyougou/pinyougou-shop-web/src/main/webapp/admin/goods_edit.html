@@ -139,8 +139,6 @@
                                 <div class="row data-type">                                  
 								 <!-- 颜色图片 -->
 								 <div class="btn-group">
-                                     {{entity.goodsDesc}}<br>
-                                     {{image_entity}}
 					                 <button @click="image_entity={url:'',color:''}" type="button" class="btn btn-default" title="新建" data-target="#uploadModal"  data-toggle="modal"  ><i class="fa fa-file-o"></i> 新建</button>
 					             </div>
 								 
@@ -181,8 +179,6 @@
 
                             <!--规格-->
                             <div class="tab-pane" id="spec">
-                                当前选择了的规格选项：{{entity.goodsDesc.specificationItems}}<br>
-                                当前sku列表：{{entity.itemList}}
                                 <div class="row data-type">
                                     <div class="col-md-2 title">是否启用规格</div>
                                     <div class="col-md-10 data">
