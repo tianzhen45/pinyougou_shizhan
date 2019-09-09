@@ -75,6 +75,23 @@ public class GoodsServiceImpl extends BaseServiceImpl<TbGoods> implements GoodsS
         saveItemList(goods);
     }
 
+    @Override
+    public Goods findGoodsById(Long id) {
+        Goods goods = new Goods();
+        //基本
+        goods.setGoods(findOne(id));
+        //描述
+        goods.setGoodsDesc(goodsDescMapper.selectByPrimaryKey(id));
+
+        //sku 列表
+        //sql --> select * from tb_item where goods_id=?
+        TbItem param = new TbItem();
+        param.setGoodsId(id);
+        List<TbItem> itemList = itemMapper.select(param);
+        goods.setItemList(itemList);
+        return goods;
+    }
+
     /**
      * 保存商品sku
      * @param goods 商品vo
