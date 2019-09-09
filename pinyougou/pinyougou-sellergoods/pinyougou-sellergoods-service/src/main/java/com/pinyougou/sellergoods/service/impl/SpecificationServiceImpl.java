@@ -12,6 +12,7 @@ import com.pinyougou.service.impl.BaseServiceImpl;
 import com.pinyougou.vo.Specification;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.Arrays;
@@ -46,6 +47,7 @@ public class SpecificationServiceImpl extends BaseServiceImpl<TbSpecification> i
         return new PageInfo<>(list);
     }
 
+    @Transactional
     @Override
     public void addSpecification(Specification specification) {
         //保存规格；通过mapper在操作之后会对主键进行回填到实体对象
