@@ -17,6 +17,24 @@ public class GoodsController {
     private GoodsService goodsService;
 
     /**
+     * 根据商品spu id数组更新商品spu 的审核状态
+     * @param status 商品spu状态
+     * @param ids 商品spu id数组
+     * @return 操作结果
+     */
+    @GetMapping("/updateStatus")
+    public Result updateStatus(String status, Long[] ids){
+        try {
+            goodsService.updateStatus(ids, status);
+            return Result.ok("更新商品状态成功！");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return Result.fail("更新商品状态失败！");
+    }
+
+    /**
      * 新增
      * @param goods 商品vo（基本、描述、sku列表）
      * @return 操作结果
