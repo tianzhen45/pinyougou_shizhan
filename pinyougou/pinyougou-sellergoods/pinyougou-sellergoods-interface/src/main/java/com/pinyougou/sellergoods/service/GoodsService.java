@@ -28,4 +28,9 @@ public interface GoodsService extends BaseService<TbGoods> {
      * @return 商品vo
      */
     Goods findGoodsById(Long id);
+    /**
+     * 修改商品
+     * @param goods 商品vo（基本、描述、sku）
+     */
+    void updateGoods(Goods goods);
 }

@@ -92,6 +92,22 @@ public class GoodsServiceImpl extends BaseServiceImpl<TbGoods> implements GoodsS
         return goods;
     }
 
+    @Override
+    public void updateGoods(Goods goods) {
+        //1、更新商品基本信息
+        goods.getGoods().setAuditStatus("0");
+        update(goods.getGoods());
+        //2、更新商品描述信息
+        goodsDescMapper.updateByPrimaryKeySelective(goods.getGoodsDesc());
+        //3、根据商品spu id 删除sku
+        //sql --> delete from tb_item where goods_id=?
+        TbItem param = new TbItem();
+        param.setGoodsId(goods.getGoods().getId());
+        itemMapper.delete(param);
+        //4、保存商品sku
+        saveItemList(goods);
+    }
+
     /**
      * 保存商品sku
      * @param goods 商品vo
