@@ -123,6 +123,29 @@ public class GoodsServiceImpl extends BaseServiceImpl<TbGoods> implements GoodsS
         example.createCriteria().andIn("id", Arrays.asList(ids));
         goodsMapper.updateByExampleSelective(tbGoods, example);
 
+        /**
+         * update tb_item
+         * set status=?
+         * where goods_id in(?,?,...)
+         */
+
+        //更新数据 ---》 set
+        TbItem tbItem = new TbItem();
+
+        if ("2".equals(status)) {
+            //- 如果是审核通过：将这些商品spu 对应的sku的状态修改为1（已启用）
+            tbItem.setStatus("1");
+        }else {
+            //- 如果是审核不通过：将这些商品spu 对应的sku的状态修改为0（不启用）
+            tbItem.setStatus("0");
+        }
+
+        //更新sku 的条件---->where
+        Example itemExample = new Example(TbItem.class);
+        itemExample.createCriteria()
+                .andIn("goodsId", Arrays.asList(ids));
+
+        itemMapper.updateByExampleSelective(tbItem, itemExample);
     }
 
     /**
