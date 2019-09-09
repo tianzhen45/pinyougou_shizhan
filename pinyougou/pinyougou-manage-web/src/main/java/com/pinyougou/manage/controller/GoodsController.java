@@ -96,7 +96,8 @@ public class GoodsController {
     @GetMapping("/delete")
     public Result delete(Long[] ids){
         try {
-            goodsService.deleteByIds(ids);
+            //goodsService.deleteByIds(ids);
+            goodsService.deleteGoodsByIds(ids);
             return Result.ok("删除成功");
         } catch (Exception e) {
             e.printStackTrace();

@@ -40,4 +40,10 @@ public interface GoodsService extends BaseService<TbGoods> {
      * @param ids 商品spu id数组
      */
     void updateStatus(Long[] ids, String status);
+
+    /**
+     * 批量更新商品的删除状态为已删除（1）
+     * @param ids 商品spu id数组
+     */
+    void deleteGoodsByIds(Long[] ids);
 }
