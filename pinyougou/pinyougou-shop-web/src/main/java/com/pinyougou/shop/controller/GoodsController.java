@@ -91,6 +91,9 @@ public class GoodsController {
     public PageInfo<TbGoods> search(@RequestParam(value = "pageNum", required = false, defaultValue = "1") Integer pageNum,
                              @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize,
                            @RequestBody TbGoods goods) {
+        //设置商家id
+        String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+        goods.setSellerId(sellerId);
         return goodsService.search(pageNum, pageSize, goods);
     }
 
