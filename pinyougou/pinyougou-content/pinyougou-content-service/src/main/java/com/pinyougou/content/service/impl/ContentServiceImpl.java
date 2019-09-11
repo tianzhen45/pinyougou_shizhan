@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import tk.mybatis.mapper.entity.Example;
 
+import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -24,6 +26,49 @@ public class ContentServiceImpl extends BaseServiceImpl<TbContent> implements Co
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @Override
+    public void add(TbContent tbContent) {
+        super.add(tbContent);
+        //更新缓存
+        updateContentListInRedisByCategoryId(tbContent.getCategoryId());
+    }
+
+    /**
+     * 更新redis中某个内容分类对应的缓存数据（删除）
+     * @param categoryId 内容分类ID
+     */
+    private void updateContentListInRedisByCategoryId(Long categoryId) {
+        redisTemplate.boundHashOps(REDIS_CONTENT_LIST).delete(categoryId);
+    }
+
+    @Override
+    public void update(TbContent tbContent) {
+        //更新旧内容对应的内容分类缓冲
+        TbContent oldContent = findOne(tbContent.getId());
+        if (!oldContent.getCategoryId().equals(tbContent.getCategoryId())) {
+            //说明内容的分类被修改；更新旧内容对应的内容分类缓冲
+            updateContentListInRedisByCategoryId(oldContent.getCategoryId());
+        }
+        super.update(tbContent);
+        //更新新内容对应的内容分类缓冲
+        updateContentListInRedisByCategoryId(tbContent.getCategoryId());
+    }
+
+    @Override
+    public void deleteByIds(Serializable[] ids) {
+        //- 根据当前选择的那些内容id查询内容列表
+        Example example = new Example(TbContent.class);
+        example.createCriteria().andIn("id", Arrays.asList(ids));
+        List<TbContent> contentList = contentMapper.selectByExample(example);
+        //- 遍历内容列表根据内容分类id删除redis中的缓存数据
+        if (contentList != null && contentList.size() > 0) {
+            for (TbContent tbContent : contentList) {
+                updateContentListInRedisByCategoryId(tbContent.getCategoryId());
+            }
+        }
+        super.deleteByIds(ids);
+    }
 
     @Override
     public PageInfo<TbContent> search(Integer pageNum, Integer pageSize, TbContent content) {
