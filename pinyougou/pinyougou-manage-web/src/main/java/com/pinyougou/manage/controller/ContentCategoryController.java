@@ -7,12 +7,19 @@ import com.pinyougou.content.service.ContentCategoryService;
 import com.pinyougou.vo.Result;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequestMapping("/contentCategory")
 @RestController
 public class ContentCategoryController {
 
     @Reference
     private ContentCategoryService contentCategoryService;
+
+    @GetMapping("/findAll")
+    public List<TbContentCategory> findAll(){
+        return contentCategoryService.findAll();
+    }
 
     /**
      * 新增
