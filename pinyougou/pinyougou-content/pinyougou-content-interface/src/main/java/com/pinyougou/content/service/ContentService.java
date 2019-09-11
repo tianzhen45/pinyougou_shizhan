@@ -16,4 +16,10 @@ public interface ContentService extends BaseService<TbContent> {
      */
     PageInfo<TbContent> search(Integer pageNum, Integer pageSize, TbContent content);
 
+    /**
+     * 根据内容分类id、状态查询内容数据并且根据排序属性降序排序
+     * @param categoryId 内容分类id
+     * @return 内容数据
+     */
+    List<TbContent> findContentListByCategoryId(Long categoryId);
 }
