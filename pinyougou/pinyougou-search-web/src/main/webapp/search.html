@@ -327,8 +327,7 @@
 											<i>{{item.price.toFixed(2)}}</i>
 										</strong>
 								</div>
-								<div class="attr" style="height: auto">
-									<em>{{item.title}}</em>
+								<div class="attr" v-html="item.title" style="height: auto">
 								</div>
 								<div class="attr" style="height: auto">
 									<em>品牌：{{item.brand}}</em>
