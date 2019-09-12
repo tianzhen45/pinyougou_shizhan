@@ -109,5 +109,24 @@ public class ElasticSearchTest {
         }
     }
 
+    //分词查询
+    @Test
+    public void copyToQuery() throws Exception {
+        //查询条件对象构建对象
+        NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
+
+        queryBuilder.withQuery(QueryBuilders.matchQuery("keywords", "欧柏"));
+
+        //查询条件对象
+        NativeSearchQuery query = queryBuilder.build();
+        //搜索
+        AggregatedPage<TbItem> result = esTemplate.queryForPage(query, TbItem.class);
+        System.out.println("总记录数为：" + result.getTotalElements());
+        System.out.println("总页数为：" + result.getTotalPages());
+        for (TbItem item : result.getContent()) {
+            System.out.println(item);
+        }
+    }
+
 
 }
