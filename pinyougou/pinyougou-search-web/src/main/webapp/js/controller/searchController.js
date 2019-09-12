@@ -3,14 +3,14 @@ var app = new Vue({
     data:{
         //搜索条件对象
         searchMap:{"keywords":""},
-        //商品列表
-        itemList: []
+        //返回结果
+        resultMap: {"itemList":[]}
     },
     methods:{
         //搜索
         search:function () {
             axios.post("itemSearch/search.do", this.searchMap).then(function (response) {
-                app.itemList = response.data;
+                app.resultMap = response.data;
             });
         }
     },
