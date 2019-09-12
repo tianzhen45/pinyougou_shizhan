@@ -5,6 +5,8 @@ import com.pinyougou.pojo.TbItem;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -40,5 +42,27 @@ public class ElasticSearchTest {
         item.setCategory("手机");
         item.setImage("https://item.jd.com/100004418727.html");
         itemDao.save(item);
+    }
+
+    //分页查询
+    @Test
+    public void findAll(){
+        //参数1：页号（从0开始）
+        //参数2：页大小
+        PageRequest pageRequest = PageRequest.of(0, 5);
+        Page<TbItem> pageResult = itemDao.findAll(pageRequest);
+        System.out.println("总记录数为：" + pageResult.getTotalElements());
+        System.out.println("总页数为：" + pageResult.getTotalPages());
+        for (TbItem tbItem : pageResult.getContent()) {
+            System.out.println(tbItem);
+        }
+    }
+
+    //条件删除
+    @Test
+    public void delete(){
+        TbItem param = new TbItem();
+        param.setId(123L);
+        itemDao.delete(param);
     }
 }
