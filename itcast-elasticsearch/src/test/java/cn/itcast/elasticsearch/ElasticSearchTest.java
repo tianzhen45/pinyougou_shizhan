@@ -2,12 +2,16 @@ package cn.itcast.elasticsearch;
 
 import cn.itcast.es.dao.ItemDao;
 import com.pinyougou.pojo.TbItem;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -65,4 +69,45 @@ public class ElasticSearchTest {
         param.setId(123L);
         itemDao.delete(param);
     }
+
+    //通配符 * 一个字符
+    //匹配分词的词条中是否符合通配符的词条
+    @Test
+    public void wildcard() throws Exception {
+        //查询条件对象构建对象
+        NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
+
+        queryBuilder.withQuery(QueryBuilders.wildcardQuery("title", "手*"));
+
+        //查询条件对象
+        NativeSearchQuery query = queryBuilder.build();
+        //搜索
+        AggregatedPage<TbItem> result = esTemplate.queryForPage(query, TbItem.class);
+        System.out.println("总记录数为：" + result.getTotalElements());
+        System.out.println("总页数为：" + result.getTotalPages());
+        for (TbItem item : result.getContent()) {
+            System.out.println(item);
+        }
+    }
+
+    //分词查询
+    @Test
+    public void matchQuery() throws Exception {
+        //查询条件对象构建对象
+        NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
+
+        queryBuilder.withQuery(QueryBuilders.matchQuery("title", "拍照游戏智能手机"));
+
+        //查询条件对象
+        NativeSearchQuery query = queryBuilder.build();
+        //搜索
+        AggregatedPage<TbItem> result = esTemplate.queryForPage(query, TbItem.class);
+        System.out.println("总记录数为：" + result.getTotalElements());
+        System.out.println("总页数为：" + result.getTotalPages());
+        for (TbItem item : result.getContent()) {
+            System.out.println(item);
+        }
+    }
+
+
 }
