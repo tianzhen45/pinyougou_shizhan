@@ -2,6 +2,9 @@ package cn.itcast.elasticsearch;
 
 import cn.itcast.es.dao.ItemDao;
 import com.pinyougou.pojo.TbItem;
+import org.apache.lucene.search.join.ScoreMode;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.NestedQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,6 +17,9 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:spring-es.xml")
@@ -45,6 +51,13 @@ public class ElasticSearchTest {
         item.setPrice(2999.0);
         item.setCategory("手机");
         item.setImage("https://item.jd.com/100004418727.html");
+
+        //设置规格
+        Map<String, String> specMap = new HashMap<>();
+        specMap.put("机身内存", "16G");
+        specMap.put("屏幕尺寸", "6.1");
+        item.setSpecMap(specMap);
+
         itemDao.save(item);
     }
 
@@ -128,5 +141,42 @@ public class ElasticSearchTest {
         }
     }
 
+
+    //嵌套组合查询
+    @Test
+    public void nestedQuery() throws Exception {
+        //查询条件对象构建对象
+        NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
+        queryBuilder.withQuery(QueryBuilders.matchQuery("keywords", "欧柏"));
+
+        //因为有多个过滤查询条件
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+
+        //机身内存
+        /**
+         * 参数1：嵌套域对应类的变量名称
+         * 参数2：查询条件，参数1：嵌套域完整域名；参数2：查询的值
+         * 参数3：在查询条件和过滤条件查询的时候；都对每个文档有一个得分；max表示在这些分值中取最大的作为该文档的返回分值
+         */
+        NestedQueryBuilder query1 = QueryBuilders.nestedQuery("specMap", QueryBuilders.wildcardQuery("specMap.机身内存.keyword", "16G"), ScoreMode.Max);
+        boolQueryBuilder.must(query1);
+
+        //屏幕尺寸
+        NestedQueryBuilder query2 = QueryBuilders.nestedQuery("specMap", QueryBuilders.wildcardQuery("specMap.屏幕尺寸.keyword", "6.1"), ScoreMode.Max);
+        boolQueryBuilder.must(query2);
+
+        //添加过滤查询
+        queryBuilder.withFilter(boolQueryBuilder);
+
+        //查询条件对象
+        NativeSearchQuery query = queryBuilder.build();
+        //搜索
+        AggregatedPage<TbItem> result = esTemplate.queryForPage(query, TbItem.class);
+        System.out.println("总记录数为：" + result.getTotalElements());
+        System.out.println("总页数为：" + result.getTotalPages());
+        for (TbItem item : result.getContent()) {
+            System.out.println(item);
+        }
+    }
 
 }
