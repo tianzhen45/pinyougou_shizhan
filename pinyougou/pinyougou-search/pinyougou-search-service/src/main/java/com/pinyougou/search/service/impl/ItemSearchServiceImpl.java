@@ -11,11 +11,14 @@ import org.elasticsearch.common.document.DocumentField;
 import org.elasticsearch.common.text.Text;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.NestedQueryBuilder;
+import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
+import org.elasticsearch.search.sort.SortBuilders;
+import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -52,7 +55,9 @@ public class ItemSearchServiceImpl implements ItemSearchService {
             String keywords = searchMap.get("keywords")+"";
             if (StringUtils.isNotBlank(keywords)) {
                 //分词之后；查询标题、品牌、分类、商家中查询符合条件的数据
-                queryBuilder.withQuery(QueryBuilders.multiMatchQuery(keywords, "title", "brand", "category", "seller"));
+                //operator 表示将搜索关键字分词之后，查询结果之间的关系是 and表示并列；or表示或者（默认）
+                queryBuilder.withQuery(
+                        QueryBuilders.multiMatchQuery(keywords, "title", "brand", "category", "seller").operator(Operator.AND));
 
                 //设置高亮
                 isHighLight = true;
@@ -125,6 +130,15 @@ public class ItemSearchServiceImpl implements ItemSearchService {
             }
 
             queryBuilder.withPageable(PageRequest.of(pageNo - 1, pageSize));
+
+            //设置排序
+            String sortField = searchMap.get("sortField")+"";
+            String sortOrder = searchMap.get("sortOrder")+"";
+            if (StringUtils.isNotBlank(sortField) && StringUtils.isNotBlank(sortOrder)) {
+                queryBuilder.withSort(SortBuilders.
+                        fieldSort(sortField).
+                        order("ASC".equals(sortOrder)?SortOrder.ASC:SortOrder.DESC));
+            }
         }
 
         //搜索对象
