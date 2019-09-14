@@ -111,21 +111,21 @@ public class ItemSearchServiceImpl implements ItemSearchService {
             }
 
             queryBuilder.withFilter(boolQueryBuilder);
-        }
 
-        //设置分页信息
-        int pageNo = 1;
-        String pageNoStr = searchMap.get("pageNo")+"";
-        if (StringUtils.isNotBlank(pageNoStr)) {
-            pageNo = Integer.parseInt(pageNoStr);
-        }
-        int pageSize = 20;
-        String pageSizeStr = searchMap.get("pageSize")+"";
-        if (StringUtils.isNotBlank(pageSizeStr)) {
-            pageSize = Integer.parseInt(pageSizeStr);
-        }
+            //设置分页信息
+            int pageNo = 1;
+            String pageNoStr = searchMap.get("pageNo")+"";
+            if (StringUtils.isNotBlank(pageNoStr)) {
+                pageNo = Integer.parseInt(pageNoStr);
+            }
+            int pageSize = 20;
+            String pageSizeStr = searchMap.get("pageSize")+"";
+            if (StringUtils.isNotBlank(pageSizeStr)) {
+                pageSize = Integer.parseInt(pageSizeStr);
+            }
 
-        queryBuilder.withPageable(PageRequest.of(pageNo - 1, pageSize));
+            queryBuilder.withPageable(PageRequest.of(pageNo - 1, pageSize));
+        }
 
         //搜索对象
         NativeSearchQuery query = queryBuilder.build();

@@ -6,9 +6,20 @@ var app = new Vue({
         //返回结果
         resultMap: {"itemList":[]},
         //页号数组
-        pageNoList: []
+        pageNoList: [],
+        //分页导航条中的前面3个点
+        frontDot: false,
+        //分页导航条中的后面3个点
+        backDot: false
     },
     methods:{
+        //根据页号查询
+        queryByPageNo:function(pageNo){
+            if (0 < pageNo && pageNo <= this.resultMap.totalPages) {
+                this.searchMap.pageNo = pageNo;
+                this.search();
+            }
+        },
         //移除过滤条件
         removeSearchItem: function(key){
             if (key == "brand" || key == "category" || key == "price") {
@@ -19,6 +30,8 @@ var app = new Vue({
                 //删除spec对象中某个属性
                 delete this.searchMap.spec[key];
             }
+            //改变了过滤查询条件，需要重置页号为1
+            this.searchMap.pageNo = 1;
             this.search();
         },
         //添加过滤条件对象
@@ -33,6 +46,9 @@ var app = new Vue({
                 this.$set(this.searchMap.spec, key, value);
                 //this.searchMap.spec[key] = value;
             }
+            //改变了过滤查询条件，需要重置页号为1
+            this.searchMap.pageNo = 1;
+
             this.search();
         },
         //搜索
@@ -70,11 +86,24 @@ var app = new Vue({
                     // - 如果起始页号小于等于0的时候，则置为1；结束页号要等于要显示的页号数
                     startPageNo = 1;
                     endPageNo = totalShowPageNo;
-                } else {
+                }
+                if(endPageNo > this.resultMap.totalPages) {
                     // - 如果结束页号数大于总页数则置为总页数，起始页号为总页数-要显示的页号数+1
                     endPageNo = this.resultMap.totalPages;
                     startPageNo = endPageNo - totalShowPageNo +1;
                 }
+            }
+
+            this.frontDot = false;
+            this.backDot = false;
+
+            //前面3个点
+            if (startPageNo > 1) {
+                this.frontDot = true;
+            }
+            //后面3个点
+            if (endPageNo < this.resultMap.totalPages) {
+                this.backDot = true;
             }
 
             for (let i = startPageNo; i <= endPageNo; i++) {

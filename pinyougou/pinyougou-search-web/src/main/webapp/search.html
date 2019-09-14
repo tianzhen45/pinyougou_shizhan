@@ -78,7 +78,7 @@
 										<!--searchAutoComplete-->
 										<div class="input-append">
 											<input type="text" v-model="searchMap.keywords" id="autocomplete" class="input-error input-xxlarge" />
-											<button @click="search()" class="sui-btn btn-xlarge btn-danger" type="button">搜索</button>
+											<button @click="searchMap.pageNo=1;search()" class="sui-btn btn-xlarge btn-danger" type="button">搜索</button>
 										</div>
 									</form>
 								</div>
@@ -150,7 +150,7 @@
 				</ul>
 				<ul class="tags-choose">
 					<li v-if="searchMap.category!=''" @click="removeSearchItem('category')" class="tag">商品分类：{{searchMap.category}}<i class="sui-icon icon-tb-close"></i></li>
-					<li v-if="searchMap.brand!=''" @click="removeSearchItem('brand')" class="tag">品牌：华为<i class="sui-icon icon-tb-close"></i></li>
+					<li v-if="searchMap.brand!=''" @click="removeSearchItem('brand')" class="tag">品牌：{{searchMap.brand}}<i class="sui-icon icon-tb-close"></i></li>
 					<li v-for="(value, key) in searchMap.spec" @click="removeSearchItem(key)" class="tag">{{key}}：{{value}}<i class="sui-icon icon-tb-close"></i></li>
 					<li v-if="searchMap.price!=''" @click="removeSearchItem('price')" class="tag">价格：{{searchMap.price}}<i class="sui-icon icon-tb-close"></i></li>
 					搜索结果：{{resultMap.total}}条 {{searchMap}}
@@ -356,22 +356,25 @@
 				<div class="fr page">
 					<div class="sui-pagination pagination-large">
 						<ul>
-							<li class="prev disabled">
-								<a href="#">«上一页</a>
+							<li :class="['prev',searchMap.pageNo<=1?'disabled':'']">
+								<a @click.prevent="queryByPageNo(searchMap.pageNo-1)" href="#">«上一页</a>
 							</li>
+                            <li v-if="frontDot" class="dotted"><span>...</span></li>
+
 							<li v-for="pn in pageNoList" :class="pn==searchMap.pageNo?'active':''">
-								<a href="#">{{pn}}</a>
+								<a @click.prevent="queryByPageNo(pn)" href="#">{{pn}}</a>
 							</li>
 
-							<li class="dotted"><span>...</span></li>
-							<li class="next">
-								<a href="#">下一页»</a>
+							<li v-if="backDot" class="dotted"><span>...</span></li>
+
+							<li :class="['next',searchMap.pageNo<resultMap.totalPages?'':'disabled']">
+								<a @click.prevent="queryByPageNo(searchMap.pageNo+1)" href="#">下一页»</a>
 							</li>
 						</ul>
 						<div><span>共{{resultMap.totalPages}}页&nbsp;</span><span>
       到第
-      <input type="text" class="page-num">
-      页 <button class="page-confirm" onclick="alert(1)">确定</button></span></div>
+      <input v-model.number="searchMap.pageNo" type="text" class="page-num">
+      页 <button class="page-confirm" @click="queryByPageNo(searchMap.pageNo)" >确定</button></span></div>
 					</div>
 				</div>
 			</div>
