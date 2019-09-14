@@ -116,6 +116,10 @@ public class GoodsController {
         try {
             //goodsService.deleteByIds(ids);
             goodsService.deleteGoodsByIds(ids);
+
+            //同步删除搜索系统中数据
+            itemSearchService.deleteByGoodsIds(ids);
+
             return Result.ok("删除成功");
         } catch (Exception e) {
             e.printStackTrace();

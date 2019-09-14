@@ -18,4 +18,10 @@ public interface ItemSearchService {
      * @param itemList 商品列表
      */
     void importItemList(List<TbItem> itemList);
+
+    /**
+     * 根据商品spu id数组删除在es中的sku
+     * @param goodsIds spu id数组
+     */
+    void deleteByGoodsIds(Long[] goodsIds);
 }
