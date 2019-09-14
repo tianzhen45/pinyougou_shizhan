@@ -17,6 +17,7 @@ var app = new Vue({
                 //删除spec对象中某个属性
                 delete this.searchMap.spec[key];
             }
+            this.search();
         },
         //添加过滤条件对象
         addSearchItem: function(key, value){
@@ -30,6 +31,7 @@ var app = new Vue({
                 this.$set(this.searchMap.spec, key, value);
                 //this.searchMap.spec[key] = value;
             }
+            this.search();
         },
         //搜索
         search:function () {

@@ -5,9 +5,12 @@ import com.alibaba.fastjson.JSON;
 import com.pinyougou.pojo.TbItem;
 import com.pinyougou.search.service.ItemSearchService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.common.document.DocumentField;
 import org.elasticsearch.common.text.Text;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.NestedQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
@@ -61,6 +64,38 @@ public class ItemSearchServiceImpl implements ItemSearchService {
 
                 queryBuilder.withHighlightFields(highLightField);
             }
+
+            //过滤查询；因为过滤条件多，所以使用组合查询对象
+            BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+
+            //商品分类
+            String category = searchMap.get("category")+"";
+            if (StringUtils.isNotBlank(category)) {
+                //词条查询；不分词
+                boolQueryBuilder.must(QueryBuilders.termQuery("category", category));
+            }
+
+            //品牌
+            String brand = searchMap.get("brand")+"";
+            if (StringUtils.isNotBlank(brand)) {
+                //词条查询；不分词
+                boolQueryBuilder.must(QueryBuilders.termQuery("brand", brand));
+            }
+
+            //规格；使用嵌套查询
+            Map<String, String> specMap = (Map<String, String>) searchMap.get("spec");
+            if (specMap != null) {
+                for (Map.Entry<String, String> entry : specMap.entrySet()) {
+                    //嵌套域名中的中间部分
+                    String key = "specMap." + entry.getKey() + ".keyword";
+                    String value = entry.getValue();
+                    NestedQueryBuilder query1 = QueryBuilders.nestedQuery("specMap",
+                            QueryBuilders.matchQuery(key, value), ScoreMode.Max);
+                    boolQueryBuilder.must(query1);
+                }
+            }
+
+            queryBuilder.withFilter(boolQueryBuilder);
         }
         //搜索对象
         NativeSearchQuery query = queryBuilder.build();
