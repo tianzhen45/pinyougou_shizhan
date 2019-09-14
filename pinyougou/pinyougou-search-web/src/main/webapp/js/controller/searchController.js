@@ -116,9 +116,15 @@ var app = new Vue({
             for (let i = startPageNo; i <= endPageNo; i++) {
                 this.pageNoList.push(i);
             }
+        },
+        //根据参数名字获取参数
+        getParameterByName: function (name) {
+            return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || [, ""])[1].replace(/\+/g, '%20')) || null
         }
     },
-    created(){
+    created: function () {
+        //获取浏览器地址栏中的搜索关键字
+        this.searchMap.keywords = this.getParameterByName("keywords");
         //默认查询所有
         this.search();
     }
