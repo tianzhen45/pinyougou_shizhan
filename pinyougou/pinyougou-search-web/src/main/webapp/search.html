@@ -149,18 +149,18 @@
 					</li>									
 				</ul>
 				<ul class="tags-choose">
-					<li class="tag">商品分类：手机<i class="sui-icon icon-tb-close"></i></li>
-					<li class="tag">品牌：华为<i class="sui-icon icon-tb-close"></i></li>
-					<li class="tag">内存：16G<i class="sui-icon icon-tb-close"></i></li>
+					<li v-if="searchMap.category!=''" @click="removeSearchItem('category')" class="tag">商品分类：{{searchMap.category}}<i class="sui-icon icon-tb-close"></i></li>
+					<li v-if="searchMap.brand!=''" @click="removeSearchItem('brand')" class="tag">品牌：华为<i class="sui-icon icon-tb-close"></i></li>
+					<li v-for="(value, key) in searchMap.spec" @click="removeSearchItem(key)" class="tag">{{key}}：{{value}}<i class="sui-icon icon-tb-close"></i></li>
 					<li class="tag">价格：500-1000<i class="sui-icon icon-tb-close"></i></li>
-					搜索结果：0条
+					搜索结果：0条 {{searchMap}}
 				</ul>
 				
 				<div class="clearfix"></div>
 			</div>
 			<!--selector-->
 			<div class="clearfix selector">
-				<div class="type-wrap">
+				<div v-if="searchMap.category==''" class="type-wrap">
 					<div class="fl key">商品分类</div>
                         <div class="fl value">
                         <span>
@@ -172,7 +172,7 @@
                     </div>
 					<div class="fl ext"></div>
 				</div>
-				<div class="type-wrap logo">
+				<div v-if="searchMap.brand==''" class="type-wrap logo">
 					<div class="fl key brand">品牌</div>
 					<div class="value logos">
 						<ul class="logo-list">
@@ -189,7 +189,7 @@
 						</ul>
 					</div>
 				</div>
-                <div class="type-wrap">
+                <div v-if="searchMap.spec['网络']==null" class="type-wrap">
                     <div class="fl key">网络</div>
                     <div class="fl value">
                         <ul class="type-list">
@@ -215,7 +215,7 @@
                     </div>
                     <div class="fl ext"></div>
                 </div>
-                <div class="type-wrap">
+                <div v-if="searchMap.spec['机身内存']==null" class="type-wrap">
                     <div class="fl key">机身内存</div>
                     <div class="fl value">
                         <ul class="type-list">
