@@ -95,6 +95,22 @@ public class ItemSearchServiceImpl implements ItemSearchService {
                 }
             }
 
+            //价格
+            String price = searchMap.get("price")+"";
+            if (StringUtils.isNotBlank(price)) {
+                //范围查询
+                String[] prices = price.split("-");
+                //查询大于价格下限的商品 price > ?
+                boolQueryBuilder.must(QueryBuilders.rangeQuery("price").gt(prices[0]));
+
+                if (!"*".equals(prices[1])) {
+                    //查询小于等于价格上限的商品 price <= ?
+                     boolQueryBuilder.must(QueryBuilders.rangeQuery("price").lte(prices[1]));
+                }
+            }
+
+
+
             queryBuilder.withFilter(boolQueryBuilder);
         }
         //搜索对象

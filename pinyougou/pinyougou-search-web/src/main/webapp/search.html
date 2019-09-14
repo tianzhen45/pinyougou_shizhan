@@ -152,7 +152,7 @@
 					<li v-if="searchMap.category!=''" @click="removeSearchItem('category')" class="tag">商品分类：{{searchMap.category}}<i class="sui-icon icon-tb-close"></i></li>
 					<li v-if="searchMap.brand!=''" @click="removeSearchItem('brand')" class="tag">品牌：华为<i class="sui-icon icon-tb-close"></i></li>
 					<li v-for="(value, key) in searchMap.spec" @click="removeSearchItem(key)" class="tag">{{key}}：{{value}}<i class="sui-icon icon-tb-close"></i></li>
-					<li class="tag">价格：500-1000<i class="sui-icon icon-tb-close"></i></li>
+					<li v-if="searchMap.price!=''" @click="removeSearchItem('price')" class="tag">价格：{{searchMap.price}}<i class="sui-icon icon-tb-close"></i></li>
 					搜索结果：0条 {{searchMap}}
 				</ul>
 				
@@ -236,7 +236,7 @@
                     <div class="fl ext"></div>
                 </div>
 				
-				<div class="type-wrap">
+				<div v-if="searchMap.price==''" class="type-wrap">
 					<div class="fl key">价格</div>
 					<div class="fl value">
 						<ul class="type-list">
