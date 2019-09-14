@@ -153,7 +153,7 @@
 					<li v-if="searchMap.brand!=''" @click="removeSearchItem('brand')" class="tag">品牌：华为<i class="sui-icon icon-tb-close"></i></li>
 					<li v-for="(value, key) in searchMap.spec" @click="removeSearchItem(key)" class="tag">{{key}}：{{value}}<i class="sui-icon icon-tb-close"></i></li>
 					<li v-if="searchMap.price!=''" @click="removeSearchItem('price')" class="tag">价格：{{searchMap.price}}<i class="sui-icon icon-tb-close"></i></li>
-					搜索结果：0条 {{searchMap}}
+					搜索结果：{{resultMap.total}}条 {{searchMap}}
 				</ul>
 				
 				<div class="clearfix"></div>
@@ -359,7 +359,7 @@
 							<li class="prev disabled">
 								<a href="#">«上一页</a>
 							</li>
-							<li v-for="pn in pageNoList" class="pn==searchMap.pageNo?'active':''">
+							<li v-for="pn in pageNoList" :class="pn==searchMap.pageNo?'active':''">
 								<a href="#">{{pn}}</a>
 							</li>
 
@@ -368,7 +368,7 @@
 								<a href="#">下一页»</a>
 							</li>
 						</ul>
-						<div><span>共10页&nbsp;</span><span>
+						<div><span>共{{resultMap.totalPages}}页&nbsp;</span><span>
       到第
       <input type="text" class="page-num">
       页 <button class="page-confirm" onclick="alert(1)">确定</button></span></div>

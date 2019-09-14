@@ -2,7 +2,7 @@ var app = new Vue({
     el:"#app",
     data:{
         //搜索条件对象
-        searchMap:{"keywords":"","brand":"","category":"", "spec":{}, "price":"","pageNo":1, "pageSize":20},
+        searchMap:{"keywords":"","brand":"","category":"", "spec":{}, "price":"","pageNo":1, "pageSize":10},
         //返回结果
         resultMap: {"itemList":[]},
         //页号数组
@@ -77,7 +77,7 @@ var app = new Vue({
                 }
             }
 
-            for (let i = startPageNo; i < endPageNo; i++) {
+            for (let i = startPageNo; i <= endPageNo; i++) {
                 this.pageNoList.push(i);
             }
         }
