@@ -35,9 +35,23 @@ list循环控制语句；可以对集合的内容进行迭代。<br>
 </#list>
 
 <br><hr><br>
-
+可以使用size获取集合大小<br>
+上述的goodsList的大小为：${goodsList?size}<br>
+可以使用eval将字符串转换为一个对象<br>
+<#assign jsonStr='{"name":"itcast","age":13}'/>
+<#assign jsonObj=jsonStr?eval/>
+${jsonObj.name}
+<br><hr><br>
+在freemarker模版中可以使用.now 获取当前日期时间：${.now}<br>
+不格式化显示日期：${today?datetime}<br>
+显示日期：${today?date}<br>
+显示时间：${today?time}<br>
+格式化显示：${today?string("yyyy年MM月dd日 HH:mm:ss")}<br>
 
 <br><hr><br>
+数值直接输出，会以千分位逗号分割，如：${number}，可以将数值以字符串方式输出：${number?c}
+<br><hr><br>
 
+<br><br><br><br><br><br><br>
 </body>
 </html>
