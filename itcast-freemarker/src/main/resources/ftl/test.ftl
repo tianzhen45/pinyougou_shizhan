@@ -20,8 +20,19 @@ include表示引入其它模版：<br>
 <#include "header.ftl" />
 
 <br><hr><br>
+if...else 条件控制语句：<br>
+<#assign bool=true/>
+<#if bool>
+    bool的值为真。
+    <#else>
+        bool的值为假。
+</#if>
 
 <br><hr><br>
+list循环控制语句；可以对集合的内容进行迭代。<br>
+<#list goodsList as goods>
+    ${goods_index}---${goods.name}---${goods.price}<br>
+</#list>
 
 <br><hr><br>
 
