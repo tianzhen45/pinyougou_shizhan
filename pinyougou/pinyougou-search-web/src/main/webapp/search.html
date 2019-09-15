@@ -153,7 +153,7 @@
 					<li v-if="searchMap.brand!=''" @click="removeSearchItem('brand')" class="tag">品牌：{{searchMap.brand}}<i class="sui-icon icon-tb-close"></i></li>
 					<li v-for="(value, key) in searchMap.spec" @click="removeSearchItem(key)" class="tag">{{key}}：{{value}}<i class="sui-icon icon-tb-close"></i></li>
 					<li v-if="searchMap.price!=''" @click="removeSearchItem('price')" class="tag">价格：{{searchMap.price}}<i class="sui-icon icon-tb-close"></i></li>
-					搜索结果：{{resultMap.total}}条 {{searchMap}}
+					搜索结果：{{resultMap.total}}条
 				</ul>
 				
 				<div class="clearfix"></div>
@@ -319,7 +319,7 @@
 						<li v-for="item in resultMap.itemList" class="yui3-u-1-5">
 							<div class="list-wrap">
 								<div class="p-img">
-									<a href="item.html" target="_blank"><img :src="item.image" /></a>
+									<a :href="'http://item.pinyougou.com/'+item.goodsId+'.html'" target="_blank"><img :src="item.image" /></a>
 								</div>
 								<div class="price">
 									<strong>
