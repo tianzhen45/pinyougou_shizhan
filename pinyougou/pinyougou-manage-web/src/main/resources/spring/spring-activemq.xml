@@ -27,4 +27,9 @@
         <constructor-arg value="pyg_item_es_queue"/>
     </bean>
 
+    <!--商品删除，同步搜索系统 -->
+    <bean id="itemEsDeleteQueue" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg value="pyg_item_es_delete_queue"/>
+    </bean>
+
 </beans>
