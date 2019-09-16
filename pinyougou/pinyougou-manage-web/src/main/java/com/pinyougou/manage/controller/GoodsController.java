@@ -9,6 +9,7 @@ import com.pinyougou.sellergoods.service.GoodsService;
 import com.pinyougou.vo.Goods;
 import com.pinyougou.vo.Result;
 import org.apache.activemq.command.ActiveMQQueue;
+import org.apache.activemq.command.ActiveMQTopic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
@@ -34,6 +35,11 @@ public class GoodsController {
 
     @Autowired
     private ActiveMQQueue itemEsDeleteQueue;
+
+    @Autowired
+    private ActiveMQTopic itemTopic;
+    @Autowired
+    private ActiveMQTopic itemDeleteTopic;
 
     /**
      * 根据商品spu id数组更新商品spu 的审核状态
@@ -61,6 +67,9 @@ public class GoodsController {
                         return textMessage;
                     }
                 });
+
+                //发送商品被审核通过的主题消息
+                sendMQMessage(itemTopic, ids);
             }
 
             return Result.ok("更新商品状态成功！");
@@ -137,20 +146,32 @@ public class GoodsController {
             goodsService.deleteGoodsByIds(ids);
 
             //同步删除搜索系统中数据
-            jmsTemplate.send(itemEsDeleteQueue, new MessageCreator() {
-                @Override
-                public Message createMessage(Session session) throws JMSException {
-                    ObjectMessage objectMessage = session.createObjectMessage();
-                    objectMessage.setObject(ids);
-                    return objectMessage;
-                }
-            });
+            sendMQMessage(itemEsDeleteQueue, ids);
+
+            //发送商品被删除的主题消息
+            sendMQMessage(itemDeleteTopic, ids);
 
             return Result.ok("删除成功");
         } catch (Exception e) {
             e.printStackTrace();
         }
         return Result.fail("删除失败");
+    }
+
+    /**
+     * 发送消息到MQ
+     * @param destination 模式；主题或队列
+     * @param ids 商品spu id数组
+     */
+    private void sendMQMessage(Destination destination, Long[] ids) {
+        jmsTemplate.send(destination, new MessageCreator() {
+            @Override
+            public Message createMessage(Session session) throws JMSException {
+                ObjectMessage objectMessage = session.createObjectMessage();
+                objectMessage.setObject(ids);
+                return objectMessage;
+            }
+        });
     }
 
     /**

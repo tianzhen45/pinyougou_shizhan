@@ -32,4 +32,14 @@
         <constructor-arg value="pyg_item_es_delete_queue"/>
     </bean>
 
+    <!--商品审核之后的主题消息-->
+    <bean id="itemTopic" class="org.apache.activemq.command.ActiveMQTopic">
+        <constructor-arg value="pyg_item_topic"/>
+    </bean>
+
+    <!--商品删除之后的主题消息-->
+    <bean id="itemDeleteTopic" class="org.apache.activemq.command.ActiveMQTopic">
+        <constructor-arg value="pyg_item_delete_topic"/>
+    </bean>
+
 </beans>
