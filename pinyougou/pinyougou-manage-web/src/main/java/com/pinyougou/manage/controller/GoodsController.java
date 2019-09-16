@@ -1,16 +1,24 @@
 package com.pinyougou.manage.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import com.pinyougou.pojo.TbGoods;
 import com.pinyougou.pojo.TbItem;
-import com.pinyougou.search.service.ItemSearchService;
 import com.pinyougou.sellergoods.service.GoodsService;
 import com.pinyougou.vo.Goods;
 import com.pinyougou.vo.Result;
+import org.apache.activemq.command.ActiveMQQueue;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Session;
+import javax.jms.TextMessage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,8 +29,11 @@ public class GoodsController {
     @Reference(retries = 0, timeout = 10000)
     private GoodsService goodsService;
 
-    @Reference
-    private ItemSearchService itemSearchService;
+    @Autowired
+    private JmsTemplate jmsTemplate;
+
+    @Autowired
+    private ActiveMQQueue itemEsQueue;
 
     /**
      * 根据商品spu id数组更新商品spu 的审核状态
@@ -41,7 +52,15 @@ public class GoodsController {
                 List<TbItem> itemList = goodsService.findItemListByGoodsIdsAndItemStatus(ids, "1");
 
                 //更新搜索系统中数据
-                itemSearchService.importItemList(itemList);
+                //itemSearchService.importItemList(itemList);
+                jmsTemplate.send(itemEsQueue, new MessageCreator() {
+                    @Override
+                    public Message createMessage(Session session) throws JMSException {
+                        TextMessage textMessage = session.createTextMessage();
+                        textMessage.setText(JSON.toJSONString(itemList));
+                        return textMessage;
+                    }
+                });
             }
 
             return Result.ok("更新商品状态成功！");
@@ -118,7 +137,7 @@ public class GoodsController {
             goodsService.deleteGoodsByIds(ids);
 
             //同步删除搜索系统中数据
-            itemSearchService.deleteByGoodsIds(ids);
+            //itemSearchService.deleteByGoodsIds(ids);
 
             return Result.ok("删除成功");
         } catch (Exception e) {

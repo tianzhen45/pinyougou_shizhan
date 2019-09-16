@@ -31,7 +31,7 @@ public class Producer {
 			@Override
 			public Message createMessage(Session session) throws JMSException {
 				TextMessage textMessage = new ActiveMQTextMessage();
-				textMessage.setText("你好！黑马。---spring-topic的方式发送。订阅主题的名称为：topic.item");
+				textMessage.setText("hello i_am_ljb can we chat。---spring-topic的方式发送。订阅主题的名称为：topic.item");
 
 				System.out.println("已发送消息...");
 
