@@ -16,9 +16,8 @@ import java.io.File;
 
 /**
  * 接收商品spu id数组的发布与订阅消息；接收到消息之后删除指定路径下的商品详情静态html页面。
- *
  */
-public class TopicMessageListener extends AbstractAdaptableMessageListener {
+public class ItemDeleteMessageListener extends AbstractAdaptableMessageListener {
     @Value("${ITEM_HTML_PATH}")
     private String ITEM_HTML_PATH;
 
