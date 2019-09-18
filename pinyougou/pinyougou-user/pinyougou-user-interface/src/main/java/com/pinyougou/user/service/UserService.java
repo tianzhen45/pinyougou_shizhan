@@ -16,4 +16,9 @@ public interface UserService extends BaseService<TbUser> {
      */
     PageInfo<TbUser> search(Integer pageNum, Integer pageSize, TbUser user);
 
+    /**
+     * 发送短信验证码
+     * @param phone 手机号
+     */
+    void sendSmsCode(String phone);
 }
