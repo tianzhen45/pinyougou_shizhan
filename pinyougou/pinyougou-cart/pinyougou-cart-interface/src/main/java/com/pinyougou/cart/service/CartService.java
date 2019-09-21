@@ -26,4 +26,12 @@ public interface CartService {
      * @param username 用户ID
      */
     void saveCartListByUsername(List<Cart> cartList, String username);
+
+    /**
+     * 合并购物车
+     * @param cookieCartList 购物车1
+     * @param redisCartList 购物车2
+     * @return 新购物车列表
+     */
+    List<Cart> mergeCartList(List<Cart> cookieCartList, List<Cart> redisCartList);
 }

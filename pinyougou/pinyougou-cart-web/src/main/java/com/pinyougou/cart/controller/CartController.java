@@ -78,22 +78,31 @@ public class CartController {
     public List<Cart> findCartList(){
         try {
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+            //未登录；从cookie中获取购物车数据
+            List<Cart> cookieCartList = new ArrayList<>();
+            //1、获取cookie中购物车列表字符串
+            String cartListJsonStr = CookieUtils.getCookieValue(request, COOKIE_CART_LIST, true);
+            //2、转换为对象
+            if (StringUtils.isNotBlank(cartListJsonStr)) {
+                cookieCartList = JSON.parseArray(cartListJsonStr, Cart.class);
+            }
+
             //如果要严格判断是否登录可以结合用户名和角色进行判断；最好的做法是禁止注册anonymousUser
             if ("anonymousUser".equals(username)) {
-                //未登录；从cookie中获取购物车数据
-                List<Cart> cookieCartList = new ArrayList<>();
-                //1、获取cookie中购物车列表字符串
-                String cartListJsonStr = CookieUtils.getCookieValue(request, COOKIE_CART_LIST, true);
-                //2、转换为对象
-                if (StringUtils.isNotBlank(cartListJsonStr)) {
-                    cookieCartList = JSON.parseArray(cartListJsonStr, Cart.class);
-                }
                 //3、返回
                 return cookieCartList;
             } else {
                 //已登录；从redis中获取购物车数据
                 List<Cart> redisCartList = cartService.findCartListInRedisByUsername(username);
-
+                if (cookieCartList.size() > 0) {
+                    //合并
+                    redisCartList = cartService.mergeCartList(cookieCartList, redisCartList);
+                    //保存
+                    cartService.saveCartListByUsername(redisCartList, username);
+                    //删除
+                    CookieUtils.deleteCookie(request, response, COOKIE_CART_LIST);
+                }
                 return redisCartList;
             }
         } catch (Exception e) {
