@@ -90,13 +90,13 @@
 								
 								<li class="yui3-u-1-8"><span class="price">{{orderItem.price.toFixed(2)}}</span></li>
 								<li class="yui3-u-1-8">
-									<a href="javascript:void(0)" class="increment mins">-</a>
+									<a href="javascript:void(0)" @click.prevent="addItemToCartList(orderItem.itemId, -1)" class="increment mins">-</a>
 									<input autocomplete="off" type="text" :value="orderItem.num" minnum="1" class="itxt" />
-									<a href="javascript:void(0)" class="increment plus">+</a>
+									<a href="javascript:void(0)" @click.prevent="addItemToCartList(orderItem.itemId, 1)" class="increment plus">+</a>
 								</li>
 								<li class="yui3-u-1-8"><span class="sum">{{orderItem.totalFee.toFixed(2)}}</span></li>
 								<li class="yui3-u-1-8">
-									<a href="#none">删除</a><br />
+									<a @click.prevent="addItemToCartList(orderItem.itemId, -orderItem.num)" href="#none">删除</a><br />
 									<a href="#none">移到我的关注</a>
 								</li>
 							</ul>
