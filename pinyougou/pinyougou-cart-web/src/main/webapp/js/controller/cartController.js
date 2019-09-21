@@ -4,7 +4,9 @@ var app = new Vue({
         //当前登录用户名
         username:"",
         //购物车列表
-        cartList: []
+        cartList: [],
+        //总价格和总数量
+        totalValue:{"totalNum":0, "totalMoney":0.0}
     },
     methods : {
 
@@ -23,7 +25,24 @@ var app = new Vue({
         findCartList: function(){
           axios.get("cart/findCartList.do").then(function (response) {
               app.cartList = response.data;
+
+              //计算总数量和总价格
+              app.totalValue = app.sumTotalValue(response.data);
           });
+        },
+        //计算总数和总价
+        sumTotalValue: function (cartList) {
+            var totalValue = {"totalNum":0, "totalMoney":0.0};
+            for (let i = 0; i < cartList.length; i++) {
+                const cart = cartList[i];
+                for (let j = 0; j < cart.orderItemList.length; j++) {
+                    const orderItem = cart.orderItemList[j];
+                    totalValue.totalNum += orderItem.num;
+                    totalValue.totalMoney += orderItem.totalFee;
+                }
+
+            }
+            return totalValue;
         },
         getUsername: function () {
             axios.get("cart/getUsername.do").then(function (response) {
