@@ -235,7 +235,7 @@
 			<div class="fc-receiverInfo">寄送至:{{selectedAddress.address}} 收货人：{{selectedAddress.contact}} {{selectedAddress.mobile}}</div>
 		</div>
 		<div class="submit">
-			<a class="sui-btn btn-danger btn-xlarge" href="#">提交订单</a>
+			<a @click="submitOrder()" class="sui-btn btn-danger btn-xlarge" href="#">提交订单</a>
 		</div>
 	</div>
 	<!-- 底部栏位 -->
