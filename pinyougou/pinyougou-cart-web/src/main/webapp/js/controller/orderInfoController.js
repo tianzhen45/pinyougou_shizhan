@@ -10,7 +10,9 @@ var app = new Vue({
         //地址列表
         addressList:[],
         //当前选中的地址
-        selectedAddress:{}
+        selectedAddress:{},
+        //订单信息
+        order:{"paymentType":'1'}
     },
     methods : {
         //选择地址
