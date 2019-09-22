@@ -70,9 +70,12 @@
 							<li class="addr-item">
 							
 							  <div v-for="address in addressList">
-								<div class="con name selected"><a href="javascript:;" >{{address.contact}}<span title="点击取消选择">&nbsp;</span></a></div>
+								<div :class="['con','name',address==selectedAddress?'selected':'']">
+                                    <a @click.prevent="selectAddress(address)" href="javascript:;" >
+                                        {{address.contact}}<span title="点击取消选择">&nbsp;</span>
+                                    </a></div>
 								<div class="con address">{{address.contact}} {{address.address}} <span>{{address.mobile}}</span>
-									<span class="base">默认地址</span>
+									<span v-if="address.isDefault=='1'" class="base">默认地址</span>
 									<span class="edittext">
                                         <a data-toggle="modal" data-target=".edit" data-keyboard="false" >编辑</a>&nbsp;&nbsp;
                                         <a href="javascript:;">删除</a></span>
@@ -229,7 +232,7 @@
 		</div>
 		<div class="clearfix trade">
 			<div class="fc-price">应付金额:　<span class="price">¥5399.00</span></div>
-			<div class="fc-receiverInfo">寄送至:北京市海淀区三环内 中关村软件园9号楼 收货人：某某某 159****3201</div>
+			<div class="fc-receiverInfo">寄送至:{{selectedAddress.address}} 收货人：{{selectedAddress.contact}} {{selectedAddress.mobile}}</div>
 		</div>
 		<div class="submit">
 			<a class="sui-btn btn-danger btn-xlarge" href="#">提交订单</a>

@@ -8,14 +8,27 @@ var app = new Vue({
         //总价格和总数量
         totalValue:{"totalNum":0, "totalMoney":0.0},
         //地址列表
-        addressList:[]
+        addressList:[],
+        //当前选中的地址
+        selectedAddress:{}
     },
     methods : {
+        //选择地址
+        selectAddress: function (address) {
+            this.selectedAddress = address;
+        },
         //查询当前登录用户的地址列表
         findAddressList: function(){
             axios.get("address/findAddressList.do").then(function (response) {
                 app.addressList = response.data;
 
+                for (let i = 0; i < response.data.length; i++) {
+                    const address = response.data[i];
+                    if (address.isDefault == "1") {
+                        app.selectedAddress = address;
+                        break;
+                    }
+                }
             });
         },
         //加入购物车
