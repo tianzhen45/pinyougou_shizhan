@@ -33,17 +33,7 @@ var app = new Vue({
                 }
             });
         },
-        //加入购物车
-        addItemToCartList: function (itemId, num) {
-            axios.get("cart/addItemToCartList.do?itemId=" + itemId + "&num=" + num).then(function (response) {
-                if(response.data.success){
-                    //刷新购物车列表
-                    app.findCartList();
-                } else {
-                    alert(response.data.message);
-                }
-            });
-        },
+
         //查询购物车列表
         findCartList: function(){
           axios.get("cart/findCartList.do").then(function (response) {
@@ -77,7 +67,7 @@ var app = new Vue({
     created(){
         this.getUsername();
         //加载购物车列表
-        //this.findCartList();
+        this.findCartList();
         //加载地址列表
         this.findAddressList();
     }
