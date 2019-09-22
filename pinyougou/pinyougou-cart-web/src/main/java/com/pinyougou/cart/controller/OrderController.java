@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.pinyougou.pojo.TbOrder;
 import com.pinyougou.order.service.OrderService;
 import com.pinyougou.vo.Result;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/order")
@@ -15,20 +16,25 @@ public class OrderController {
     private OrderService orderService;
 
     /**
-     * 新增
-     * @param order 实体
+     * 提交订单
+     * @param order 订单信息
      * @return 操作结果
      */
     @PostMapping("/add")
     public Result add(@RequestBody TbOrder order){
         try {
-            orderService.add(order);
+            //购买人
+            String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+            order.setUserId(userId);
+            //订单来源 PC
+            order.setSourceType("2");
+            String outTradeNo = orderService.addOrder(order);
 
-            return Result.ok("新增成功");
+            return Result.ok(outTradeNo);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return Result.fail("新增失败");
+        return Result.fail("提交订单失败");
     }
 
     /**
