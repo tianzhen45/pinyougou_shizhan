@@ -64,7 +64,7 @@ public class PayController {
                     break;
                 }
                 count++;
-                if (count > 3) {
+                if (count > 60) {
                     result = Result.fail("支付超时");
                     break;
                 }
