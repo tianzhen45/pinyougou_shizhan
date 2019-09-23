@@ -49,6 +49,8 @@ public class PayController {
     public Result queryPayStatus(String outTradeNo){
         Result result = Result.fail("支付失败！");
         try {
+            //在3分钟内未支付则表示超时未支付
+            int count = 0;
             while (true) {
                 //- 循环调用查询微信支付状态的业务方法
                 Map<String, String> map = payService.queryPayStatus(outTradeNo);
@@ -59,6 +61,11 @@ public class PayController {
                 if ("SUCCESS".equals(map.get("trade_state"))) {
                     orderService.updateOrderStatus(outTradeNo, map.get("transaction_id"));
                     result = Result.ok("支付成功");
+                    break;
+                }
+                count++;
+                if (count > 3) {
+                    result = Result.fail("支付超时");
                     break;
                 }
                 //- 如果还未支付则每隔3秒查询
