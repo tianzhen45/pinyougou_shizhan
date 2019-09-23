@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -147,6 +148,32 @@ public class OrderServiceImpl extends BaseServiceImpl<TbOrder> implements OrderS
     @Override
     public TbPayLog findPayLogByOutTradeNo(String outTradeNo) {
         return payLogMapper.selectByPrimaryKey(outTradeNo);
+    }
+
+    @Override
+    public void updateOrderStatus(String outTradeNo, String transactionId) {
+        //在支付成功之后需要更新支付日志（1已支付）、订单（2已支付）的状态为已支付
+        //1、查询支付日志
+        TbPayLog payLog = findPayLogByOutTradeNo(outTradeNo);
+        //2、更新支付日志的支付状态
+        payLog.setPayTime(new Date());
+        payLog.setTradeState("1");
+        payLog.setTransactionId(transactionId);
+        payLogMapper.updateByPrimaryKeySelective(payLog);
+
+        //3、更新该支付日志对应的所以订单的支付状态为已支付2
+        //update tb_order set status=2 where order_id in(?,?,...)
+        String[] orderIds = payLog.getOrderList().split(",");
+        TbOrder order = new TbOrder();
+        order.setPaymentTime(new Date());
+        order.setStatus("2");
+        order.setUpdateTime(new Date());
+
+        //创建更新的条件对象
+        Example example = new Example(TbOrder.class);
+        example.createCriteria()
+                .andIn("orderId", Arrays.asList(orderIds));
+        orderMapper.updateByExampleSelective(order, example);
     }
 
 }

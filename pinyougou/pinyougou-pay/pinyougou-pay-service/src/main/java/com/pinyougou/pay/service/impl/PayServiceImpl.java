@@ -75,6 +75,37 @@ public class PayServiceImpl implements PayService {
 
     @Override
     public Map<String, String> queryPayStatus(String outTradeNo) {
+        try {
+            //1、封装请求参数
+            Map<String, String> paramMap = new HashMap<>();
+            //公众账号ID
+            paramMap.put("appid", appid);
+            //商户号
+            paramMap.put("mch_id", partner);
+            //随机字符串
+            paramMap.put("nonce_str", WXPayUtil.generateNonceStr());
+            //签名；可以在发送的时候；将参数数据统一加密并生成前面
+            //paramMap.put("sign", null);
+            //商户订单号
+            paramMap.put("out_trade_no", outTradeNo);
+
+            //2、发送请求
+            //将上述的请求参数转换为xml并添加签名
+            String signedXml = WXPayUtil.generateSignedXml(paramMap, partnerkey);
+            System.out.println("调用微信 查询订单 的接口请求数据为：" + signedXml);
+
+            HttpClient httpClient = new HttpClient("https://api.mch.weixin.qq.com/pay/orderquery");
+            httpClient.setHttps(true);
+            httpClient.setXmlParam(signedXml);
+            httpClient.post();
+
+            //3、处理结果
+            String content = httpClient.getContent();
+            System.out.println("调用微信 查询订单 的接口返回数据为：" + content);
+            return WXPayUtil.xmlToMap(content);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 }
