@@ -72,4 +72,9 @@ public class PayServiceImpl implements PayService {
         }
         return resultMap;
     }
+
+    @Override
+    public Map<String, String> queryPayStatus(String outTradeNo) {
+        return null;
+    }
 }

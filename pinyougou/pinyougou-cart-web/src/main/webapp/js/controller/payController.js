@@ -9,6 +9,17 @@ var app = new Vue({
         totalFee: 0
     },
     methods: {
+        //查询支付状态
+        queryPayStatus: function (outTradeNo) {
+            axios.get("pay/queryPayStatus.do?outTradeNo="+outTradeNo).then(function (response) {
+                if(response.data.success){
+                    //支付成功;跳转到支付成功页面
+                    location.href = "paysuccess.html?totalFee=" + app.totalFee;
+                } else {
+                    location.href = "payfail.html";
+                }
+            });
+        },
         //生成支付二维码
         createNative: function () {
             this.outTradeNo = this.getParameterByName("outTradeNo");
@@ -24,6 +35,8 @@ var app = new Vue({
                         size: 250,
                         value: response.data.code_url
                     });
+                    //查询支付状态
+                    app.queryPayStatus(app.outTradeNo);
                 } else {
                     alert("生成支付二维码失败！");
                 }
