@@ -2,6 +2,7 @@ package com.pinyougou.order.service;
 
 import com.github.pagehelper.PageInfo;
 import com.pinyougou.pojo.TbOrder;
+import com.pinyougou.pojo.TbPayLog;
 import com.pinyougou.service.BaseService;
 
 import java.util.List;
@@ -22,4 +23,11 @@ public interface OrderService extends BaseService<TbOrder> {
      * @return 支付日志id
      */
     String addOrder(TbOrder order);
+
+    /**
+     * 查询支付日志信息
+     * @param outTradeNo 支付日志id
+     * @return 支付日志
+     */
+    TbPayLog findPayLogByOutTradeNo(String outTradeNo);
 }

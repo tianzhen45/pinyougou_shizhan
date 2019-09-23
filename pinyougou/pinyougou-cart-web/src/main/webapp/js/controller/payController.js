@@ -14,15 +14,19 @@ var app = new Vue({
             this.outTradeNo = this.getParameterByName("outTradeNo");
             //发送请求；获取信息
             axios.get("pay/createNative.do?outTradeNo="+this.outTradeNo).then(function (response) {
-                //设置支付总金额
-                app.totalFee = (response.data.totalFee/100).toFixed(2);
-                //生成二维码
-                var qr = new QRious({
-                    element:document.getElementById("qrious"),
-                    level:"M",
-                    size:250,
-                    value: response.data.code_url
-                });
+
+                if ("SUCCESS"==response.data.result_code) { //设置支付总金额
+                    app.totalFee = (response.data.totalFee / 100).toFixed(2);
+                    //生成二维码
+                    var qr = new QRious({
+                        element: document.getElementById("qrious"),
+                        level: "M",
+                        size: 250,
+                        value: response.data.code_url
+                    });
+                } else {
+                    alert("生成支付二维码失败！");
+                }
             });
 
         },
