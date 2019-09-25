@@ -87,6 +87,7 @@ public class SeckillOrderServiceImpl extends BaseServiceImpl<TbSeckillOrder> imp
             orderId = idWorker.nextId()+"";
             seckillOrder.setId(orderId);
             //未支付
+            seckillOrder.setSeckillId(seckillGoodsId);
             seckillOrder.setStatus("0");
             seckillOrder.setUserId(userId);
             seckillOrder.setSellerId(tbSeckillGoods.getSellerId());
@@ -97,6 +98,25 @@ public class SeckillOrderServiceImpl extends BaseServiceImpl<TbSeckillOrder> imp
         }
         //4、返回订单id
         return orderId;
+    }
+
+    @Override
+    public TbSeckillOrder findSeckillOrderByOutTradeNo(String outTradeNo) {
+        return (TbSeckillOrder) redisTemplate.boundHashOps(SECKILL_ORDERS).get(outTradeNo);
+    }
+
+    @Override
+    public void saveSeckillOrderInRedisToDb(String outTradeNo, String transactionId) {
+        //1、查询订单
+        TbSeckillOrder seckillOrder = findSeckillOrderByOutTradeNo(outTradeNo);
+        //2、更新订单数据
+        seckillOrder.setPayTime(new Date());
+        seckillOrder.setStatus("1");
+        seckillOrder.setTransactionId(transactionId);
+        //3、保存订单到数据库
+        seckillOrderMapper.insertSelective(seckillOrder);
+        //4、删除redis中订单
+        redisTemplate.boundHashOps(SECKILL_ORDERS).delete(outTradeNo);
     }
 
 }
