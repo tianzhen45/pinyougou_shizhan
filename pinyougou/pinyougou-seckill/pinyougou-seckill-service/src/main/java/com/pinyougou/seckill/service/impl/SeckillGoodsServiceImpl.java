@@ -18,7 +18,7 @@ import java.util.List;
 @Service
 public class SeckillGoodsServiceImpl extends BaseServiceImpl<TbSeckillGoods> implements SeckillGoodsService {
     //在redis中的秒杀商品数据的键名
-    private static final String SECKILL_GOODS = "SECKILL_GOODS";
+    public static final String SECKILL_GOODS = "SECKILL_GOODS";
     @Autowired
     private SeckillGoodsMapper seckillGoodsMapper;
 

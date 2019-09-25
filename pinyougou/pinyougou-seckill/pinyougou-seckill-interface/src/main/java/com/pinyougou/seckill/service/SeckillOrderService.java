@@ -22,5 +22,5 @@ public interface SeckillOrderService extends BaseService<TbSeckillOrder> {
      * @param userId 用户id
      * @return 秒杀订单号
      */
-    String submitOrder(Long seckillGoodsId, String userId);
+    String submitOrder(Long seckillGoodsId, String userId) throws Exception;
 }

@@ -5,7 +5,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 
 @Table(name = "tb_seckill_goods")
@@ -22,9 +21,9 @@ public class TbSeckillGoods implements Serializable {
 
     private String smallPic;
 
-    private BigDecimal price;
+    private Double price;
 
-    private BigDecimal costPrice;
+    private Double costPrice;
 
     private String sellerId;
 
@@ -86,19 +85,19 @@ public class TbSeckillGoods implements Serializable {
         this.smallPic = smallPic;
     }
 
-    public BigDecimal getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
-    public BigDecimal getCostPrice() {
+    public Double getCostPrice() {
         return costPrice;
     }
 
-    public void setCostPrice(BigDecimal costPrice) {
+    public void setCostPrice(Double costPrice) {
         this.costPrice = costPrice;
     }
 
