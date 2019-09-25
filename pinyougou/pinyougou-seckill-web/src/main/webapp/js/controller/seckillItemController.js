@@ -28,6 +28,7 @@ var app = new Vue({
 
                 //倒计时总秒数
                 var allSeconds = Math.floor((new Date(response.data.endTime).getTime() - new Date().getTime()) / 1000);
+                //setInterval 参数1：要执行的方法，参数2：频率
                 var task = setInterval(function () {
                     if (allSeconds > 0) {
                         allSeconds = allSeconds - 1;

@@ -52,7 +52,8 @@ public class SeckillGoodsController {
      */
     @GetMapping("/findOne/{id}")
     public TbSeckillGoods findOne(@PathVariable Long id){
-        return seckillGoodsService.findOne(id);
+        //return seckillGoodsService.findOne(id);
+        return seckillGoodsService.findOneInRedis(id);
     }
 
     /**
