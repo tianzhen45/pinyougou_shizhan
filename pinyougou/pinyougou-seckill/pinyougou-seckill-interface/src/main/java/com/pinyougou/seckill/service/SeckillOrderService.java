@@ -16,4 +16,11 @@ public interface SeckillOrderService extends BaseService<TbSeckillOrder> {
      */
     PageInfo<TbSeckillOrder> search(Integer pageNum, Integer pageSize, TbSeckillOrder seckillOrder);
 
+    /**
+     * 生成秒杀订单并返回
+     * @param seckillGoodsId 秒杀商品id
+     * @param userId 用户id
+     * @return 秒杀订单号
+     */
+    String submitOrder(Long seckillGoodsId, String userId);
 }

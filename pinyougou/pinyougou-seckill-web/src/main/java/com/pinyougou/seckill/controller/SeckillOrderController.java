@@ -5,6 +5,8 @@ import com.github.pagehelper.PageInfo;
 import com.pinyougou.pojo.TbSeckillOrder;
 import com.pinyougou.seckill.service.SeckillOrderService;
 import com.pinyougou.vo.Result;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/seckillOrder")
@@ -13,6 +15,30 @@ public class SeckillOrderController {
 
     @Reference
     private SeckillOrderService seckillOrderService;
+
+    /**
+     * 生成秒杀订单并返回
+     * @param seckillGoodsId 秒杀商品
+     * @return 操作结果（秒杀订单号）
+     */
+    @GetMapping("/submitOrder")
+    public Result submitOrder(Long seckillGoodsId){
+        Result result = Result.fail("抢购失败！");
+        try {
+            String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+            if (!"anonymousUser".equals(userId)) {
+                String orderId = seckillOrderService.submitOrder(seckillGoodsId, userId);
+                if (StringUtils.isNotBlank(orderId)) {
+                    result = Result.ok(orderId);
+                }
+            } else {
+                result = Result.fail("请登录之后再抢购！");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 
     /**
      * 新增
