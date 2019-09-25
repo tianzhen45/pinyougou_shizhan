@@ -9,6 +9,7 @@ import com.pinyougou.seckill.service.SeckillGoodsService;
 import com.pinyougou.service.impl.BaseServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
@@ -16,9 +17,13 @@ import java.util.List;
 
 @Service
 public class SeckillGoodsServiceImpl extends BaseServiceImpl<TbSeckillGoods> implements SeckillGoodsService {
-
+    //在redis中的秒杀商品数据的键名
+    private static final String SECKILL_GOODS = "SECKILL_GOODS";
     @Autowired
     private SeckillGoodsMapper seckillGoodsMapper;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @Override
     public PageInfo<TbSeckillGoods> search(Integer pageNum, Integer pageSize, TbSeckillGoods seckillGoods) {
@@ -42,6 +47,17 @@ public class SeckillGoodsServiceImpl extends BaseServiceImpl<TbSeckillGoods> imp
     @Override
     public List<TbSeckillGoods> findList() {
         List<TbSeckillGoods> seckillGoodsList = null;
+
+        try {
+            //从缓存中查询数据
+            seckillGoodsList = redisTemplate.boundHashOps(SECKILL_GOODS).values();
+            if (seckillGoodsList != null && seckillGoodsList.size() > 0) {
+                return seckillGoodsList;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         /**
          * -- 在秒杀系统首页加载库存大于0，已经审核，正在秒杀期间的秒杀商品。
          * select * from tb_seckill_goods where stock_count > 0 and `status` = 1
@@ -56,6 +72,17 @@ public class SeckillGoodsServiceImpl extends BaseServiceImpl<TbSeckillGoods> imp
 
         example.orderBy("startTime");
         seckillGoodsList = seckillGoodsMapper.selectByExample(example);
+
+        try {
+            //将数据存入缓存
+            if (seckillGoodsList != null && seckillGoodsList.size() > 0) {
+                for (TbSeckillGoods tbSeckillGoods : seckillGoodsList) {
+                    redisTemplate.boundHashOps(SECKILL_GOODS).put(tbSeckillGoods.getId(), tbSeckillGoods);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return seckillGoodsList;
     }
