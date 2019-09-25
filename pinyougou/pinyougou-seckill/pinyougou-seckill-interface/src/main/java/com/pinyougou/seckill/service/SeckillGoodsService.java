@@ -16,4 +16,9 @@ public interface SeckillGoodsService extends BaseService<TbSeckillGoods> {
      */
     PageInfo<TbSeckillGoods> search(Integer pageNum, Integer pageSize, TbSeckillGoods seckillGoods);
 
+    /**
+     * 查询符合条件的秒杀商品
+     * @return 秒杀商品列表
+     */
+    List<TbSeckillGoods> findList();
 }

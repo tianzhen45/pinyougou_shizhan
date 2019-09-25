@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -36,6 +37,27 @@ public class SeckillGoodsServiceImpl extends BaseServiceImpl<TbSeckillGoods> imp
 
         List<TbSeckillGoods> list = seckillGoodsMapper.selectByExample(example);
         return new PageInfo<>(list);
+    }
+
+    @Override
+    public List<TbSeckillGoods> findList() {
+        List<TbSeckillGoods> seckillGoodsList = null;
+        /**
+         * -- 在秒杀系统首页加载库存大于0，已经审核，正在秒杀期间的秒杀商品。
+         * select * from tb_seckill_goods where stock_count > 0 and `status` = 1
+         * and start_time <= NOW() and end_time > NOW() order by start_time asc
+         */
+        Example example = new Example(TbSeckillGoods.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("status", "1");
+        criteria.andGreaterThan("stockCount", 0);
+        criteria.andLessThanOrEqualTo("startTime", new Date());
+        criteria.andGreaterThan("endTime", new Date());
+
+        example.orderBy("startTime");
+        seckillGoodsList = seckillGoodsMapper.selectByExample(example);
+
+        return seckillGoodsList;
     }
 
 }
