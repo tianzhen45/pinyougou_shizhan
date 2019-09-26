@@ -55,4 +55,24 @@ public class SeckillTask {
             System.out.println("缓存了 " + seckillGoodsList.size() + " 个秒杀商品...");
         }
     }
+    /**
+     * 将在redis中结束时间小于等于当前时间的秒杀商品需要从redis中移除并更新到mysql数据库中。
+     */
+    @Scheduled(cron = "0/3 * * * * ?")
+    public void removeSeckillGoods(){
+        //1、获取redis中的秒杀商品列表；
+        List<TbSeckillGoods> seckillGoodsList = redisTemplate.boundHashOps(SECKILL_GOODS).values();
+        //2、遍历每个秒杀商品，判断其结束时间是否小于当前时间
+        if (seckillGoodsList != null && seckillGoodsList.size() > 0) {
+            for (TbSeckillGoods tbSeckillGoods : seckillGoodsList) {
+                if (tbSeckillGoods.getEndTime().getTime() <= System.currentTimeMillis()) {
+                    //2.1、如果结束时间小于当前时间则需要将其同步到mysql，删除redis中商品
+                    seckillGoodsMapper.updateByPrimaryKeySelective(tbSeckillGoods);
+                    redisTemplate.boundHashOps(SECKILL_GOODS).delete(tbSeckillGoods.getId());
+                    System.out.println("从redis中移除了id为：" + tbSeckillGoods.getId() + " 的秒杀商品...");
+                }
+            }
+        }
+
+    }
 }
