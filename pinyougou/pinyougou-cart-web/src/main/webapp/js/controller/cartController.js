@@ -6,7 +6,8 @@ var app = new Vue({
         //购物车列表
         cartList: [],
         //总价格和总数量
-        totalValue:{"totalNum":0, "totalMoney":0.0}
+        totalValue:{"totalNum":0, "totalMoney":0.0},
+
     },
     methods : {
 
