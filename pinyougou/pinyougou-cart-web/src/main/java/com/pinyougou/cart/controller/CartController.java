@@ -46,7 +46,7 @@ public class CartController {
      * @return 操作结果
      */
     @GetMapping("/addItemToCartList")
-    @CrossOrigin(origins = "http://item.pinyougou.com", allowCredentials = "true")
+    @CrossOrigin(origins = "*", allowCredentials = "true")
     public Result addItemToCartList(Long itemId, Integer num){
         Result result = Result.fail("加入购物车失败！");
         try {
