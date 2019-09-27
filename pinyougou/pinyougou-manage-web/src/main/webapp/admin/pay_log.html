@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- 页面meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>支付日志管理</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../js/vuejs-2.5.16.js"></script>
+    <script src="../js/axios-0.18.0.js"></script>
+    <script src="../js/pagination.js"></script>
+
+</head>
+
+<body class="hold-transition skin-red sidebar-mini"  >
+<div id="app">
+    <!-- .box-body -->
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">支付日志管理{{searchEntity}}</h3>
+        </div>
+
+        <div class="box-body">
+
+            <!-- 数据表格 -->
+            <div class="table-box">
+
+                <!--工具栏-->
+                <!--工具栏-->
+                <div class="pull-left">
+                    <div class="form-group form-inline">
+                        <div class="btn-group">
+                            <button @click="importExcel()" type="button" class="btn btn-default" title="导入数据" ><i class="fa fa-trash-o"></i> 导入数据</button>
+                            <button @click="exportExcel()" type="button" class="btn btn-default" title="导出数据" ><i class="fa fa-trash-o"></i> 导出数据</button>
+                            <!--<el-upload
+                                    style="display: inline"
+                                    :show-file-list="false"
+                                    :on-success="onSuccess"
+                                    :on-error="onError"
+                                    :before-upload="beforeUpload"
+                                    action="/system/basic/jl/import">
+                                <el-button size="mini" type="success" :disabled="!enabledUploadBtn" :icon="uploadBtnIcon">{{btnText}}</el-button>
+                            </el-upload>-->
+                            <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i class="fa fa-refresh"></i> 刷新</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="box-tools pull-right">
+                    <div class="has-feedback">
+                        支付时间：<input v-model="searchEntity.payTime" >
+                        订单号： <input v-model="searchEntity.orderList"  >
+                        状态：
+                        <input type="radio" v-model="searchEntity.tradeState" value="" />全部
+                        <input type="radio" v-model="searchEntity.tradeState" value="0" />未支付
+                        <input type="radio" v-model="searchEntity.tradeState" value="1" />已支付
+                        <button class="btn btn-default" @click="searchList(1)" >查询</button>
+                    </div>
+                </div>
+                <!--工具栏/-->
+
+                <!--数据列表-->
+                <table id="dataList" class="table table-bordered table-striped table-hover dataTable">
+                    <thead>
+                    <tr>
+                        <th class="" style="padding-right:0px">
+                            <input @click="selectAll()" v-model="checkAll" id="selall" type="checkbox" class="icheckbox_square-blue">
+                        </th>
+                        <th class="sorting_asc">支付日志ID</th>
+                        <th class="sorting">用户ID</th>
+                        <th class="sorting">支付金额</th>
+                        <th class="sorting">支付状态</th>
+                        <th class="sorting">创建时间</th>
+                        <th class="sorting">支付时间</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="entity in entityList">
+                        <td><input v-model="outTradeNos" :value="entity.outTradeNo" type="checkbox"></td>
+                        <td>{{entity.outTradeNo}}</td>
+                        <td>{{entity.userId}}</td>
+                        <td>{{entity.totalFee}}</td>
+                        <td>{{entity.tradeState == '1' ? "已支付":"未支付"}}</td>
+                        <td>{{entity.createTime}}</td>
+                        <td>{{entity.payTime}}</td>
+                    </tr>
+
+                    </tbody>
+                </table>
+                <!--数据列表/-->
+                <!--分页导航条-->
+                <navigation :total="total" :pageSize="pageSize" :current.sync="pageNum" @navpage="searchList"></navigation>
+
+
+            </div>
+            <!-- 数据表格 /-->
+
+        </div>
+        <!-- /.box-body -->
+
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="../js/controller/payLogController.js"></script>
+
+</html>

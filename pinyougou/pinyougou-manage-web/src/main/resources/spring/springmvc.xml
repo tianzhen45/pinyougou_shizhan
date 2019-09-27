@@ -12,14 +12,45 @@ http://code.alibabatech.com/schema/dubbo
 http://code.alibabatech.com/schema/dubbo/dubbo.xsd
 http://www.springframework.org/schema/context
 http://www.springframework.org/schema/context/spring-context.xsd">
-    <mvc:annotation-driven>
+    <!--<mvc:annotation-driven>
         <mvc:message-converters register-defaults="true">
             <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
                 <property name="supportedMediaTypes" value="application/json"/>
             </bean>
         </mvc:message-converters>
+    </mvc:annotation-driven>-->
+
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="objectMapper">
+                    <bean class="com.fasterxml.jackson.databind.ObjectMapper">
+                        <property name="dateFormat">
+                            <bean class="java.text.SimpleDateFormat">
+                                <constructor-arg type="java.lang.String" value="yyyy-MM-dd HH:mm:ss" />
+                            </bean>
+                        </property>
+                    </bean>
+                </property>
+            </bean>
+        </mvc:message-converters>
     </mvc:annotation-driven>
-    <context:component-scan base-package="com.pinyougou.manage.controller"/>
+
+    <context:component-scan base-package="com.pinyougou.manage"/>
+
+    <!--配置日期转化工厂-->
+    <!--<mvc:annotation-driven conversion-service="conversionService" />-->
+    <!-- 配置统一日期格式转换器（前端传入-后台接收处理） -->
+    <!--<bean id="conversionService"
+          class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <property name="converters">
+            <set>
+                <bean class="com.pinyougou.manage.converter.DataConvert">
+                    <property name="datePattern" value="yyyy-MM-dd HH:mm:ss" />
+                </bean>
+            </set>
+        </property>
+    </bean>-->
 
     <!--  配置文件上传解析器  -->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">

@@ -90,7 +90,8 @@ var app = new Vue({
                 app.entityList = response.data.list;
                 app.total = response.data.total;
             });*/
-            axios.post("../brand/search.do?pageNum="+this.pageNum+"&pageSize=" + this.pageSize,this.searchEntity).then(function (response) {
+            axios.post("../brand/search.do?pageNum="+this.pageNum+"&pageSize=" +
+                this.pageSize,this.searchEntity).then(function (response) {
                 //response.data 分页信息对象PageInfo
                 //记录列表
                 app.entityList = response.data.list;
