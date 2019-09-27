@@ -170,24 +170,26 @@
 						<h5>送货清单</h5>
 					</div>
 					<div class="step-cont">
-						<ul v-for="cart in cartList" class="send-detail">
+						<ul class="send-detail">
 							<li>
-								
-								<div v-for="orderItem in cart.orderItemList" class="sendGoods">
-									
-									<ul class="yui3-g">
+								<div class="sendGoods" v-for="item in items">
+									<ul class="yui3-g" >
 										<li class="yui3-u-1-6">
-											<span><img :src="orderItem.picPath"/></span>
+											<span><img :src="item.picPath"/></span>
 										</li>
 										<li class="yui3-u-7-12">
-											<div class="desc">{{orderItem.title}}</div>
+											<div class="desc">{{item.name}}
+											</div>
 											<div class="seven">7天无理由退货</div>
 										</li>
 										<li class="yui3-u-1-12">
-											<div class="price">￥{{orderItem.price.toFixed(2)}}</div>
+											<div class="price">￥{{item.price.toFixed(2)}}</div>
 										</li>
 										<li class="yui3-u-1-12">
-											<div class="num">X {{orderItem.num}}</div>
+											<div class="num">X{{item.num}}</div>
+										</li>
+										<li class="yui3-u-1-12">
+											<div class="num">X{{item.totalFee}}</div>
 										</li>
 										<li class="yui3-u-1-12">
 											<div class="exit">有货</div>
@@ -198,7 +200,6 @@
 							<li></li>
 							<li></li>
 						</ul>
-						
 					</div>
 					<div class="hr"></div>
 				</div>
@@ -207,9 +208,11 @@
 						<h5>发票信息</h5>
 					</div>
 					<div class="step-cont">
-						<span>普通发票（电子）</span>
-						<span>个人</span>
-						<span>明细</span>
+					<ul class="payType">
+						<li :class="order.invoiceType=='1'?'selected':''" @click="order.invoiceType='1'">  普通发票（电子）<span title="点击取消选择"></span></li>
+						<li :class="order.invoiceType=='2'?'selected':''" @click="order.invoiceType='2'">  个人<span title="点击取消选择"></span></li>
+						<li :class="order.invoiceType=='3'?'selected':''" @click="order.invoiceType='3'">  明细<span title="点击取消选择"></span></li>
+					</ul>
 					</div>
 				</div>
 				<div class="cardInfo">

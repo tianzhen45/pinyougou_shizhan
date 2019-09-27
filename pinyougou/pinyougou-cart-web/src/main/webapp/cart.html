@@ -21,8 +21,8 @@
 			<div class="shortcut">
 				<ul class="fl">
 					<li class="f-item">品优购欢迎您！</li>
-					<li class="f-item" v-if="username != 'anonymousUser'">{{username}}　<span><a href="/logout/cas">退出</a></span></li>
-					<li class="f-item" v-if="username == 'anonymousUser'">
+					<li class="f-item" v-if="loginName != 'anonymousUser'">{{loginName}}　<span><a href="/logout/cas">退出  </a></span></li>
+					<li class="f-item" v-if="loginName == 'anonymousUser'">
                         <span><a href="http://cas.pinyougou.com?service=http://cart.pinyougou.com/redirect.html">请登录</a></span>　
                         <span><a href="http://user.pinyougou.com/register.html">免费注册</a></span>
                     </li>
@@ -48,7 +48,11 @@
 	<div class="cart py-container">
 		<!--logoArea-->
 		<div class="logoArea">
-			<div class="fl logo"><span class="title">购物车</span></div>
+			<a href="http://www.pinyougou.com">
+				<div class="fl logo">
+					<span class="title">购物车</span>
+				</div>
+			</a>
 			<div class="fr search">
 				<form class="sui-form form-inline">
 					<div class="input-append">
@@ -60,26 +64,26 @@
 		</div>
 		<!--All goods-->
 		<div class="allgoods">
-			<h4>全部商品<span> {{totalValue.totalNum}}</span></h4>
+			<h4>全部商品<span>{{totalEntity.totalType}}</span>项</h4>
 			<div class="cart-main">
 				<div class="yui3-g cart-th">
-					<div class="yui3-u-1-4"><input type="checkbox" /> 全部</div>
+					<div class="yui3-u-1-4"><input type="checkbox" @click="checkAll($event)" :checked="checked" /> 全部</div>
 					<div class="yui3-u-1-4">商品</div>
 					<div class="yui3-u-1-8">单价（元）</div>
 					<div class="yui3-u-1-8">数量</div>
 					<div class="yui3-u-1-8">小计（元）</div>
 					<div class="yui3-u-1-8">操作</div>
 				</div>
-				<div v-for="cart in cartList" class="cart-item-list">
+				<div class="cart-item-list" v-for="cart in carts">
 					<div class="cart-shop">
-						<input type="checkbox" />
+						<input type="checkbox" name="" :value="cart.sellerId" v-model="ids.sellerIds" @click="checkSeller($event,cart.sellerId)" />
 						<span class="shopname self">{{cart.sellerName}}</span>
 					</div>
 					<div class="cart-body">
-						<div v-for="orderItem in cart.orderItemList" class="cart-list">
+						<div class="cart-list" v-for="orderItem in cart.orderItemList">
 							<ul class="goods-list yui3-g">
 								<li class="yui3-u-1-24">
-									<input type="checkbox" />
+									<input type="checkbox" name="" :value="orderItem" v-model="ids.items" @click="checkItem($event,cart.sellerId)"/>
 								</li>
 								<li class="yui3-u-11-24">
 									<div class="good-item">
@@ -87,42 +91,96 @@
 										<div class="item-msg">{{orderItem.title}}</div>
 									</div>
 								</li>
-								
-								<li class="yui3-u-1-8"><span class="price">{{orderItem.price.toFixed(2)}}</span></li>
+
+								<li class="yui3-u-1-8"><span class="price">{{Number(orderItem.price).toFixed(2)}}</span></li>
 								<li class="yui3-u-1-8">
-									<a href="javascript:void(0)" @click.prevent="addItemToCartList(orderItem.itemId, -1)" class="increment mins">-</a>
-									<input autocomplete="off" type="text" :value="orderItem.num" minnum="1" class="itxt" />
-									<a href="javascript:void(0)" @click.prevent="addItemToCartList(orderItem.itemId, 1)" class="increment plus">+</a>
+									<a href="javascript:void(0)" class="increment mins" @click="setCart(orderItem.itemId,orderItem.num-1)">-</a>
+									<input autocomplete="off" type="text" value="1" minnum="1" class="itxt" v-model="orderItem.num" @blur="setCart(orderItem.itemId,orderItem.num)" />
+									<a href="javascript:void(0)" class="increment plus" @click="setCart(orderItem.itemId,orderItem.num+1)">+</a>
 								</li>
-								<li class="yui3-u-1-8"><span class="sum">{{orderItem.totalFee.toFixed(2)}}</span></li>
+								<li class="yui3-u-1-8"><span class="sum">{{Number(orderItem.totalFee).toFixed(2)}}</span></li>
 								<li class="yui3-u-1-8">
-									<a @click.prevent="addItemToCartList(orderItem.itemId, -orderItem.num)" href="#none">删除</a><br />
+									<a href="#none" @click="delItem(orderItem.itemId)">删除</a><br />
 									<a href="#none">移到我的关注</a>
 								</li>
 							</ul>
 						</div>
+						<!--<div class="cart-list">-->
+						<!--<ul class="goods-list yui3-g">-->
+						<!--<li class="yui3-u-1-24">-->
+						<!--<input type="checkbox" name="" value="" />-->
+						<!--</li>-->
+						<!--<li class="yui3-u-11-24">-->
+						<!--<div class="good-item">-->
+						<!--<div class="item-img"><img src="img/goods.png" /></div>-->
+						<!--<div class="item-msg">Apple Macbook Air 13.3英寸笔记本电脑 银色（Corei5）处理器/8GB内存-->
+						<!--尺寸：13.3英寸</div>-->
+						<!--</div>-->
+						<!--</li>-->
+						<!---->
+						<!--<li class="yui3-u-1-8"><span class="price">8848.00</span></li>-->
+						<!--<li class="yui3-u-1-8">-->
+						<!--<a href="javascript:void(0)" class="increment mins">-</a>-->
+						<!--<input autocomplete="off" type="text" value="1" minnum="1" class="itxt" />-->
+						<!--<a href="javascript:void(0)" class="increment plus">+</a>-->
+						<!--</li>-->
+						<!--<li class="yui3-u-1-8"><span class="sum">8848.00</span></li>-->
+						<!--<li class="yui3-u-1-8">-->
+						<!--<a href="#none">删除</a><br />-->
+						<!--<a href="#none">移到我的关注</a>-->
+						<!--</li>-->
+						<!--</ul>-->
+						<!--</div>-->
+						<!--<div class="cart-list">-->
+						<!--<ul class="goods-list yui3-g">-->
+						<!--<li class="yui3-u-1-24">-->
+						<!--<input type="checkbox" name="" value="" />-->
+						<!--</li>-->
+						<!--<li class="yui3-u-11-24">-->
+						<!--<div class="good-item">-->
+						<!--<div class="item-img"><img src="img/goods.png" /></div>-->
+						<!--<div class="item-msg">-->
+						<!--Apple Macbook Air 13.3英寸笔记本电脑 银色（Corei5）处理器/8GB内存-->
+						<!--尺寸：13.3英寸-->
+						<!--</div>-->
+						<!--</div>-->
+						<!--</li>-->
+						<!---->
+						<!--<li class="yui3-u-1-8"><span class="price">8848.00</span></li>-->
+						<!--<li class="yui3-u-1-8">-->
+						<!--<a href="javascript:void(0)" class="increment mins">-</a>-->
+						<!--<input autocomplete="off" type="text" value="1" minnum="1" class="itxt" />-->
+						<!--<a href="javascript:void(0)" class="increment plus">+</a>-->
+						<!--</li>-->
+						<!--<li class="yui3-u-1-8"><span class="sum">8848.00</span></li>-->
+						<!--<li class="yui3-u-1-8">-->
+						<!--<a href="#none">删除</a><br />-->
+						<!--<a href="#none">移到我的关注</a>-->
+						<!--</li>-->
+						<!--</ul>-->
+						<!--</div>-->
 					</div>
 				</div>
 
 			</div>
 			<div class="cart-tool">
 				<div class="select-all">
-					<input type="checkbox" />
+					<input type="checkbox" name="" @click="checkAll($event)" :checked="checked" />
 					<span>全选</span>
 				</div>
 				<div class="option">
-					<a href="#none">删除选中的商品</a>
+					<a href="#none" @click="delBatch">删除选中的商品</a>
 					<a href="#none">移到我的关注</a>
 					<a href="#none">清除下柜商品</a>
 				</div>
 				<div class="toolbar">
-					<div class="chosed">已选择<span>0</span>件商品</div>
+					<div class="chosed">已选择<span>{{totalEntity.totalNum}}</span>件商品</div>
 					<div class="sumprice">
-						<span><em>总价（不含运费） ：</em><i class="summoney">¥{{totalValue.totalMoney.toFixed(2)}}</i></span>
-						<span><em>已节省：</em><i>-¥20.00</i></span>
+						<span><em>总价（不含运费） ：</em><i class="summoney">¥{{totalEntity.totalMoney.toFixed(2)}}</i></span>
+						<br/>	<span><em>已节省：</em><i>-¥0.00</i></span>
 					</div>
 					<div class="sumbtn">
-						<a class="sum-btn" href="getOrderInfo.html" target="_blank">结算</a>
+						<a class="sum-btn" target="_blank"  @click="saveSelectedItem()">结算</a>
 					</div>
 				</div>
 			</div>
@@ -130,18 +188,18 @@
 			<div class="deled">
 				<span>已删除商品，您可以重新购买或加关注：</span>
 				<div class="cart-list del">
-					<ul class="goods-list yui3-g">
+					<ul class="goods-list yui3-g" v-for="orderItem in delOrderItems">
 						<li class="yui3-u-1-2">
 							<div class="good-item">
-								<div class="item-msg">Apple Macbook Air 13.3英寸笔记本电脑 银色（Corei5）处理器/8GB内存</div>
+								<div class="item-msg">{{orderItem.title}}</div>
 							</div>
 						</li>
-						<li class="yui3-u-1-6"><span class="price">8848.00</span></li>
+						<li class="yui3-u-1-6"><span class="price">{{orderItem.price}}</span></li>
 						<li class="yui3-u-1-6">
-							<span class="number">1</span>
+							<span class="number">{{orderItem.num}}</span>
 						</li>
 						<li class="yui3-u-1-8">
-							<a href="#none">重新购买</a>
+							<a href="#none" @click="reBuy(orderItem.itemId,orderItem.num)">重新购买</a>
 							<a href="#none">移到我的关注</a>
 						</li>
 					</ul>
