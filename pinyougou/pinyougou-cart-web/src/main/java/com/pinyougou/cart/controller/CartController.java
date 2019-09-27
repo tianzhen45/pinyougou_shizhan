@@ -4,15 +4,13 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSON;
 import com.pinyougou.cart.service.CartService;
 import com.pinyougou.common.util.CookieUtils;
+import com.pinyougou.pojo.TbOrderItem;
 import com.pinyougou.vo.Cart;
 import com.pinyougou.vo.Result;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -129,5 +127,72 @@ public class CartController {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         map.put("username", username);
         return map;
+    }
+
+    @GetMapping("/setItemToCartList")
+    @CrossOrigin(origins = "http://item.pinyougou.com", allowCredentials = "true")
+    public Result setItemToCartList(Long itemId, Integer num){
+        Result result = Result.fail("加入购物车失败！");
+        try {
+            //解决跨域：设置允许跨域请求的域名
+            //response.setHeader("Access-Control-Allow-Origin", "http://item.pinyougou.com");
+            //允许携带并接收cookie
+            //response.setHeader("Access-Control-Allow-Credentials", "true");
+
+            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+            //获取当前的购物车
+            List<Cart> cartList = findCartList();
+            //将商品加入购物车
+            List<Cart> newCartList = cartService.setItemToCartList(cartList, itemId, num);
+            //存购物车数据
+            if ("anonymousUser".equals(username)) {
+                //未登录；将购物车存入到cookie
+                CookieUtils.setCookie(request, response, COOKIE_CART_LIST,
+                        JSON.toJSONString(newCartList), COOKIE_CART_LIST_MAX_AGE, true);
+            } else {
+                //已登录；将购物车存入到redis
+                cartService.saveCartListByUsername(newCartList, username);
+            }
+            result = Result.ok("加入购物车成功！");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+
+    @PostMapping("/delBatch")
+    public Boolean delBatch(@RequestBody TbOrderItem[] items){
+        try {
+            if (items != null && items.length > 0) {
+                for (TbOrderItem item : items) {
+                    setItemToCartList(item.getItemId(), 0);
+                }
+                return true;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    //保存选中的商品到redis中
+    @PostMapping("/saveSelectedItem")
+    public boolean saveSelectedItem(@RequestBody List<TbOrderItem> items){
+        try {
+            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+            cartService.saveSelectedItemInRedis(items,username);
+            return true;
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
+    //读取redis中保存的选中的商品
+    @GetMapping("/loadSelectedItem")
+    public List<TbOrderItem> loadSelectedItem(){
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return cartService.loadSelectedItem(username);
     }
 }

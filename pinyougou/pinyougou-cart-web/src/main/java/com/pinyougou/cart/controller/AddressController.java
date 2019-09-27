@@ -39,6 +39,8 @@ public class AddressController {
     @PostMapping("/add")
     public Result add(@RequestBody TbAddress address){
         try {
+            String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+            address.setUserId(userId);
             addressService.add(address);
 
             return Result.ok("新增成功");
@@ -102,6 +104,18 @@ public class AddressController {
                              @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize,
                            @RequestBody TbAddress address) {
         return addressService.search(pageNum, pageSize, address);
+    }
+
+
+    @PostMapping("/setDefault")
+    public Result setDefault(@RequestBody TbAddress address){
+        try {
+            addressService.setDefault(address);
+            return Result.ok("设置默认地址成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Result.fail("设置默认地址失败");
     }
 
 }

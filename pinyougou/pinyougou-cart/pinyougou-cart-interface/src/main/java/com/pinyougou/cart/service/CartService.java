@@ -1,5 +1,6 @@
 package com.pinyougou.cart.service;
 
+import com.pinyougou.pojo.TbOrderItem;
 import com.pinyougou.vo.Cart;
 
 import java.util.List;
@@ -34,4 +35,10 @@ public interface CartService {
      * @return 新购物车列表
      */
     List<Cart> mergeCartList(List<Cart> cookieCartList, List<Cart> redisCartList);
+
+    List<Cart> setItemToCartList(List<Cart> cartList, Long itemId, Integer num);
+
+    void saveSelectedItemInRedis(List<TbOrderItem> items, String username);
+
+    List<TbOrderItem> loadSelectedItem(String userId);
 }
