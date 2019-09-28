@@ -10,118 +10,123 @@
 
     <link rel="stylesheet" type="text/css" href="css/webbase.css" />
     <link rel="stylesheet" type="text/css" href="css/pages-seckillOrder.css" />
+    <script src="js/vuejs-2.5.16.js"></script>
+    <script src="js/axios-0.18.0.js"></script>
 </head>
 
 <body>
+<div id="app">
+    <div id="nav-bottom">
+        <!--顶部-->
+        <div class="nav-top">
+            <div class="top">
+                <div class="py-container">
+                    <div class="shortcut">
+                        <ul class="fl">
+                            <li class="f-item">品优购欢迎您！</li>
+                            <li class="f-item">{{entity.username}}　<span><a href="/logout/cas">退出登录</a></span></li>
+                        </ul>
+                        <ul class="fr">
+                            <li class="f-item">我的订单</li>
+                            <li class="f-item space"></li>
+                            <li class="f-item"><a href="home.html" target="_blank">我的品优购</a></li>
+                            <li class="f-item space"></li>
+                            <li class="f-item">品优购会员</li>
+                            <li class="f-item space"></li>
+                            <li class="f-item">企业采购</li>
+                            <li class="f-item space"></li>
+                            <li class="f-item">关注品优购</li>
+                            <li class="f-item space"></li>
+                            <li class="f-item" id="service">
+                                <span>客户服务</span>
+                                <ul class="service">
+                                    <li><a href="cooperation.html" target="_blank">合作招商</a></li>
+                                    <li><a href="shoplogin.html" target="_blank">商家后台</a></li>
+                                    <li><a href="cooperation.html" target="_blank">合作招商</a></li>
+                                    <li><a href="#">商家后台</a></li>
+                                </ul>
+                            </li>
+                            <li class="f-item space"></li>
+                            <li class="f-item">网站导航</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!--头部-->
+            <div class="header">
+                <div class="py-container">
+                    <div class="yui3-g Logo">
+                        <div class="yui3-u Left logoArea">
+                            <a class="logo-bd" title="品优购" href="JD-index.html" target="_blank"></a>
+                        </div>
+                        <div class="yui3-u Center searchArea">
+                            <div class="search">
+                                <form action="" class="sui-form form-inline">
+                                    <!--searchAutoComplete-->
+                                    <div class="input-append">
+                                        <input type="text" id="autocomplete" type="text" class="input-error input-xxlarge" />
+                                        <button class="sui-btn btn-xlarge btn-danger" type="button">搜索</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="hotwords">
+                                <ul>
+                                    <li class="f-item">品优购首发</li>
+                                    <li class="f-item">亿元优惠</li>
+                                    <li class="f-item">9.9元团购</li>
+                                    <li class="f-item">每满99减30</li>
+                                    <li class="f-item">亿元优惠</li>
+                                    <li class="f-item">9.9元团购</li>
+                                    <li class="f-item">办公用品</li>
+
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="yui3-u Right shopArea">
+                            <div class="fr shopcar">
+                                <div class="show-shopcar" id="shopcar">
+                                    <span class="car"></span>
+                                    <a class="sui-btn btn-default btn-xlarge" href="cart.html" target="_blank">
+                                        <span>我的购物车</span>
+                                        <i class="shopnum">0</i>
+                                    </a>
+                                    <div class="clearfix shopcarlist" id="shopcarlist" style="display:none">
+                                        <p>"啊哦，你的购物车还没有商品哦！"</p>
+                                        <p>"啊哦，你的购物车还没有商品哦！"</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="yui3-g NavList">
+                        <div class="yui3-u Left all-sort">
+                            <h4>全部商品分类</h4>
+                        </div>
+                        <div class="yui3-u Center navArea">
+                            <ul class="nav">
+                                <li class="f-item">服装城</li>
+                                <li class="f-item">美妆馆</li>
+                                <li class="f-item">品优超市</li>
+                                <li class="f-item">全球购</li>
+                                <li class="f-item">闪购</li>
+                                <li class="f-item">团购</li>
+                                <li class="f-item">有趣</li>
+                                <li class="f-item"><a href="seckill-index.html" target="_blank">秒杀</a></li>
+                            </ul>
+                        </div>
+                        <div class="yui3-u Right"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- 头部栏位 -->
     <!--页面顶部-->
-<div id="nav-bottom">
-	<!--顶部-->
-	<div class="nav-top">
-		<div class="top">
-			<div class="py-container">
-				<div class="shortcut">
-					<ul class="fl">
-						<li class="f-item">品优购欢迎您！</li>
-						<li class="f-item">请<a href="login.html" target="_blank">登录</a>　<span><a href="register.html" target="_blank">免费注册</a></span></li>
-					</ul>
-					<ul class="fr">
-						<li class="f-item">我的订单</li>
-						<li class="f-item space"></li>
-						<li class="f-item"><a href="home.html" target="_blank">我的品优购</a></li>
-						<li class="f-item space"></li>
-						<li class="f-item">品优购会员</li>
-						<li class="f-item space"></li>
-						<li class="f-item">企业采购</li>
-						<li class="f-item space"></li>
-						<li class="f-item">关注品优购</li>
-						<li class="f-item space"></li>
-						<li class="f-item" id="service">
-							<span>客户服务</span>
-							<ul class="service">
-								<li><a href="cooperation.html" target="_blank">合作招商</a></li>
-								<li><a href="shoplogin.html" target="_blank">商家后台</a></li>
-								<li><a href="cooperation.html" target="_blank">合作招商</a></li>
-								<li><a href="#">商家后台</a></li>
-							</ul>
-						</li>
-						<li class="f-item space"></li>
-						<li class="f-item">网站导航</li>
-					</ul>
-				</div>
-			</div>
-		</div>
 
-		<!--头部-->
-		<div class="header">
-			<div class="py-container">
-				<div class="yui3-g Logo">
-					<div class="yui3-u Left logoArea">
-						<a class="logo-bd" title="品优购" href="JD-index.html" target="_blank"></a>
-					</div>
-					<div class="yui3-u Center searchArea">
-						<div class="search">
-							<form action="" class="sui-form form-inline">
-								<!--searchAutoComplete-->
-								<div class="input-append">
-									<input type="text" id="autocomplete" type="text" class="input-error input-xxlarge" />
-									<button class="sui-btn btn-xlarge btn-danger" type="button">搜索</button>
-								</div>
-							</form>
-						</div>
-						<div class="hotwords">
-							<ul>
-								<li class="f-item">品优购首发</li>
-								<li class="f-item">亿元优惠</li>
-								<li class="f-item">9.9元团购</li>
-								<li class="f-item">每满99减30</li>
-								<li class="f-item">亿元优惠</li>
-								<li class="f-item">9.9元团购</li>
-								<li class="f-item">办公用品</li>
-
-							</ul>
-						</div>
-					</div>
-					<div class="yui3-u Right shopArea">
-						<div class="fr shopcar">
-							<div class="show-shopcar" id="shopcar">
-								<span class="car"></span>
-								<a class="sui-btn btn-default btn-xlarge" href="cart.html" target="_blank">
-									<span>我的购物车</span>
-									<i class="shopnum">0</i>
-								</a>
-								<div class="clearfix shopcarlist" id="shopcarlist" style="display:none">
-									<p>"啊哦，你的购物车还没有商品哦！"</p>
-									<p>"啊哦，你的购物车还没有商品哦！"</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="yui3-g NavList">
-					<div class="yui3-u Left all-sort">
-						<h4>全部商品分类</h4>
-					</div>
-					<div class="yui3-u Center navArea">
-						<ul class="nav">
-							<li class="f-item">服装城</li>
-							<li class="f-item">美妆馆</li>
-							<li class="f-item">品优超市</li>
-							<li class="f-item">全球购</li>
-							<li class="f-item">闪购</li>
-							<li class="f-item">团购</li>
-							<li class="f-item">有趣</li>
-							<li class="f-item"><a href="seckill-index.html" target="_blank">秒杀</a></li>
-						</ul>
-					</div>
-					<div class="yui3-u Right"></div>
-				</div>
-			</div>
-		</div>
-	</div>
 </div>
-
 <script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
 <script type="text/javascript">
 $(function(){
@@ -279,7 +284,7 @@ $(function(){
                     <div class="person-info">
                         <div class="person-photo"><img src="img/_/photo.png" alt=""></div>
                         <div class="person-account">
-                            <span class="name">Michelle</span>
+                            <span class="name">{{user.username}}</span>
                             <span class="safe">账户安全</span>
                         </div>
                         <div class="clearfix"></div>
@@ -320,31 +325,31 @@ $(function(){
                             <div id="one" class="tab-pane active">
                                 <form class="sui-form form-horizontal sui-validate" id="jsForm">
                                     <div class="control-group">
-                                        <label for="inputusername" class="control-label">用户名：</label>
+                                        <label  class="control-label">用户名：</label>
                                         <div class="controls">
                                             <input id="pwdid" class="fn-tinput" data-rule-remote="http://www.baidu.com" type="password" name="OldPassword" placeholder="输入昵称"
-                                                required data-msg-required="请输入昵称" minlength="6" data-msg-minlength="至少输入6个字符"
+                                                required data-msg-required="请输入用户名" minlength="6" data-msg-minlength="至少输入6个字符" v-model="entity.username"
                                             />
 
                                         </div>
                                     </div>
                                     <div class="control-group">
-                                        <label for="inputPassword" class="control-label">密码：</label>
+                                        <label  class="control-label">密码：</label>
                                         <div class="controls">
-                                            <input class="fn-tinput" type="password" name="password" value="" placeholder="新密码" required id="password" data-rule-remote="php.php">
+                                            <input class="fn-tinput" type="password" name="password" value="" placeholder="新密码" required id="password" data-rule-remote="php.php" v-model="entity.password">
                                         </div>
                                     </div>
                                     <div class="control-group">
-                                        <label for="inputRepassword" class="control-label">重复密码：</label>
+                                        <label class="control-label">重复密码：</label>
                                         <div class="controls">
-                                            <input class="fn-tinput" type="password" name="confirm_password" value="" placeholder="确认新密码" required equalTo="#password">
+                                            <input class="fn-tinput" type="password" name="confirm_password" value="" placeholder="确认新密码" required equalTo="#password" v-model="password">
                                         </div>
                                     </div>
 
                                     <div class="control-group">
                                         <label class="control-label"></label>
                                         <div class="controls">
-                                            <button type="submit" class="sui-btn btn-primary">提交按钮</button>
+                                            <button type="submit" class="sui-btn btn-primary" @click="updateLoginUserPassword()">提交按钮</button>
                                         </div>
                                     </div>
                                 </form>
@@ -374,29 +379,20 @@ $(function(){
                                 <form class="sui-form form-horizontal sui-validate" data-toggle='validate' id="bind-form">
 
                                     <div class="control-group">
-                                        <label for="inputPassword" class="control-label">验证方式：</label>
-                                        <div class="controls fixed">手机验证（138****9856）</div>                            
-                                    </div>
-                                     <div class="control-group">
-                                        <label for="inputcode" class="control-label">验证码：</label>
-                                        <div class="controls">
-                                            <input name="inputcode" type="text" id="inputcode">
-                                        </div>
-                                        <div class="controls">
-                                            验证码
-                                        </div>
+                                        <label  class="control-label">验证方式：</label>
+                                        <div class="controls fixed">手机验证（{{user.phone}}）</div>
                                     </div>
                                     <div class="control-group">
-                                        <label for="inputRepassword" class="control-label">短信验证码：</label>
+                                        <label class="control-label">短信验证码：</label>
                                         <div class="controls">
-                                            <input name="msgcode" type="text" id="msgcode">
+                                            <input name="msgcode" type="text" id="msgcode" v-model="msgCode">
                                         </div>
                                         <div class="controls">
-                                            <button class="sui-btn btn-info">发送</button>
+                                            <button class="sui-btn btn-info" @click.prevent="sendSmsCode()">发送</button>
                                         </div>
                                     </div>
                                     <div class="control-group next-btn">
-                                        <a class="sui-btn btn-primary" href="home-setting-address-phone.html">下一步</a>
+                                        <a class="sui-btn btn-primary" @click.prevent="checkTwoCode()">下一步</a>
                                     </div>
                                 </form>
                             </div>
@@ -539,9 +535,10 @@ $(function(){
 		</div>
 	</div>
 </div>
+
 <!--页面底部END-->
 
 
-undefined
-
+<script type="text/javascript" src="js/controller/indexController.js"></script>
+<script type="text/javascript" src="js/controller/safeController.js"></script>
 </html>

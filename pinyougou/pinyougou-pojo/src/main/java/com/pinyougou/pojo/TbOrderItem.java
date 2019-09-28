@@ -5,6 +5,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Table(name="tb_order_item")
 public class TbOrderItem implements Serializable {
@@ -110,5 +111,20 @@ public class TbOrderItem implements Serializable {
 
     public void setSellerId(String sellerId) {
         this.sellerId = sellerId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TbOrderItem that = (TbOrderItem) o;
+        return Objects.equals(itemId, that.itemId) &&
+                Objects.equals(title, that.title);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(itemId, title);
     }
 }
