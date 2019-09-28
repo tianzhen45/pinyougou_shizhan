@@ -42,4 +42,10 @@ public interface AddressService extends BaseService<TbAddress> {
     Map<String, Object> showAddressName(String provinceId, String cityId, String townId);
 
     void save(TbAddress address);
+
+    List<Map<String,Object>> findAllProvinces();
+
+    List<Map<String,Object>> findCitiesByProvince(String provinceId);
+
+    List<Map<String,Object>> findAreasByCity(String cityId);
 }

@@ -20,7 +20,7 @@ import java.util.regex.PatternSyntaxException;
 @RestController
 public class UserController {
 
-    @Reference(timeout = 10000)
+    @Reference(timeout = 9999999)
     private UserService userService;
 
     @PostMapping("/updateUserInfo")
@@ -41,7 +41,7 @@ public class UserController {
 
     /**
      * 取消订单
-     * @param orderId 选中的订单ids数组
+     * @param orderId 选中的订单id
      * @return
      */
     @GetMapping("/deleteOrder")

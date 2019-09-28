@@ -16,4 +16,16 @@ public interface SellerService extends BaseService<TbSeller> {
      */
     PageInfo<TbSeller> search(Integer pageNum, Integer pageSize, TbSeller seller);
 
+    /**
+     * 查询商家
+     * @param sellerId
+     * @return
+     */
+    TbSeller findSellerBySellerId(String sellerId);
+
+    /**
+     * 更新用户密码
+     * @param seller
+     */
+    void updatePassword(TbSeller seller);
 }
