@@ -4,23 +4,19 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.pinyougou.common.util.IdWorker;
-import com.pinyougou.mapper.OrderItemMapper;
-import com.pinyougou.mapper.OrderMapper;
-import com.pinyougou.mapper.PayLogMapper;
-import com.pinyougou.pojo.TbOrder;
+import com.pinyougou.mapper.*;
+import com.pinyougou.pojo.*;
 import com.pinyougou.order.service.OrderService;
-import com.pinyougou.pojo.TbOrderItem;
-import com.pinyougou.pojo.TbPayLog;
 import com.pinyougou.service.impl.BaseServiceImpl;
 import com.pinyougou.vo.Cart;
+import com.pinyougou.vo.SeckillOrderVo;
+import com.pinyougou.vo.SellerSeckillOrderVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class OrderServiceImpl extends BaseServiceImpl<TbOrder> implements OrderService {
@@ -39,6 +35,12 @@ public class OrderServiceImpl extends BaseServiceImpl<TbOrder> implements OrderS
 
     @Autowired
     private IdWorker idWorker;
+
+    @Autowired
+    private SeckillOrderMapper seckillOrderMapper;
+
+    @Autowired
+    private SeckillGoodsMapper seckillGoodsMapper;
 
     //品优购购物车在redis中的键名
     private static final String CART_LIST = "CART_LIST";
@@ -175,5 +177,98 @@ public class OrderServiceImpl extends BaseServiceImpl<TbOrder> implements OrderS
                 .andIn("orderId", Arrays.asList(orderIds));
         orderMapper.updateByExampleSelective(order, example);
     }
+
+    @Override
+    public PageInfo<TbOrder> findOrderList(Integer pageNum, Integer pageSize, TbOrder order) {
+        //设置分页
+        PageHelper.startPage(pageNum, pageSize);
+        //创建查询对象
+        Example example = new Example(TbOrder.class);
+
+        //创建查询条件对象
+        Example.Criteria criteria = example.createCriteria();
+        if (StringUtils.isNotBlank(order.getStatus())) {
+
+            criteria.andEqualTo("status", order.getStatus());
+
+        }
+        if (StringUtils.isNotBlank(order.getSellerId())) {
+
+            criteria.andEqualTo("sellerId", order.getSellerId());
+        }
+
+        //模糊查询
+        /**if (StringUtils.isNotBlank(user.getProperty())) {
+         criteria.andLike("property", "%" + user.getProperty() + "%");
+         }*/
+
+        List<TbOrder> list = orderMapper.selectByExample(example);
+        return new PageInfo<>(list);
+
+    }
+
+    @Override
+    public void updateStatus(TbOrder order) {
+        orderMapper.updateByPrimaryKeySelective(order);
+    }
+
+    @Override
+    public Map<String, Object> findSeckillOrderList(Integer pageNum, Integer pageSize, TbSeckillOrder order) {
+        Map<String, Object> resultMap = new HashMap<>();
+        //select * from tb_seckill_order where user_id = 'heima' ORDER BY create_time DESC
+        //设置分页信息
+        PageHelper.startPage(pageNum, pageSize);
+        Example example = new Example(TbSeckillOrder.class);
+        Example.Criteria criteria = example.createCriteria();
+        if (StringUtils.isNotBlank(order.getSellerId())) {
+
+            criteria.andEqualTo("sellerId", order.getSellerId());
+        }
+        //设置排序
+        example.orderBy("createTime").desc();
+        List<TbSeckillOrder> seckillOrderList = seckillOrderMapper.selectByExample(example);
+        if (seckillOrderList == null || seckillOrderList.size() == 0) {
+            return new HashMap<>();
+        }
+        PageInfo<TbSeckillOrder> pageInfo = PageInfo.of(seckillOrderList);
+
+        List<SellerSeckillOrderVo> list = new ArrayList<>();
+        for (TbSeckillOrder tbSeckillOrder : seckillOrderList) {
+
+            SellerSeckillOrderVo SeckillOrderVo = new SellerSeckillOrderVo();
+
+            SeckillOrderVo.setSeckillOrder(tbSeckillOrder);
+            //2.根据秒杀商品id查询秒杀商品
+            TbSeckillGoods seckillGoods = seckillGoodsMapper.selectByPrimaryKey(tbSeckillOrder.getSeckillId());
+            if (seckillGoods == null) {
+                return new HashMap<>();
+            }
+            SeckillOrderVo.setSeckillGoods(seckillGoods);
+            list.add(SeckillOrderVo);
+        }
+
+        //vo列表
+        resultMap.put("seckillOrderList", list);
+        //当前页
+        resultMap.put("pageNum", pageInfo.getPageNum());
+        //总页数
+        resultMap.put("total", pageInfo.getTotal());
+        return resultMap;
+    }
+
+    @Override
+    public void deleteSeckillOrder(Long[] ids) {
+        if (ids != null && ids.length > 0) {
+            for (Long id : ids) {
+                seckillOrderMapper.deleteByPrimaryKey(id.toString());
+            }
+        }
+    }
+
+    @Override
+    public void updatePayment(TbOrder order) {
+        orderMapper.updateByPrimaryKeySelective(order);
+    }
+
 
 }

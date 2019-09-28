@@ -126,8 +126,9 @@ var app = new Vue({
         //根据页号查询
         queryByPageNo:function(pageNo){
             if (0 < pageNo && pageNo <= this.pages) {
-                this.pageNum = pageNo;
-                this.findUserSeckillOrder();
+                app.pageNum = pageNo;
+                app.ids=[];
+                app.findUserSeckillOrder();
             }
         },
         //用户秒杀订单
@@ -136,6 +137,7 @@ var app = new Vue({
                 app.resultMap = response.data;
                 app.pageNum = app.resultMap.pageNum;
                 app.pages = app.resultMap.pages;
+                this.ids=[];
                 app.buildPagination();
             });
         },

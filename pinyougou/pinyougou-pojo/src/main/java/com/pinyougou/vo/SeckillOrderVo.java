@@ -2,13 +2,12 @@ package com.pinyougou.vo;
 
 import com.pinyougou.pojo.TbSeckillGoods;
 import com.pinyougou.pojo.TbSeckillOrder;
+import com.pinyougou.pojo.TbSeller;
 
 import java.io.Serializable;
 
 /**
- * @author: Lewis
- * @date: 2019/9/26
- * @description:
+ * 用户秒杀订单vo
  */
 public class SeckillOrderVo implements Serializable{
 
@@ -16,7 +15,7 @@ public class SeckillOrderVo implements Serializable{
     private TbSeckillOrder seckillOrder;
 //    liu
     //商家名称
-    private String sellerName;
+    private TbSeller seller;
     //秒杀商品（为了显示标题，原价，秒杀价）
     private TbSeckillGoods tbSeckillGoods;
     //原商品sku规格字符串（为了显示规格）
@@ -30,12 +29,12 @@ public class SeckillOrderVo implements Serializable{
         this.seckillOrder = seckillOrder;
     }
 
-    public String getSellerName() {
-        return sellerName;
+    public TbSeller getSeller() {
+        return seller;
     }
 
-    public void setSellerName(String sellerName) {
-        this.sellerName = sellerName;
+    public void setSeller(TbSeller seller) {
+        this.seller = seller;
     }
 
     public TbSeckillGoods getTbSeckillGoods() {

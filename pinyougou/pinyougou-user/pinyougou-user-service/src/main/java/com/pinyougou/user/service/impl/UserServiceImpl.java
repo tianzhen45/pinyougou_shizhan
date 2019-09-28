@@ -142,7 +142,7 @@ public class UserServiceImpl extends BaseServiceImpl<TbUser> implements UserServ
             if (seller == null) {
                 return null;
             }
-            seckillOrderVo.setSellerName(seller.getName());
+            seckillOrderVo.setSeller(seller);
             //2.根据秒杀商品id查询秒杀商品
             TbSeckillGoods seckillGoods = seckillGoodsMapper.selectByPrimaryKey(tbSeckillOrder.getSeckillId());
             if (seckillGoods == null) {

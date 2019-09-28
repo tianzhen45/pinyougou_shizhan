@@ -200,9 +200,9 @@
                                 <th width="35%">宝贝</th>
                                 <th width="5%">单价</th>
                                 <th width="5%">数量</th>
-                                <th width="8%">商品操作</th>
+                                <!--<th width="8%">商品操作</th>-->
                                 <th width="10%">实付款</th>
-                                <th width="10%">交易状态</th>
+                                <!--<th width="10%">交易状态</th>-->
                                 <th width="10%">交易操作</th>
                                 </thead>
                             </tr>
@@ -225,7 +225,7 @@
                             <div  v-for="vo in resultMap.seckillOrderList" class="choose-title">
                             <div>
                                 <label data-toggle="checkbox" >
-                                    <input :value="vo.seckillOrder.id" v-model="ids" type="checkbox"><span>{{vo.seckillOrder.payTime}}　订单编号：{{vo.seckillOrder.id}}  店铺：{{vo.sellerName}} <a>和我联系</a></span>
+                                    <input :value="vo.seckillOrder.id" v-model="ids" type="checkbox"><span>{{vo.seckillOrder.crateTime}}　订单编号：{{vo.seckillOrder.id}}  店铺：{{vo.seller.name}} <a >和我联系</a></span>
                                 </label>
                                 <a class="sui-btn btn-info share-btn">分享</a>
                             </div>
@@ -233,7 +233,7 @@
                                 <tbody>
                                 <tr>
                                     <td width="35%">
-                                        <div class="typographic"><img src="img/goods.png" />
+                                        <div class="typographic"><img width="50" height="50" :src="vo.tbSeckillGoods.smallPic" />
                                             <a href="#" class="block-text">{{vo.tbSeckillGoods.title}}</a>
                                             <span class="guige">规格：{{vo.specStr}}</span>
                                         </div>
@@ -245,7 +245,7 @@
                                         </ul>
                                     </td>
                                     <td width="5%" class="center">1</td>
-                                    <td width="8%" class="center">
+                                    <!--<td width="8%" class="center">-->
 
                                     </td>
                                     <td width="10%" class="center" >
@@ -257,16 +257,16 @@
                                     <td width="10%" class="center">
                                         <ul class="unstyled">
                                             <!--<li>等待卖家付款</li>-->
-                                            <li><a href="orderDetail.html" class="btn">订单详情 </a></li>
+                                            <li><a href="home-orderDetail.html" class="btn">订单详情 </a></li>
                                         </ul>
                                     </td>
-                                    <td width="10%" class="center">
-                                        <ul class="unstyled">
-                                            <!--<li><a href="#" class="sui-btn btn-info">立即付款</a></li>-->
-                                            <li><button @click="deleteSeckillOrder(vo.seckillOrder.id)">删除订单</button></li>
+                                    <!--<td width="10%" class="center">-->
+                                        <!--<ul class="unstyled">-->
+                                            <!--&lt;!&ndash;<li><a href="#" class="sui-btn btn-info">立即付款</a></li>&ndash;&gt;-->
+                                            <!--<li><button @click="deleteSeckillOrder(vo.seckillOrder.id)">删除订单</button></li>-->
 
-                                        </ul>
-                                    </td>
+                                        <!--</ul>-->
+                                    <!--</td>-->
                                 </tr>
 
 
