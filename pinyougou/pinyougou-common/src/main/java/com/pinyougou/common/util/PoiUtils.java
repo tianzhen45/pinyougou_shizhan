@@ -31,7 +31,7 @@ public class PoiUtils {
         datecellStyle.setDataFormat(HSSFDataFormat.getBuiltinFormat("m/d/yy"));//这个文件的日期格式和平时的不一样
 
         //创建表单
-        HSSFSheet sheet = workbook.createSheet("百威美食尚职称表");
+        HSSFSheet sheet = workbook.createSheet("品优购支付日志表");
         HSSFRow r0 = sheet.createRow(0);//创建第一行
         HSSFCell c0 = r0.createCell(0);// 创建列
         HSSFCell c1 = r0.createCell(1);// 创建列
@@ -57,7 +57,7 @@ public class PoiUtils {
             HSSFCell cell2 = row.createCell(2);
             cell2.setCellValue(payLog.getTotalFee());
             HSSFCell cell3 = row.createCell(3);
-            cell3.setCellValue(payLog.getTradeState()=="1"?"已支付":"未支付");
+            cell3.setCellValue(payLog.getTradeState().equals("1") ? "已支付":"未支付");
             HSSFCell cell4 = row.createCell(4);
             cell4.setCellStyle(datecellStyle);//让日期格式数据正确显示
             cell4.setCellValue(payLog.getCreateTime());

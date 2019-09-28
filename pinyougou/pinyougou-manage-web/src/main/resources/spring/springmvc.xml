@@ -20,7 +20,7 @@ http://www.springframework.org/schema/context/spring-context.xsd">
         </mvc:message-converters>
     </mvc:annotation-driven>-->
 
-    <mvc:annotation-driven>
+    <!--<mvc:annotation-driven>
         <mvc:message-converters>
             <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
                 <property name="objectMapper">
@@ -34,23 +34,23 @@ http://www.springframework.org/schema/context/spring-context.xsd">
                 </property>
             </bean>
         </mvc:message-converters>
-    </mvc:annotation-driven>
+    </mvc:annotation-driven>-->
 
     <context:component-scan base-package="com.pinyougou.manage"/>
 
     <!--配置日期转化工厂-->
-    <!--<mvc:annotation-driven conversion-service="conversionService" />-->
+    <mvc:annotation-driven conversion-service="conversionService" />
     <!-- 配置统一日期格式转换器（前端传入-后台接收处理） -->
-    <!--<bean id="conversionService"
-          class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+    <bean id="stringToDateConverter" class="com.pinyougou.manage.converter.DataConvert"/>
+    <!-- 配置自定义类型转换器 -->
+    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <!-- 创建项目定义所有类型转换器 -->
         <property name="converters">
             <set>
-                <bean class="com.pinyougou.manage.converter.DataConvert">
-                    <property name="datePattern" value="yyyy-MM-dd HH:mm:ss" />
-                </bean>
+                <ref bean="stringToDateConverter"/>
             </set>
         </property>
-    </bean>-->
+    </bean>
 
     <!--  配置文件上传解析器  -->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">

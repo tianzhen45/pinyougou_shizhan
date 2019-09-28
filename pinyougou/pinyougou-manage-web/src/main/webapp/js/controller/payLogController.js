@@ -29,7 +29,7 @@ var app = new Vue({
                 //选中
                 for (let i = 0; i < this.entityList.length; i++) {
                     var entity = this.entityList[i];
-                    this.outTradeNos.push(entity.outTradeNo);
+                    this.outTradeNos.push(entity);
                 }
             } else {
                 //将所有的选择反选
@@ -46,7 +46,7 @@ var app = new Vue({
             });
         },
         // 导出支付日志
-        exportExcel : function(){
+        /*exportExcel : function(){
 
             if (this.outTradeNos.length == 0) {
                 alert("请先选择要导出的记录！");
@@ -54,7 +54,7 @@ var app = new Vue({
             }
             //confirm 如果点击 确定 则返回true
             if(confirm("确定要导出选中了的那些记录吗？")){
-                axios.post("../payLog/export.do", this.outTradeNos.entries).then(function (response) {
+                axios.post("../payLog/export.do", this.outTradeNos.entries, "_parent").then(function (response) {
                     if(response.data.success){
                         alert("导出成功！")
                     } else {
@@ -62,8 +62,59 @@ var app = new Vue({
                     }
                 });
             }
+        },*/
+        // 异步请求发送
+        exportExcel(url,data){
+            return new Promise((resolve, reject) => {
+                axios({
+                    method: 'post',
+                    url:  url, // 请求地址
+                    data: data, // 参数
+                    responseType: 'blob', // 表明返回服务器返回的数据类型
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(res => {
+                    resolve(res.data);
+                }).catch(err => {
+                    reject(err);
+                });
+            })
+        },
+        // 导出Excel
+        exportPayLogExcel() {
+            let that = this;
+            //调用方法
+            that.exportExcel('../payLog/export.do', this.outTradeNos).then(result => {
+                let blob = new Blob([result]);
+                let fileName = '支付日志.xls';
+                let eLink = document.createElement('a');
+                eLink.download = fileName;
+                eLink.style.display = 'none';
+                eLink.href = URL.createObjectURL(blob);
+                document.body.appendChild(eLink);
+                eLink.click();
+                URL.revokeObjectURL(eLink.href); // 释放URL 对象
+                document.body.removeChild(eLink);
+            }).catch(err => {
+                that.error(err.message);
+            });
         }
-
+    },
+    //监控数据属性的变化
+    watch:{
+        outTradeNos:{
+            //开启深度监控；可以监控里面具体元素的改变
+            deep: true,
+            //处理方法
+            handler: function (newValue, oldValue) {
+                if (this.outTradeNos.length == this.entityList.length && this.entityList.length>0) {
+                    this.checkAll = true;
+                } else {
+                    this.checkAll = false;
+                }
+            }
+        }
     },
     created : function () {
         this.searchList(this.pageNum);

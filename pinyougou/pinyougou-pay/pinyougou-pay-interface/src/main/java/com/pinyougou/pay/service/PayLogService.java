@@ -4,6 +4,8 @@ import com.github.pagehelper.PageInfo;
 import com.pinyougou.pojo.TbPayLog;
 import com.pinyougou.service.BaseService;
 
+import java.util.List;
+
 public interface PayLogService extends BaseService<TbPayLog> {
 
     /**
@@ -14,4 +16,6 @@ public interface PayLogService extends BaseService<TbPayLog> {
      * @return 分页信息
      */
     PageInfo<TbPayLog> search(Integer pageNum, Integer pageSize, TbPayLog payLog);
+
+    List<TbPayLog> getAllPayLog();
 }
