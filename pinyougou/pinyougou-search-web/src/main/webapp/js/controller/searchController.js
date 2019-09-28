@@ -11,8 +11,10 @@ var app = new Vue({
         frontDot: false,
         //分页导航条中的后面3个点
         backDot: false
+
     },
     methods:{
+
         //排序查询
         sortSearch: function(sortField, sortOrder){
             this.searchMap.sortField = sortField;
@@ -57,6 +59,10 @@ var app = new Vue({
             this.searchMap.pageNo = 1;
 
             this.search();
+        },
+        //跳转到商家前端系统
+        ToSeller:function (seller) {
+          location.href="http://seller.pinyougou.com?keywords="+seller;
         },
         //搜索
         search:function () {
@@ -120,11 +126,11 @@ var app = new Vue({
         //根据参数名字获取参数
         getParameterByName: function (name) {
             return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || [, ""])[1].replace(/\+/g, '%20')) || null
-        }
+        },
+
     },
     created: function () {
-        //获取浏览器地址栏中的搜索关键字
-        this.searchMap.keywords = this.getParameterByName("keywords");
+
         //默认查询所有
         this.search();
     }

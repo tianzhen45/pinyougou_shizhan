@@ -8,11 +8,12 @@ var app = new Vue({
         //总价格和总数量
         totalValue:{"totalNum":0, "totalMoney":0.0},
         //订单信息
-        order:{"paymentType":'1'},
+        order:{"paymentType":'1',"invoiceType": "1"},
         //选中的地址
         address: {},
         addressList: [],
-        addressEntity: {alias: ''}
+        addressEntity: {alias: ''},
+        items:[]
     },
     methods : {
         //提交订单
@@ -21,6 +22,8 @@ var app = new Vue({
             this.order.receiverAreaName = this.address.address;
             this.order.receiverMobile = this.address.mobile;
             this.order.receiver = this.address.contact;
+            this.order.userId = this.username;
+
             axios.post("order/add.do", this.order).then(function (response) {
                 if(response.data.success){
                     //跳转到支付页面
@@ -45,26 +48,29 @@ var app = new Vue({
             });
         },
 
-        //查询购物车列表
-        findCartList: function(){
-          axios.get("cart/findCartList.do").then(function (response) {
-              app.cartList = response.data;
-
-              //计算总数量和总价格
-              app.totalValue = app.sumTotalValue(response.data);
-          });
+        loadSelectedItem:function () {
+            axios.get("/cart/loadSelectedItem.do").then(function (response) {
+                app.items = response.data;
+                app.totalValue = app.sumTotalValue(response.data);
+            })
         },
-        //计算总数和总价
-        sumTotalValue: function (cartList) {
-            var totalValue = {"totalNum":0, "totalMoney":0.0};
-            for (let i = 0; i < cartList.length; i++) {
-                const cart = cartList[i];
-                for (let j = 0; j < cart.orderItemList.length; j++) {
-                    const orderItem = cart.orderItemList[j];
-                    totalValue.totalNum += orderItem.num;
-                    totalValue.totalMoney += orderItem.totalFee;
-                }
 
+        // //查询购物车列表
+        // findCartList: function(){
+        //   axios.get("cart/findCartList.do").then(function (response) {
+        //       app.cartList = response.data;
+        //
+        //       //计算总数量和总价格
+        //       app.totalValue = app.sumTotalValue(response.data);
+        //   });
+        // },
+        //计算总数和总价
+        sumTotalValue: function (items) {
+            var totalValue = {"totalNum":0, "totalMoney":0.0};
+            for (let i = 0; i < items.length; i++) {
+                const item = items[i];
+                totalValue.totalNum += item.num;
+                totalValue.totalMoney += item.totalFee;
             }
             return totalValue;
         },
@@ -130,8 +136,12 @@ var app = new Vue({
     },
     created(){
         this.getUsername();
-        //加载购物车列表
-        this.findCartList();
+        // //加载购物车列表
+        // this.findCartList();
+
+        //加载选中的商品
+        this.loadSelectedItem();
+
         //加载地址列表
         this.findAddressList();
     }
