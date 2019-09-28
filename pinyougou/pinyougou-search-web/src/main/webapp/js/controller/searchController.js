@@ -1,3 +1,4 @@
+
 var app = new Vue({
     el:"#app",
     data:{
@@ -10,10 +11,18 @@ var app = new Vue({
         //分页导航条中的前面3个点
         frontDot: false,
         //分页导航条中的后面3个点
-        backDot: false
-
+        backDot: false,
+        //用户名
+        loginName:""
     },
     methods:{
+        //加载用户
+        loadUserName: function () {
+            //获取登录用户名
+            axios.get("/itemSearch/getUsername.do").then(function (response) {
+                app.loginName = response.data.username;
+            })
+        },
 
         //排序查询
         sortSearch: function(sortField, sortOrder){
@@ -127,10 +136,15 @@ var app = new Vue({
         getParameterByName: function (name) {
             return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || [, ""])[1].replace(/\+/g, '%20')) || null
         },
+        //收藏商品
+        collect:function (itemId) {
+
+        }
 
     },
     created: function () {
-
+        //加载用户名
+        this.loadUserName();
         //默认查询所有
         this.search();
     }
