@@ -3,6 +3,7 @@ package com.pinyougou.user.controller;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageInfo;
 import com.pinyougou.common.util.PhoneFormatCheckUtils;
+import com.pinyougou.order.service.MyOrderService;
 import com.pinyougou.pojo.TbUser;
 import com.pinyougou.user.service.UserService;
 import com.pinyougou.vo.Result;
@@ -19,8 +20,41 @@ import java.util.regex.PatternSyntaxException;
 @RestController
 public class UserController {
 
-    @Reference(timeout = 10000)
+    @Reference(timeout = 99999999,retries = 0)
     private UserService userService;
+
+    @Reference
+    private MyOrderService myOrderService;
+
+    /**
+     * 取消订单
+     * @param orderId 选中的订单ids数组
+     * @return
+     */
+    @GetMapping("/deleteOrder")
+    public Result deleteOrder(Long orderId){
+        try {
+            if (orderId != null) {
+                myOrderService.deleteOrder(orderId);
+                return Result.ok("取消订单成功");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Result.fail("取消订单失败");
+    }
+    /**
+     * 查询所有订单
+     * @return
+     */
+    @GetMapping("/findOrder")
+    public Map<String, Object> findOrder(
+            @RequestParam(defaultValue = "1") Integer pageNum,
+            @RequestParam(defaultValue = "5") Integer pageSize){
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+        Map<String, Object> resultMap = myOrderService.findOrderByUserId(pageNum, pageSize, userId);
+        return resultMap;
+    }
 
     /**
      * 获取当前登录的用户信息
