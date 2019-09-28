@@ -63,7 +63,7 @@
 			<div class="checkout-steps">
 				<!--收件人信息-->
 				<div class="step-tit">
-					<h5>收件人信息<span><a data-toggle="modal" data-target=".edit" data-keyboard="false" class="newadd" @click="addressEntity={alias:''}">新增收货地址</a></span></h5>
+					<h5>收件人信息<span><a data-toggle="modal" data-target=".edit" data-keyboard="false" class="newadd" @click="addressEntity={alias: '',provinceId:'1',cityId:'1',townId:'1'}">新增收货地址</a></span></h5>
 				</div>
 				<div class="step-cont">
 					<div class="addressInfo">
@@ -77,7 +77,7 @@
 										<span class="base" v-if="address.isDefault == 1">默认地址</span>
 										<span>
 										<a data-toggle="modal" data-target=".edit"
-										   data-keyboard="false" @click="addressEntity=address">编辑</a>&nbsp;&nbsp;
+										   data-keyboard="false" @click="backShow(address)">编辑</a>&nbsp;&nbsp;
 										<a href="javascript:;" @click="delAddress(address)">删除</a>
 											<a href="javascript:;" @click="setDefault(address)" v-if="isSelectAddress(address) && address.isDefault == '0' ">设为默认地址</a>
 									    </span>
@@ -104,7 +104,26 @@
 													<input type="text" class="input-medium" v-model="addressEntity.contact">
 												</div>
 											</div>
-
+											<div class="control-group">
+												<label class="control-label">地址选择：</label>
+												<div class="controls">
+													<select v-model="addressEntity.provinceId">
+														<template v-for="item in provinces">
+															<option :value="item.value">{{item.text}}</option>
+														</template>
+													</select>
+													<select v-model="addressEntity.cityId">
+														<template v-for="item in cities">
+															<option :value="item.value">{{item.text}}</option>
+														</template>
+													</select>
+													<select v-model="addressEntity.townId">
+														<template v-for="item in areas">
+															<option :value="item.value">{{item.text}}</option>
+														</template>
+													</select>
+												</div>
+											</div>
 											<div class="control-group">
 												<label class="control-label">详细地址：</label>
 												<div class="controls">
