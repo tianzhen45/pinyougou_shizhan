@@ -13,14 +13,13 @@ import tk.mybatis.mapper.entity.Example;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:spring/applicationContext-dao.xml")
 public class BrandMapperTest {
 
     @Autowired
     private BrandMapper brandMapper;
+
 
     //根据主键查询
     @org.junit.Test
@@ -72,13 +71,7 @@ public class BrandMapperTest {
         brandMapper.deleteByPrimaryKey(23L);
     }
 
-    @org.junit.Test
-    public void queryAll() {
-        List<TbBrand> list = brandMapper.queryAll();
-        for (TbBrand tbBrand : list) {
-            System.out.println(tbBrand);
-        }
-    }
+
 
     /**
      * 查询首字母为c并查第2页数据每页2条；根据id降序排

@@ -1,11 +1,14 @@
 package com.pinyougou.order.service;
 
 import com.github.pagehelper.PageInfo;
+import com.pinyougou.pojo.TbGoods;
 import com.pinyougou.pojo.TbOrder;
 import com.pinyougou.pojo.TbPayLog;
+import com.pinyougou.pojo.TbSeckillOrder;
 import com.pinyougou.service.BaseService;
 
 import java.util.List;
+import java.util.Map;
 
 public interface OrderService extends BaseService<TbOrder> {
     /**
@@ -37,4 +40,33 @@ public interface OrderService extends BaseService<TbOrder> {
      * @param transactionId 微信订单号
      */
     void updateOrderStatus(String outTradeNo, String transactionId);
+
+    /**
+     * 查询商家的普通订单
+     * @param pageNum
+     * @param pageSize
+     * @param order
+     * @return
+     */
+    PageInfo<TbOrder> findOrderList(Integer pageNum, Integer pageSize, TbOrder order);
+
+    /**
+     * 修改普通订单状态（发货、交易成功）
+     * @param order
+     */
+    void updateStatus(TbOrder order);
+
+    /**
+     * 查询商家秒杀订单
+     * @param pageNum
+     * @param pageSize
+     * @param order
+     * @return
+     */
+    Map<String,Object> findSeckillOrderList(Integer pageNum, Integer pageSize, TbSeckillOrder order);
+
+    void deleteSeckillOrder(Long[] ids);
+
+
+    void updatePayment(TbOrder order);
 }

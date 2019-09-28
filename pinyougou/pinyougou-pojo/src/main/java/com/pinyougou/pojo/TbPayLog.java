@@ -1,5 +1,7 @@
 package com.pinyougou.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -39,6 +41,7 @@ public class TbPayLog implements Serializable {
         this.outTradeNo = outTradeNo;
     }
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "Asia/Shanghai")
     public Date getCreateTime() {
         return createTime;
     }
@@ -47,6 +50,7 @@ public class TbPayLog implements Serializable {
         this.createTime = createTime;
     }
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "Asia/Shanghai")
     public Date getPayTime() {
         return payTime;
     }
@@ -101,5 +105,20 @@ public class TbPayLog implements Serializable {
 
     public void setPayType(String payType) {
         this.payType = payType;
+    }
+
+    @Override
+    public String toString() {
+        return "TbPayLog{" +
+                "outTradeNo='" + outTradeNo + '\'' +
+                ", createTime=" + createTime +
+                ", payTime=" + payTime +
+                ", totalFee=" + totalFee +
+                ", userId='" + userId + '\'' +
+                ", transactionId='" + transactionId + '\'' +
+                ", tradeState='" + tradeState + '\'' +
+                ", orderList='" + orderList + '\'' +
+                ", payType='" + payType + '\'' +
+                '}';
     }
 }
