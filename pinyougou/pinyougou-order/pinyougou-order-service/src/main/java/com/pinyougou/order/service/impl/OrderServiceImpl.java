@@ -307,6 +307,26 @@ public class OrderServiceImpl extends BaseServiceImpl<TbOrder> implements OrderS
         orderMapper.updateByExampleSelective(order, example);
     }
 
+
+    //将orderItem按商家id分组
+    public Map<String,List<TbOrderItem>> groupTbOrderItemBySeller(List<TbOrderItem> orderItems){
+        Map<String,List<TbOrderItem>> result = new HashMap<>();
+        for (TbOrderItem orderItem : orderItems) {
+            String sellerId = orderItem.getSellerId();
+            if(!result.containsKey(sellerId)){
+                result.put(sellerId,new ArrayList<TbOrderItem>());
+            }
+            List<TbOrderItem> orderItems1 = result.get(sellerId);
+            orderItems1.add(orderItem);
+        }
+        return result;
+    }
+
+
+
+
+
+
     @Override
     public PageInfo<TbOrder> findOrderList(Integer pageNum, Integer pageSize, TbOrder order) {
         //设置分页
@@ -401,19 +421,7 @@ public class OrderServiceImpl extends BaseServiceImpl<TbOrder> implements OrderS
 
 
 
-    //将orderItem按商家id分组
-    public Map<String,List<TbOrderItem>> groupTbOrderItemBySeller(List<TbOrderItem> orderItems){
-        Map<String,List<TbOrderItem>> result = new HashMap<>();
-        for (TbOrderItem orderItem : orderItems) {
-            String sellerId = orderItem.getSellerId();
-            if(!result.containsKey(sellerId)){
-                result.put(sellerId,new ArrayList<TbOrderItem>());
-            }
-            List<TbOrderItem> orderItems1 = result.get(sellerId);
-            orderItems1.add(orderItem);
-        }
-        return result;
-    }
+
 
     public List<Cart> findCartRedis(String username) {
         List<Cart> carts = (List<Cart>) redisTemplate.boundHashOps(CART_LIST).get(username);
