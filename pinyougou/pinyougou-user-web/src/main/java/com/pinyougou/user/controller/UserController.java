@@ -20,7 +20,7 @@ import java.util.regex.PatternSyntaxException;
 @RestController
 public class UserController {
 
-    @Reference(timeout = 99999999,retries = 0)
+    @Reference(timeout = 10000)
     private UserService userService;
 
     @Reference
@@ -55,6 +55,38 @@ public class UserController {
         Map<String, Object> resultMap = myOrderService.findOrderByUserId(pageNum, pageSize, userId);
         return resultMap;
     }
+
+    /**
+     * 批量删除用户秒杀订单
+     * @param ids
+     * @return
+     */
+    @GetMapping("/deleteSeckillOrder")
+    public Result deleteSeckillOrder(Long[] ids){
+        try {
+            userService.deleteSeckillOrder(ids);
+            return Result.ok("删除成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Result.fail("删除失败");
+    }
+
+    /**
+     * 查询用户秒杀订单
+     * @param searchMap 搜索条件
+     * @return 搜索结果
+     */
+    @PostMapping("/findUserSeckillOrder")
+    public Map<String,Object> search(
+            @RequestParam(defaultValue = "1") Integer pageNum,
+            @RequestParam(defaultValue = "2") Integer pageSize){
+        //获取用户id
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userService.findUserSeckillOrder(pageNum,pageSize,userId);
+    }
+
+
 
     /**
      * 获取当前登录的用户信息
@@ -165,8 +197,8 @@ public class UserController {
      */
     @PostMapping("/search")
     public PageInfo<TbUser> search(@RequestParam(value = "pageNum", required = false, defaultValue = "1") Integer pageNum,
-                             @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize,
-                           @RequestBody TbUser user) {
+                                   @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize,
+                                   @RequestBody TbUser user) {
         return userService.search(pageNum, pageSize, user);
     }
 

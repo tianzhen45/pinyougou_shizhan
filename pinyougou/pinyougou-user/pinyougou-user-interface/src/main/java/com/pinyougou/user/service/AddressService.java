@@ -16,4 +16,13 @@ public interface AddressService extends BaseService<TbAddress> {
      */
     PageInfo<TbAddress> search(Integer pageNum, Integer pageSize, TbAddress address);
 
+
+
+    List<TbAddress> findAddressByUser(String username);
+
+
+    boolean delete(Long id);
+
+
+    void setDefault(TbAddress address);
 }

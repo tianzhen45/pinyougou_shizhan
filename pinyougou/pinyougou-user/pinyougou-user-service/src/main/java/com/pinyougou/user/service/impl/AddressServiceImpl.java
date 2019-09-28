@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -38,4 +39,34 @@ public class AddressServiceImpl extends BaseServiceImpl<TbAddress> implements Ad
         return new PageInfo<>(list);
     }
 
+    @Override
+    public List<TbAddress> findAddressByUser(String username) {
+        TbAddress tbAddress = new TbAddress();
+        tbAddress.setUserId(username);
+        return addressMapper.select(tbAddress);
+    }
+
+    @Override
+    public boolean delete(Long id) {
+        return addressMapper.deleteByPrimaryKey(id) == 1;
+    }
+
+    @Override
+    public void setDefault(TbAddress address) {
+        address.setIsDefault("1");
+        List<TbAddress> tbAddresses = addressMapper.selectAll();
+        for (TbAddress tbAddress : tbAddresses) {
+            tbAddress.setIsDefault("0");
+            addressMapper.updateByPrimaryKeySelective(tbAddress);
+        }
+        addressMapper.updateByPrimaryKeySelective(address);
+    }
+
+
+    @Override
+    public void add(TbAddress tbAddress) {
+        tbAddress.setIsDefault("0");
+        tbAddress.setCreateDate(new Date());
+        super.add(tbAddress);
+    }
 }

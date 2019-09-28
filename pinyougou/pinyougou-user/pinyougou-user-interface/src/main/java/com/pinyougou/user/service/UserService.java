@@ -4,7 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.pinyougou.pojo.TbUser;
 import com.pinyougou.service.BaseService;
 
-import java.util.List;
+import java.util.Map;
 
 public interface UserService extends BaseService<TbUser> {
     /**
@@ -30,4 +30,15 @@ public interface UserService extends BaseService<TbUser> {
      */
     Boolean checkSmsCode(String phone, String smsCode);
 
+    /**
+     * 分页查询数据库中用户的秒杀订单
+     * @return
+     */
+    Map<String,Object> findUserSeckillOrder(Integer pageNum, Integer pageSize, String userId);
+
+    /**
+     * 批量删除用户秒杀订单
+     * @param ids
+     */
+    void deleteSeckillOrder(Long[] ids);
 }
