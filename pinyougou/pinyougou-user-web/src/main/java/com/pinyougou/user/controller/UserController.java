@@ -87,8 +87,9 @@ public class UserController {
 
     /**
      * 查询用户秒杀订单
-     * @param searchMap 搜索条件
-     * @return 搜索结果
+     * @param pageNum
+     * @param pageSize
+     * @return
      */
     @PostMapping("/findUserSeckillOrder")
     public Map<String,Object> search(
