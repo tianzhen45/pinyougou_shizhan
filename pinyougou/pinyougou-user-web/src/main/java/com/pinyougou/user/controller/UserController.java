@@ -22,15 +22,36 @@ public class UserController {
     @Reference(timeout = 10000)
     private UserService userService;
 
+    @PostMapping("/updateUserInfo")
+    public Result updateUserInfo(@RequestBody TbUser user){
+        Result result = Result.fail("修改失败");
+        try {
+            userService.update(user);
+            result = Result.ok("修改成功");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
     /**
      * 获取当前登录的用户信息
      * @return 用户信息
      */
+    @GetMapping("/getUserInfo")
+    public Map<String, Object> getUserInfo(){
+        Map<String, Object> map = new HashMap<>();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        TbUser tbUser = userService.findByUserName(username);
+        map.put("user", tbUser);
+        return map;
+    }
     @GetMapping("/getUsername")
     public Map<String, Object> getUsername(){
         Map<String, Object> map = new HashMap<>();
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        map.put("username", username);
+        map.put("username",username);
         return map;
     }
 
@@ -135,5 +156,44 @@ public class UserController {
                            @RequestBody TbUser user) {
         return userService.search(pageNum, pageSize, user);
     }
+    @PostMapping("/updatePassword")
+    public Result updatePassword(@RequestBody TbUser tbUser){
+        Result result = Result.fail("修改失败");
+        try{
+            tbUser.setPassword(DigestUtils.md5Hex(tbUser.getPassword()));
+            userService.update(tbUser);
+            result = Result.ok("修改成功");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+    @GetMapping("/checkTwoCode")
+    public Result checkTwoCode(String msgCode,String phone){
+        Result result = Result.fail("验证码错误！！");
+        try {
+            userService.checkSmsCode(msgCode,phone);
+            result = Result.ok("验证成功！！");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
 
+    @GetMapping("/bindNewPhoneNumber")
+    public Result bindNewPhoneNumber(String msgCode,String phone){
+        Result result = Result.fail("验证码错误！！");
+        try {
+            if (userService.checkSmsCode(msgCode,phone)){
+                String username = SecurityContextHolder.getContext().getAuthentication().getName();
+                TbUser tbUser = userService.findByUserName(username);
+                tbUser.setPhone(phone);
+                userService.update(tbUser);
+            }
+            result = Result.ok("验证成功！！");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
 }

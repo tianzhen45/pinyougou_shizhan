@@ -100,4 +100,11 @@ public class UserServiceImpl extends BaseServiceImpl<TbUser> implements UserServ
         return false;
     }
 
+    @Override
+    public TbUser findByUserName(String username) {
+        TbUser tbUser = new TbUser();
+        tbUser.setUsername(username);
+        return userMapper.selectOne(tbUser);
+    }
+
 }

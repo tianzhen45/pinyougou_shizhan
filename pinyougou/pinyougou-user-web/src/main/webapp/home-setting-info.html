@@ -10,9 +10,12 @@
 
     <link rel="stylesheet" type="text/css" href="css/webbase.css" />
     <link rel="stylesheet" type="text/css" href="css/pages-seckillOrder.css" />
+    <script src="js/vuejs-2.5.16.js"></script>
+    <script src="js/axios-0.18.0.js"></script>
 </head>
 
 <body>
+<div id="app">
     <!-- 头部栏位 -->
     <!--页面顶部-->
 <div id="nav-bottom">
@@ -23,7 +26,7 @@
 				<div class="shortcut">
 					<ul class="fl">
 						<li class="f-item">品优购欢迎您！</li>
-						<li class="f-item">请<a href="login.html" target="_blank">登录</a>　<span><a href="register.html" target="_blank">免费注册</a></span></li>
+                        <li class="f-item">{{username}}　<span><a href="/logout/cas">退出登录</a></span></li>
 					</ul>
 					<ul class="fr">
 						<li class="f-item">我的订单</li>
@@ -52,76 +55,77 @@
 			</div>
 		</div>
 
-		<!--头部-->
-		<div class="header">
-			<div class="py-container">
-				<div class="yui3-g Logo">
-					<div class="yui3-u Left logoArea">
-						<a class="logo-bd" title="品优购" href="JD-index.html" target="_blank"></a>
-					</div>
-					<div class="yui3-u Center searchArea">
-						<div class="search">
-							<form action="" class="sui-form form-inline">
-								<!--searchAutoComplete-->
-								<div class="input-append">
-									<input type="text" id="autocomplete" type="text" class="input-error input-xxlarge" />
-									<button class="sui-btn btn-xlarge btn-danger" type="button">搜索</button>
-								</div>
-							</form>
-						</div>
-						<div class="hotwords">
-							<ul>
-								<li class="f-item">品优购首发</li>
-								<li class="f-item">亿元优惠</li>
-								<li class="f-item">9.9元团购</li>
-								<li class="f-item">每满99减30</li>
-								<li class="f-item">亿元优惠</li>
-								<li class="f-item">9.9元团购</li>
-								<li class="f-item">办公用品</li>
+            <!--头部-->
+            <div class="header">
+                <div class="py-container">
+                    <div class="yui3-g Logo">
+                        <div class="yui3-u Left logoArea">
+                            <a class="logo-bd" title="品优购" href="JD-index.html" target="_blank"></a>
+                        </div>
+                        <div class="yui3-u Center searchArea">
+                            <div class="search">
+                                <form action="" class="sui-form form-inline">
+                                    <!--searchAutoComplete-->
+                                    <div class="input-append">
+                                        <input type="text" id="autocomplete" type="text" class="input-error input-xxlarge" />
+                                        <button class="sui-btn btn-xlarge btn-danger" type="button">搜索</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="hotwords">
+                                <ul>
+                                    <li class="f-item">品优购首发</li>
+                                    <li class="f-item">亿元优惠</li>
+                                    <li class="f-item">9.9元团购</li>
+                                    <li class="f-item">每满99减30</li>
+                                    <li class="f-item">亿元优惠</li>
+                                    <li class="f-item">9.9元团购</li>
+                                    <li class="f-item">办公用品</li>
 
-							</ul>
-						</div>
-					</div>
-					<div class="yui3-u Right shopArea">
-						<div class="fr shopcar">
-							<div class="show-shopcar" id="shopcar">
-								<span class="car"></span>
-								<a class="sui-btn btn-default btn-xlarge" href="cart.html" target="_blank">
-									<span>我的购物车</span>
-									<i class="shopnum">0</i>
-								</a>
-								<div class="clearfix shopcarlist" id="shopcarlist" style="display:none">
-									<p>"啊哦，你的购物车还没有商品哦！"</p>
-									<p>"啊哦，你的购物车还没有商品哦！"</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="yui3-u Right shopArea">
+                            <div class="fr shopcar">
+                                <div class="show-shopcar" id="shopcar">
+                                    <span class="car"></span>
+                                    <a class="sui-btn btn-default btn-xlarge" href="cart.html" target="_blank">
+                                        <span>我的购物车</span>
+                                        <i class="shopnum">0</i>
+                                    </a>
+                                    <div class="clearfix shopcarlist" id="shopcarlist" style="display:none">
+                                        <p>"啊哦，你的购物车还没有商品哦！"</p>
+                                        <p>"啊哦，你的购物车还没有商品哦！"</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-				<div class="yui3-g NavList">
-					<div class="yui3-u Left all-sort">
-						<h4>全部商品分类</h4>
-					</div>
-					<div class="yui3-u Center navArea">
-						<ul class="nav">
-							<li class="f-item">服装城</li>
-							<li class="f-item">美妆馆</li>
-							<li class="f-item">品优超市</li>
-							<li class="f-item">全球购</li>
-							<li class="f-item">闪购</li>
-							<li class="f-item">团购</li>
-							<li class="f-item">有趣</li>
-							<li class="f-item"><a href="seckill-index.html" target="_blank">秒杀</a></li>
-						</ul>
-					</div>
-					<div class="yui3-u Right"></div>
-				</div>
-			</div>
-		</div>
-	</div>
+                    <div class="yui3-g NavList">
+                        <div class="yui3-u Left all-sort">
+                            <h4>全部商品分类</h4>
+                        </div>
+                        <div class="yui3-u Center navArea">
+                            <ul class="nav">
+                                <li class="f-item">服装城</li>
+                                <li class="f-item">美妆馆</li>
+                                <li class="f-item">品优超市</li>
+                                <li class="f-item">全球购</li>
+                                <li class="f-item">闪购</li>
+                                <li class="f-item">团购</li>
+                                <li class="f-item">有趣</li>
+                                <li class="f-item"><a href="seckill-index.html" target="_blank">秒杀</a></li>
+                            </ul>
+                        </div>
+                        <div class="yui3-u Right"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
-
 <script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
 <script type="text/javascript">
 $(function(){
@@ -156,6 +160,7 @@ $(function(){
                 });
             });
         </script>
+
 </body>
     <!--header-->
     <div id="account">
@@ -167,7 +172,7 @@ $(function(){
                     <div class="person-info">
                         <div class="person-photo"><img src="img/_/photo.png" alt=""></div>
                         <div class="person-account">
-                            <span class="name">Michelle</span>
+                            <span class="name">{{entity.username}}</span>
                             <span class="safe">账户安全</span>
                         </div>
                         <div class="clearfix"></div>
@@ -210,32 +215,32 @@ $(function(){
                                     <div class="control-group">
                                         <label for="inputName" class="control-label">昵称：</label>
                                         <div class="controls">
-                                            <input type="text" id="inputName" name="email" placeholder="昵称">
+                                            <input v-model="entity.nickName" type="text" id="inputName" name="email" placeholder="昵称">
                                         </div>
                                     </div>
                                     <div class="control-group">
-                                        <label for="inputGender" class="control-label">性别：</label>
+                                        <label class="control-label">性别：</label>
                                         <div class="controls">
                                             <label data-toggle="radio" class="radio-pretty inline">
-                                            <input type="radio" name="gender" value="1"><span>男</span>
+                                            <input checked  v-model="entity.sex" type="radio" name="gender" :value="1"><span>男</span>
                                         </label>
                                             <label data-toggle="radio" class="radio-pretty inline">
-                                            <input type="radio" name="gender" value="2"><span>女</span>
+                                            <input v-model="entity.sex"  type="radio" name="gender" :value="2"><span>女</span>
                                         </label>
                                         </div>
                                     </div>
                                     <div class="control-group">
-                                        <label for="inputPassword" class="control-label">生日：</label>
+                                        <label  class="control-label">生日：</label>
                                         <div class="controls">
-                                            <select id="select_year2" rel="1990"></select>年
-                                            <select id="select_month2" rel="4"></select>月
-                                            <select id="select_day2" rel="3"></select>日
+                                            <select v-model="year" id="select_year2" ></select>年
+                                            <select v-model="month" id="select_month2" ></select>月
+                                            <select v-model="day" id="select_day2" ></select>日
                                         </div>
                                     </div>
 
 
                                     <div class="control-group">
-                                        <label for="inputPassword" class="control-label">所在地：</label>
+                                        <label class="control-label">所在地：</label>
                                         <div class="controls">
                                             <div data-toggle="distpicker">
                                                 <div class="form-group area">
@@ -251,7 +256,7 @@ $(function(){
                                         </div>
                                     </div>
                                     <div class="control-group">
-                                        <label for="inputJob" class="control-label">职业：</label>
+                                        <label  class="control-label">职业：</label>
                                         <div class="controls"><span class="sui-dropdown dropdown-bordered select"><span class="dropdown-inner"><a role="button" data-toggle="dropdown" href="#" class="dropdown-toggle">
                                                 <input name="job" type="hidden" data-rules="required"><i class="caret"></i><span>请选择</span></a>
                                             <ul id="menu4" role="menu" aria-labelledby="drop4" class="sui-dropdown-menu">
@@ -264,9 +269,9 @@ $(function(){
                                         </div>
                                     </div>
                                     <div class="control-group">
-                                        <label for="sanwei" class="control-label"></label>
+                                        <label  class="control-label"></label>
                                         <div class="controls">
-                                            <button type="submit" class="sui-btn btn-primary">立即注册</button>
+                                            <button @click="updateUserInfo()" type="submit" class="sui-btn btn-primary">修改</button>
                                         </div>
                                     </div>
                                 </form>
@@ -277,7 +282,7 @@ $(function(){
                                     <p>当前头像：</p>
                                     <div class="upload">
                                         <img id="imgShow_WU_FILE_0" width="100" height="100" src="img/_/photo_icon.png" alt="">
-                                        <input type="file" id="up_img_WU_FILE_0" />
+                                        <input   type="file" id="up_img_WU_FILE_0" />
                                     </div>
 
                                 </div>
@@ -421,8 +426,10 @@ $(function(){
 		</div>
 	</div>
 </div>
+
 <!--页面底部END-->
 
-undefined
+<script type="text/javascript" src="js/controller/indexController.js"></script>
+<script type="text/javascript" src="js/controller/userSettingController.js"></script>
 
 </html>

@@ -30,4 +30,5 @@ public interface UserService extends BaseService<TbUser> {
      */
     Boolean checkSmsCode(String phone, String smsCode);
 
+    TbUser findByUserName(String username);
 }
