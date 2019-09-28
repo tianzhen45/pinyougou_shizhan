@@ -8,7 +8,6 @@ var app = new Vue({
             axios.get("../login/getUsername.do").then(function (response) {
                 app.username = response.data.username;
             });
-
         }
     },
     created(){

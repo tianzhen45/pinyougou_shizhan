@@ -48,4 +48,23 @@ public class SellerServiceImpl extends BaseServiceImpl<TbSeller> implements Sell
         return new PageInfo<>(list);
     }
 
+    /**
+     * 查询商家
+     * @param sellerId
+     * @return
+     */
+    @Override
+    public TbSeller findSellerBySellerId(String sellerId) {
+        return sellerMapper.selectByPrimaryKey(sellerId);
+    }
+
+    /**
+     * 更新用户密码
+     * @param seller
+     */
+    @Override
+    public void updatePassword(TbSeller seller) {
+        sellerMapper.updateByPrimaryKeySelective(seller);
+    }
+
 }
