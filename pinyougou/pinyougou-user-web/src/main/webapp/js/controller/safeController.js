@@ -25,14 +25,18 @@ window.onload = function () {
                 });
             },
             updateLoginUserPassword:function () {
+                this.user.username = this.entity.username;
+                this.user.password = this.entity.password;
                 //判断两次密码是否一致
-                if (this.password != this.user.password) {
+                if (this.password != this.entity.password) {
                     alert("两次输入的密码不一致;请重新输入");
                     return;
                 }
+
                 axios.post("user/updatePassword.do?",this.user).then(function (response) {
                     if (response.data.success){
-                        alert(response.data.message)
+
+                        alert(response.data.message);
                     }else {
                         alert(response.data.message)
                     }

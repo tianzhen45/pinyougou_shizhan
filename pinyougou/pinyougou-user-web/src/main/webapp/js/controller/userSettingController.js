@@ -72,5 +72,5 @@ var app = new Vue({
         //加载地址列表
         this.findAddressList();
         this.findProvinceList();
-    }
+    },
 });
