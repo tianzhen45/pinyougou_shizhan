@@ -208,7 +208,7 @@ public class OrderServiceImpl extends BaseServiceImpl<TbOrder> implements OrderS
             payLog.setOutTradeNo(outTradeNo);
 
             payLog.setUserId(order.getUserId());
-            payLog.setCreateTime((Timestamp) new Date());
+            payLog.setCreateTime(new Timestamp(new Date().getTime()));
             //本次交易要支付的总金额 = 每一笔订单的总金额；一般在电商中价格都是长整型；单位精确到分
             payLog.setTotalFee((long)(totalFee*100));
             //本次交易对应的所有订单，使用,分隔
