@@ -8,7 +8,7 @@ var goodsControllerMixin = {
         //总记录数
         total: 0,
         //页大小
-        pageSize: 2,
+        pageSize: 5,
         //当前页号
         pageNum: 1,
         //选择的id数组
