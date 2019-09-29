@@ -12,6 +12,7 @@
     <link rel="stylesheet" type="text/css" href="css/pages-seckillOrder.css" />
     <script src="js/vuejs-2.5.16.js"></script>
     <script src="js/axios-0.18.0.js"></script>
+
 </head>
 
 <body>
@@ -145,7 +146,6 @@ $(function(){
 <script type="text/javascript" src="js/plugins/jquery.easing/jquery.easing.min.js"></script>
 <script type="text/javascript" src="js/plugins/sui/sui.min.js"></script>
 <script type="text/javascript" src="js/widget/nav.js"></script>
-<script type="text/javascript" src="plugins/jquery.validate/jquery.validate.js"></script>
 <script>
         $(function(){
             //jquery.validate
@@ -384,9 +384,9 @@ $(function(){
                                         </div>                            
                                     </div>
                                     <div class="control-group">
-                                        <label for="inputRepassword" class="control-label" v-model="msgCode">短信验证码：</label>
+                                        <label for="inputRepassword" class="control-label" >短信验证码：</label>
                                         <div class="controls">
-                                            <input name="msgcode" type="text" id="msgcode">
+                                            <input name="msgcode" type="text" id="msgcode" v-model="msgCode">
                                         </div>
                                         <div class="controls">
                                             <button class="sui-btn btn-info" @click.prevent="sendSmsCode()">发送</button>
@@ -541,8 +541,8 @@ $(function(){
 
 <!--页面底部END-->
 
+<script type="text/javascript" src="js/controller/updatePhoneController.js"></script>
 
 <script type="text/javascript" src="js/controller/indexController.js"></script>
-<script type="text/javascript" src="js/controller/updatePhoneController.js"></script>
 
 </html>

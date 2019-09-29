@@ -48,4 +48,6 @@ public interface AddressService extends BaseService<TbAddress> {
     List<Map<String,Object>> findCitiesByProvince(String provinceId);
 
     List<Map<String,Object>> findAreasByCity(String cityId);
+
+    void updateStatus(Long id);
 }

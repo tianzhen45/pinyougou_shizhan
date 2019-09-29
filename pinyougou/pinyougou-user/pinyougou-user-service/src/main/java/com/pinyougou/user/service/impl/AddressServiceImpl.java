@@ -165,6 +165,15 @@ public class AddressServiceImpl extends BaseServiceImpl<TbAddress> implements Ad
         return list;
     }
 
+    @Override
+    public void updateStatus(Long id) {
+        TbAddress tbAddress = new TbAddress();
+        tbAddress.setIsDefault("0");
+        Example example = new Example(TbAddress.class);
+        example.createCriteria().andNotEqualTo("id",id);
+        addressMapper.updateByExampleSelective(tbAddress,example);
+    }
+
 
     @Override
     public List<TbAddress> findAddressByUser(String username) {

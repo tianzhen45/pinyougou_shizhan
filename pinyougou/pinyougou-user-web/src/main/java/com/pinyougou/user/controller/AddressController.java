@@ -173,5 +173,19 @@ public class AddressController {
         Map<String,Object> data = addressService.showAddressName(provinceId,cityId,townId);
         return data;
     }
+    @GetMapping("/updateStatus")
+    public Result updateStatus(Long id){
+        Result result = Result.fail("设置失败");
+        try {
+            TbAddress tbAddress = addressService.findOne(id);
+            tbAddress.setIsDefault("1");
+            addressService.update(tbAddress);
+            addressService.updateStatus(id);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 
 }

@@ -3,7 +3,6 @@ window.onload = function () {
     var app = new Vue({
         el: '#account', // 元素绑定
         data: { // 数据模型
-            redirectUrl: '',
             userEntity: {},
             user: {
                 username: "",
@@ -27,11 +26,11 @@ window.onload = function () {
             },
             updateLoginUserPassword:function () {
                 //判断两次密码是否一致
-                if (this.password != this.entity.password) {
+                if (this.password != this.user.password) {
                     alert("两次输入的密码不一致;请重新输入");
                     return;
                 }
-                axios.get("user/updatePassword.do?username="+this.entity.username+"&password="+this.entity.password).then(function (response) {
+                axios.post("user/updatePassword.do?",this.user).then(function (response) {
                     if (response.data.success){
                         alert(response.data.message)
                     }else {
@@ -47,7 +46,7 @@ window.onload = function () {
             checkTwoCode:function () {
                 axios.get("user/checkTwoCode.do?msgCode=" + this.msgCode +"&phone=" +this.user.phone).then(function (response) {
                     if (response.data.success){
-                        window.location.href="home-setting-address-phone.html"
+                        location.href="home-setting-address-phone.html"
                     }else {
                         alert(response.data.message)
                     }

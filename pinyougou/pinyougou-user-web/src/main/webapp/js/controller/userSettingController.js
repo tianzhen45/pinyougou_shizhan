@@ -3,17 +3,35 @@ var app = new Vue({
     data: {
         entity: {username: "",headPic: "",birthday:""},
         image_entity: {url: ""},
-        year:"--",
-        month:"--",
-        day:"--",
+        day:"5",
+        year:"",
+        month:"",
+
         newPwd:""
     },
 
     methods: {
-
+        // 保存用户信息
+        saveUserInfo :function () {
+                        // 发送异步请求
+                        axios.post("user/saveUserInfo.do", this.entity).then(function (response) {
+                            if (response.data.success) {
+                                alert(response.data.message)
+                            } else {
+                                alert(response.data.message)
+                            }
+                        })
+        },
         getUserInfo: function () {
+
             axios.get("user/getUserInfo.do").then(function (response) {
                 app.entity = response.data.user;
+                app.birthday = response.data.user.birthday;
+                let date = new Date(app.birthday);
+                app.year=date.getFullYear();
+                app.month = date.getMonth()+1;
+
+
             });
         },
         //将上传的图片加入到对应商品描述属性
@@ -47,18 +65,7 @@ var app = new Vue({
             })
 
         },
-        updateUserInfo: function () {
-            var birthday = this.year + "-" + this.month + "-" + this.day;
-            this.entity.birthday = new Date(birthday);
-            this.uploadFile();
-            axios.post("user/updateUserInfo.do", this.entity).then(function (response) {
-                if (response.data.success) {
-                    alert(response.data.message);
-                } else {
-                    alert(response.data.message)
-                }
-            })
-        },
+
     },
     created() {
         this.getUserInfo();

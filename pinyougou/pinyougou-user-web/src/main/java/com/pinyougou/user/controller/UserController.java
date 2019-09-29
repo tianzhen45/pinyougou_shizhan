@@ -23,8 +23,8 @@ public class UserController {
     @Reference(timeout = 9999999)
     private UserService userService;
 
-    @PostMapping("/updateUserInfo")
-    public Result updateUserInfo(@RequestBody TbUser user){
+    @PostMapping("/saveUserInfo")
+    public Result saveUserInfo(@RequestBody TbUser user){
         Result result = Result.fail("修改失败");
         try {
             userService.update(user);
@@ -256,8 +256,11 @@ public class UserController {
                 TbUser tbUser = userService.findByUserName(username);
                 tbUser.setPhone(phone);
                 userService.update(tbUser);
+                result = Result.ok("验证成功！！");
+            }else {
+                result = Result.fail("验证码错误！！");
             }
-            result = Result.ok("验证成功！！");
+
         }catch (Exception e){
             e.printStackTrace();
         }
