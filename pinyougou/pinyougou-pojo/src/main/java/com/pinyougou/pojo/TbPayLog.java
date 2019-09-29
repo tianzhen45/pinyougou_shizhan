@@ -1,13 +1,11 @@
 package com.pinyougou.pojo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Timestamp;
 
 @Table(name = "tb_pay_log")
 public class TbPayLog implements Serializable {
@@ -15,9 +13,9 @@ public class TbPayLog implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String outTradeNo;
 
-    private Date createTime;
+    private Timestamp createTime;
 
-    private Date payTime;
+    private Timestamp payTime;
 
     private Long totalFee;
 
@@ -41,21 +39,21 @@ public class TbPayLog implements Serializable {
         this.outTradeNo = outTradeNo;
     }
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "Asia/Shanghai")
-    public Date getCreateTime() {
+
+    public Timestamp getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
     }
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "Asia/Shanghai")
-    public Date getPayTime() {
+
+    public Timestamp getPayTime() {
         return payTime;
     }
 
-    public void setPayTime(Date payTime) {
+    public void setPayTime(Timestamp payTime) {
         this.payTime = payTime;
     }
 

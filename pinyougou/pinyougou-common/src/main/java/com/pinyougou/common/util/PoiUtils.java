@@ -10,6 +10,9 @@ import org.springframework.http.ResponseEntity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class PoiUtils {
@@ -19,7 +22,6 @@ public class PoiUtils {
         HSSFWorkbook workbook = new HSSFWorkbook();//创建一个Excel文件
 
         //创建Excel文档属性，必不可少。
-        // 少了的话，getDocumentSummaryInformation()方法就会返回null
         workbook.createInformationProperties();
         DocumentSummaryInformation info = workbook.getDocumentSummaryInformation();
         info.setCompany("PinYouGou Ltd.");//设置公司信息
@@ -28,10 +30,19 @@ public class PoiUtils {
 
         //设置文件中的日期格式
         HSSFCellStyle datecellStyle = workbook.createCellStyle();
-        datecellStyle.setDataFormat(HSSFDataFormat.getBuiltinFormat("m/d/yy"));//这个文件的日期格式和平时的不一样
+        datecellStyle.setDataFormat(HSSFDataFormat.getBuiltinFormat("yyyy-MM-dd HH:mm:ss"));
 
         //创建表单
         HSSFSheet sheet = workbook.createSheet("品优购支付日志表");
+
+        // 设置列宽
+        sheet.setColumnWidth(0, 256 * 25);
+        sheet.setColumnWidth(1, 256 * 20);
+        sheet.setColumnWidth(2, 256 * 10);
+        sheet.setColumnWidth(3, 256 * 10);
+        sheet.setColumnWidth(4, 256 * 25);
+        sheet.setColumnWidth(5, 256 * 25);
+
         HSSFRow r0 = sheet.createRow(0);//创建第一行
         HSSFCell c0 = r0.createCell(0);// 创建列
         HSSFCell c1 = r0.createCell(1);// 创建列
@@ -55,20 +66,24 @@ public class PoiUtils {
             HSSFCell cell1 = row.createCell(1);
             cell1.setCellValue(payLog.getUserId());
             HSSFCell cell2 = row.createCell(2);
-            cell2.setCellValue(payLog.getTotalFee());
+            cell2.setCellValue(payLog.getTotalFee() + " 元");
             HSSFCell cell3 = row.createCell(3);
             cell3.setCellValue(payLog.getTradeState().equals("1") ? "已支付":"未支付");
             HSSFCell cell4 = row.createCell(4);
             cell4.setCellStyle(datecellStyle);//让日期格式数据正确显示
-            cell4.setCellValue(payLog.getCreateTime());
+            cell4.setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(payLog.getCreateTime()));
             HSSFCell cell5 = row.createCell(5);
             cell5.setCellStyle(datecellStyle);//让日期格式数据正确显示
-            cell5.setCellValue(payLog.getPayTime());
+            if (payLog.getPayTime() != null) {
+                cell5.setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(payLog.getPayTime()));
+            }else {
+                cell5.setCellValue("未支付");
+            }
 
         }
         HttpHeaders headers = new HttpHeaders();
         headers.setContentDispositionFormData("attachment",
-                new String("支付日志列表.xls".getBytes("UTF-8"),"iso-8859-1"));
+                new String("支付日志.xls".getBytes("UTF-8"),"iso-8859-1"));
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         ByteArrayOutputStream baos=new ByteArrayOutputStream();
         workbook.write(baos);

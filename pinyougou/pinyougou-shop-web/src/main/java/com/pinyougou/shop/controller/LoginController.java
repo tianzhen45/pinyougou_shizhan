@@ -1,6 +1,12 @@
 package com.pinyougou.shop.controller;
 
+import com.alibaba.dubbo.config.annotation.Reference;
+import com.pinyougou.pojo.TbSeller;
+import com.pinyougou.sellergoods.service.SellerService;
+import com.pinyougou.vo.Result;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -13,13 +13,12 @@ http://www.springframework.org/schema/security/spring-security.xsd">
     <http pattern="/img/**" security="none"/>
     <http pattern="/js/**" security="none"/>
     <http pattern="/plugins/**" security="none"/>
-    <http pattern="/user/add.do" security="none"/>
-    <http pattern="/user/sendSmsCode.do" security="none"/>
-    <http pattern="/register.html" security="none"/>
-    <http pattern="/collection/*.do" security="none"/>
+    <http pattern="/search.html" security="none"/>
 
     <!-- entry-point-ref 入口点引用  -->
     <http use-expressions="false" entry-point-ref="casProcessingFilterEntryPoint">
+        <!--可以允许匿名访问；如果是匿名访问的话那么用户为anonymousUser -->
+        <intercept-url pattern="/itemSearch/*.do" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <intercept-url pattern="/**" access="ROLE_USER"/>
         <csrf disabled="true"/>
         <!-- custom-filter 为过滤器， position  表示将过滤器放在指定的位置上， before
@@ -41,7 +40,7 @@ http://www.springframework.org/schema/security/spring-security.xsd">
                 class="org.springframework.security.cas.ServiceProperties">
         <!--service  配置自身工程的根地址 +/login/cas -->
         <beans:property name="service"
-                        value="http://user.pinyougou.com/login/cas"/>
+                        value="http://search.pinyougou.com/login/cas"/>
     </beans:bean>
     <!-- CAS 入口点 结束  -->
     <!--  认证过滤器 开始  -->
@@ -56,7 +55,7 @@ http://www.springframework.org/schema/security/spring-security.xsd">
     </authentication-manager>
     <!--  认证类  -->
     <beans:bean id="userDetailsService"
-                class="com.pinyougou.user.service.impl.UserDetailServiceImpl"/>
+                class="com.pinyougou.search.service.impl.UserDetailServiceImpl"/>
     <!--  认证提供者  -->
     <beans:bean id="casAuthenticationProvider"
                 class="org.springframework.security.cas.authentication.CasAuthenticationProvider">
@@ -84,7 +83,7 @@ http://www.springframework.org/schema/security/spring-security.xsd">
     <beans:bean id="requestSingleLogoutFilter"
                 class="org.springframework.security.web.authentication.logout.LogoutFilter">
         <beans:constructor-arg
-                value="http://cas.pinyougou.com/logout?service=http://user.pinyougou.com"/>
+                value="http://cas.pinyougou.com/logout?service=http://search.pinyougou.com"/>
         <beans:constructor-arg>
             <beans:bean
                     class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler"/>

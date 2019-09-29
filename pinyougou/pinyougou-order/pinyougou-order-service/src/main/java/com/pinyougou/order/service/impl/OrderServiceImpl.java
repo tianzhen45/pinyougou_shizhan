@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import tk.mybatis.mapper.entity.Example;
 
+import java.sql.Timestamp;
 import java.util.*;
 import java.math.BigDecimal;
 import java.util.*;
@@ -207,7 +208,7 @@ public class OrderServiceImpl extends BaseServiceImpl<TbOrder> implements OrderS
             payLog.setOutTradeNo(outTradeNo);
 
             payLog.setUserId(order.getUserId());
-            payLog.setCreateTime(new Date());
+            payLog.setCreateTime((Timestamp) new Date());
             //本次交易要支付的总金额 = 每一笔订单的总金额；一般在电商中价格都是长整型；单位精确到分
             payLog.setTotalFee((long)(totalFee*100));
             //本次交易对应的所有订单，使用,分隔
@@ -287,7 +288,7 @@ public class OrderServiceImpl extends BaseServiceImpl<TbOrder> implements OrderS
         //1、查询支付日志
         TbPayLog payLog = findPayLogByOutTradeNo(outTradeNo);
         //2、更新支付日志的支付状态
-        payLog.setPayTime(new Date());
+        payLog.setPayTime((Timestamp) new Date());
         payLog.setTradeState("1");
         payLog.setTransactionId(transactionId);
         payLogMapper.updateByPrimaryKeySelective(payLog);

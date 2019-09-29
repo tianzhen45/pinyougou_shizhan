@@ -16,16 +16,13 @@ import com.pinyougou.service.impl.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class AddressServiceImpl extends BaseServiceImpl<TbAddress> implements AddressService {
 
     @Autowired
     private AddressMapper addressMapper;
-
 
 
     @Autowired
@@ -107,6 +104,67 @@ public class AddressServiceImpl extends BaseServiceImpl<TbAddress> implements Ad
         // 调用数据访问接口添加地址
         addressMapper.insertSelective(address);
     }
+
+    @Override
+    public List<Map<String, Object>> findAllProvinces() {
+        List<TbProvinces> tbProvinces = provincesMapper.selectAll();
+        ArrayList<Map<String, Object>> list = new ArrayList<>();
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("text","请选择省份");
+        map.put("value","1");
+        list.add(map);
+
+
+        for (TbProvinces tbProvince : tbProvinces) {
+            map = new HashMap<>();
+            map.put("text",tbProvince.getProvince());
+            map.put("value",tbProvince.getProvinceId());
+            list.add(map);
+        }
+        return list;
+    }
+
+    @Override
+    public List<Map<String, Object>> findCitiesByProvince(String provinceId) {
+        List<TbCities> citiesList = this.findCityListByProvinceId(provinceId);
+        ArrayList<Map<String, Object>> list = new ArrayList<>();
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("text","请选择城市");
+        map.put("value","1");
+        list.add(map);
+
+
+        for (TbCities tbCities : citiesList) {
+            map = new HashMap<>();
+            map.put("text",tbCities.getCity());
+            map.put("value",tbCities.getCityId());
+            list.add(map);
+        }
+        return list;
+    }
+
+    @Override
+    public List<Map<String, Object>> findAreasByCity(String cityId) {
+        List<TbAreas> areaListByCityId = this.findAreaListByCityId(cityId);
+        ArrayList<Map<String, Object>> list = new ArrayList<>();
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("text","请选择地区");
+        map.put("value","1");
+        list.add(map);
+
+
+        for (TbAreas tbAreas : areaListByCityId) {
+            map = new HashMap<>();
+            map.put("text",tbAreas.getArea());
+            map.put("value",tbAreas.getAreaId());
+            list.add(map);
+        }
+        return list;
+    }
+
 
     @Override
     public List<TbAddress> findAddressByUser(String username) {
