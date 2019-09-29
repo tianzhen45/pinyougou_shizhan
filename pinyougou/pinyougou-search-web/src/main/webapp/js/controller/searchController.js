@@ -138,8 +138,23 @@ var app = new Vue({
         },
         //收藏商品
         collect:function (itemId) {
-
+            axios.get("http://user.pinyougou.com/collection/collect.do?username="+app.loginName+"&itemId="+itemId,{"withCredentials": true}).then(function (response) {
+                if(response.data.success){
+                    app.search();
+                }
+                alert(response.data.message);
+            })
+        },
+        //取消收藏
+        uncollect:function (itemId) {
+            axios.get("http://user.pinyougou.com/collection/uncollect.do?username="+app.loginName+"&itemId="+itemId,{"withCredentials": true}).then(function (response) {
+                if(response.data.success){
+                    app.search();
+                }
+                alert(response.data.message);
+            })
         }
+
 
     },
     created: function () {

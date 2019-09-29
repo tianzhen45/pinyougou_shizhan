@@ -2,6 +2,7 @@ package com.pinyougou.user.service;
 
 import com.github.pagehelper.PageInfo;
 import com.pinyougou.pojo.TbCollection;
+import com.pinyougou.pojo.TbItem;
 import com.pinyougou.service.BaseService;
 
 import java.util.List;
@@ -19,4 +20,8 @@ public interface CollectionService extends BaseService<TbCollection> {
     void collect(String username, String itemId);
 
     void uncollect(String username, String itemId);
+
+    boolean checkCollect(String username, String itemId);
+
+    List<TbItem> checkCollectItemList(String username, List<TbItem> itemList);
 }
