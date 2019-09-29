@@ -5,6 +5,7 @@ import com.pinyougou.order.service.OrderService;
 import com.pinyougou.pay.service.PayService;
 import com.pinyougou.pojo.TbPayLog;
 import com.pinyougou.vo.Result;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,19 @@ public class PayController {
     @Reference
     private PayService payService;
 
+
+    /**
+     * 根据订单id查询支付日志id
+     * @param orderId 订单id
+     * @return 支付日志id
+     */
+    @GetMapping("/queryOutTradeNo")
+    @CrossOrigin(origins = "*", allowCredentials = "true")
+    public String queryOutTradeNo(Long orderId){
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+        String outTradeNo = payService.queryOutTradeNo(orderId, userId);
+        return outTradeNo;
+    }
     /**
      * 获取支付二维码链接等信息
      * @param outTradeNo 交易编号

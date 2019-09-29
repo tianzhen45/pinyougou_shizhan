@@ -213,10 +213,9 @@
 
                             <!--order1-->
                             <div v-for="myOrder in resultMap.myOrderList">
-                                <div v-for="order in myOrder.orderList">
                                 <div class="choose-title">
                                     <label data-toggle="checkbox" class="checkbox-pretty ">
-                                        <input type="checkbox" checked="checked"><span>{{order.createTime}}　订单编号：{{order.orderId}}  店铺：{{myOrder.sellerName}} <a>和我联系</a></span>
+                                        <input type="checkbox" checked="checked"><span>{{myOrder.order.createTime}}　订单编号：{{myOrder.order.orderId}}  店铺：{{myOrder.sellerName}} <a>和我联系</a></span>
                                     </label>
                                     <a class="sui-btn btn-info share-btn">分享</a>
                                 </div>
@@ -227,7 +226,7 @@
                                             <td width="35%">
                                                 <div class="typographic"><img :src="orderItem.picPath" height="100" width="100"/>
                                                     <a href="#" class="block-text">{{orderItem.title}}</a>
-                                                    <span class="guige">规格：{{myOrder.specStr}}</span>
+                                                    <span class="guige">规格：{{orderItem.goodsId}}</span>
                                                 </div>
                                             </td>
                                             <td width="5%" class="center">
@@ -248,32 +247,32 @@
                                             </td>
                                             <td width="10%" class="center">
                                                 <ul class="unstyled">
-                                                    <li v-if="order.status==1">未付款</li>
-                                                    <li v-if="order.status==2">已付款</li>
-                                                    <li v-if="order.status==3">未发货</li>
-                                                    <li v-if="order.status==4">已发货</li>
-                                                    <li v-if="order.status==5">交易成功</li>
-                                                    <li v-if="order.status==6">交易关闭</li>
-                                                    <li v-if="order.status==7">待评价</li>
-                                                    <li><a href="home-orderDetail.html" class="btn">订单详情 </a></li>
+                                                    <li v-if="myOrder.order.status==1">未付款</li>
+                                                    <li v-if="myOrder.order.status==2">已付款</li>
+                                                    <li v-if="myOrder.order.status==3">未发货</li>
+                                                    <li v-if="myOrder.order.status==4">已发货</li>
+                                                    <li v-if="myOrder.order.status==5">交易成功</li>
+                                                    <li v-if="myOrder.order.status==6">交易关闭</li>
+                                                    <li v-if="myOrder.order.status==7">待评价</li>
+                                                    <li><a href="home-orderDetail.html" class="btn">订单详情{{outTradeNo}} </a></li>
                                                 </ul>
                                             </td>
                                             <td width="10%" class="center">
                                                 <ul class="unstyled">
-                                                    <li v-if="order.status==1"><a :href="'http://cart.pinyougou.com/pay.html?outTradeNo='+(myOrder.payLog.outTradeNo)"
+                                                    <li v-if="myOrder.order.status==1" @click.prevent="queryOutTradeNo(myOrder.order.orderId)"><a href="#"
                                                             class="sui-btn btn-info">立即付款</a></li>
-                                                    <li v-if="order.status==2"><a href="" class="sui-btn btn-info">待发货</a>
+                                                    <li v-if="myOrder.order.status==2"><a href="" class="sui-btn btn-info">待发货</a>
                                                     </li>
-                                                    <li v-if="order.status==3"><a href="" class="sui-btn btn-info">待发货</a>
+                                                    <li v-if="myOrder.order.status==3"><a href="" class="sui-btn btn-info">待发货</a>
                                                     </li>
-                                                    <li v-if="order.status==4"><a href="" class="sui-btn btn-info">待收货</a>
+                                                    <li v-if="myOrder.order.status==4"><a href="" class="sui-btn btn-info">待收货</a>
                                                     </li>
-                                                    <li v-if="order.status==5"><a href="" class="sui-btn btn-info">待评价</a>
+                                                    <li v-if="myOrder.order.status==5"><a href="" class="sui-btn btn-info">待评价</a>
                                                     </li>
-                                                    <li v-if="order.status==7"><a href="" class="sui-btn btn-info">立即评价</a>
+                                                    <li v-if="myOrder.order.status==7"><a href="" class="sui-btn btn-info">立即评价</a>
                                                     </li>
-                                                    <li @click.prevent="deleteOrder(order.orderId)"><a
-                                                            v-if="order.status!=6" href="" class="btn">取消订单</a></li>
+                                                    <li @click.prevent="deleteOrder(myOrder.order.orderId)"><a
+                                                            v-if="myOrder.order.status!=6" href="" class="btn">取消订单</a></li>
 
                                                 </ul>
                                             </td>
@@ -281,7 +280,6 @@
 
                                         </tbody>
                                     </table>
-                                </div>
                                 </div>
                             </div>
                         </div>

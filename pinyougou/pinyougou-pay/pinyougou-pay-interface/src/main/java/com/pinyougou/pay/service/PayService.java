@@ -24,4 +24,11 @@ public interface PayService {
      * @return 操作结果
      */
     Map<String, String> closeOrder(String outTradeNo);
+
+    /**
+     * 根据订单id查询支付日志id
+     * @param orderId 订单id
+     * @return 支付日志id
+     */
+    String queryOutTradeNo(Long orderId,String userId);
 }

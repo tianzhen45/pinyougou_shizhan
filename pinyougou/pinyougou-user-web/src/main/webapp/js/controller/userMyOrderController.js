@@ -15,7 +15,8 @@ var app = new Vue({
         frontDot: false,
         //分页导航条中的后面3个点
         backDot: false,
-        username: ""
+        username: "",
+        outTradeNo:""
 
 
     },
@@ -35,6 +36,15 @@ var app = new Vue({
                 this.pageNum = pageNum;
                 this.search();
             }
+        },
+
+        //查询支付订单id
+        queryOutTradeNo:function(orderId){
+            axios.get("http://cart.pinyougou.com/pay/queryOutTradeNo.do?orderId=" +
+                orderId,{"withCredentials": true}).then(function (response) {
+                    app.outTradeNo = response.data;
+                    location.href="http://cart.pinyougou.com/pay.html?outTradeNo="+app.outTradeNo;
+            })
         },
         //取消订单
         deleteOrder: function(orderId){

@@ -8,6 +8,7 @@ import com.pinyougou.pojo.TbUser;
 import com.pinyougou.user.service.UserService;
 import com.pinyougou.vo.Result;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,6 +39,8 @@ public class UserController {
 
     @Reference
     private MyOrderService myOrderService;
+
+
 
     /**
      * 取消订单

@@ -3,10 +3,16 @@ package com.pinyougou.pay.service.impl;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.wxpay.sdk.WXPayUtil;
 import com.pinyougou.common.util.HttpClient;
+import com.pinyougou.mapper.PayLogMapper;
 import com.pinyougou.pay.service.PayService;
+import com.pinyougou.pojo.TbPayLog;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import tk.mybatis.mapper.entity.Example;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -20,6 +26,9 @@ public class PayServiceImpl implements PayService {
     private String partnerkey;
     @Value("${notifyurl}")
     private String notifyurl;
+
+    @Autowired
+    private PayLogMapper payLogMapper;
 
     @Override
     public Map<String, String> createNative(String outTradeNo, String totalFee) {
@@ -144,5 +153,28 @@ public class PayServiceImpl implements PayService {
         }
         return null;
 
+    }
+
+    @Override
+    public String queryOutTradeNo(Long orderId,String userId) {
+
+        //创建查询条件
+        Example example = new Example(TbPayLog.class);
+        example.createCriteria().andEqualTo("userId",userId);
+        List<TbPayLog> payLogList = payLogMapper.selectByExample(example);
+        if (payLogList !=null && payLogList.size()>0){
+            for (TbPayLog payLog : payLogList) {
+                String orderList = payLog.getOrderList();
+                if (orderList != null && orderList.length()>0){
+                    String[] orderIds = orderList.split(",");
+                    for (String id : orderIds) {
+                        if (id.equals(orderId+"")){
+                            return payLog.getOutTradeNo();
+                        }
+                    }
+                }
+            }
+        }
+        return null;
     }
 }

@@ -11,18 +11,25 @@ public class MyOrderVo implements Serializable {
 
     //商家id
     private String sellerId;
-    //支付日志列表
-    private  TbPayLog payLog;
     //商家名称
     private String sellerName;
+
     //订单
-    private List<TbOrder> orderList;
+    private TbOrder order;
+
     //订单商品列表
     private List<TbOrderItem> orderItemList;
 
     //规格spec
     private String specStr;
 
+    public TbOrder getOrder() {
+        return order;
+    }
+
+    public void setOrder(TbOrder order) {
+        this.order = order;
+    }
 
 
     public String getSpecStr() {
@@ -40,23 +47,6 @@ public class MyOrderVo implements Serializable {
     public void setSpecList(List<String> specList) {
         this.specList = specList;
     }*/
-
-
-    public List<TbOrder> getOrderList() {
-        return orderList;
-    }
-
-    public void setOrderList(List<TbOrder> orderList) {
-        this.orderList = orderList;
-    }
-
-    public TbPayLog getPayLog() {
-        return payLog;
-    }
-
-    public void setPayLog(TbPayLog payLog) {
-        this.payLog = payLog;
-    }
 
     public String getSellerId() {
         return sellerId;
