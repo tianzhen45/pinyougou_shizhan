@@ -15,6 +15,7 @@ var app = new Vue({
         frontDot: false,
         //分页导航条中的后面3个点
         backDot: false,
+        username: ""
 
 
     },
@@ -41,6 +42,11 @@ var app = new Vue({
                     alert(response.data.message);
                 this.search()
             })
+        },
+        getUsername: function () {
+            axios.get("user/getUsername.do").then(function (response) {
+                app.username = response.data.username;
+            });
         },
         //构建分页导航条
         buildPagination: function () {

@@ -5,6 +5,7 @@ import com.pinyougou.order.service.OrderService;
 import com.pinyougou.pay.service.PayService;
 import com.pinyougou.pojo.TbPayLog;
 import com.pinyougou.vo.Result;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +28,7 @@ public class PayController {
      * @param outTradeNo 交易编号
      * @return 操作结果
      */
+    @CrossOrigin(origins = "*", allowCredentials = "true")
     @GetMapping("/createNative")
     public Map<String, String> createNative(String outTradeNo){
         //1、根据支付日志id获取支付日志；
