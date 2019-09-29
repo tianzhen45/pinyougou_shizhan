@@ -82,7 +82,7 @@ public class MyOrderServiceImpl implements MyOrderService {
                 //根据支付日志id查询订单列表
                 //创建查询条件查询订单基本信息
                 Example example = new Example(TbOrder.class);
-                example.createCriteria().andEqualTo("orderId", payLog.getOrderList());
+                example.createCriteria().andIn("orderId", Arrays.asList(payLog.getOrderList().split(",")));
                 example.orderBy("createTime").desc();
                 List<TbOrder> orderList = orderMapper.selectByExample(example);
 
@@ -129,8 +129,6 @@ public class MyOrderServiceImpl implements MyOrderService {
                             if (seller != null) {
                                 myOrderVo.setSellerId(tbOrder.getSellerId());
                                 myOrderVo.setSellerName(seller.getName());
-                            }else {
-                                return null;
                             }
                         } else {
                             myOrderVo.setSellerId("pinyougou");

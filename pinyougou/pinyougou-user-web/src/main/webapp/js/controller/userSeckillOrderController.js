@@ -10,7 +10,8 @@ var app = new Vue({
         
         //返回结果
         resultMap:{"seckillOrderList":[]},
-
+        //用户名
+        username:"",
         //页号数组
         pageNoList: [],
         //分页导航条中的前面3个点
@@ -141,10 +142,16 @@ var app = new Vue({
                 app.buildPagination();
             });
         },
+        getUsername: function () {
+            axios.get("user/getUsername.do").then(function (response) {
+                app.username = response.data.username;
+            });
+        }
 
 
     },
     created() {
         this.findUserSeckillOrder();
+        this.getUsername();
     }
 });

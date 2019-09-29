@@ -344,7 +344,7 @@
                                     <em>品牌：{{item.brand}}</em>
                                 </div>
                                 <div class="attr" style="height: auto">
-                                    <em>商家：{{item.seller}}</em>
+                                    <a  @click="ToSeller(item.seller)" >商家：{{item.seller}}</a>
                                 </div>
                                 <div class="attr" style="height: auto">
                                     <em>分类：{{item.category}}</em>
