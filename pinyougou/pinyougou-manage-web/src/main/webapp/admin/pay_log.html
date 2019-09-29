@@ -25,7 +25,7 @@
     <!-- .box-body -->
     <div class="box box-primary">
         <div class="box-header with-border">
-            <h3 class="box-title">支付日志管理{{searchEntity}}</h3>
+            <h3 class="box-title">支付日志管理</h3>
         </div>
 
         <div class="box-body">
@@ -38,7 +38,7 @@
                 <div class="pull-left">
                     <div class="form-group form-inline">
                         <div class="btn-group">
-                            <button @click="importExcel()" type="button" class="btn btn-default" title="导入数据" ><i class="fa fa-trash-o"></i> 导入数据</button>
+                            <!--<button @click="importExcel()" type="button" class="btn btn-default" title="导入数据" ><i class="fa fa-trash-o"></i> 导入数据</button>-->
                             <button @click="exportPayLogExcel()" type="button" class="btn btn-default" title="导出数据" ><i class="fa fa-trash-o"></i> 导出数据</button>
                             <!--<el-upload
                                     style="display: inline"
@@ -75,6 +75,7 @@
                             <input @click="selectAll()" v-model="checkAll" id="selall" type="checkbox" class="icheckbox_square-blue">
                         </th>
                         <th class="sorting_asc">支付日志ID</th>
+                        <th class="sorting_asc">订单ID</th>
                         <th class="sorting">用户ID</th>
                         <th class="sorting">支付金额</th>
                         <th class="sorting">支付状态</th>
@@ -86,6 +87,7 @@
                     <tr v-for="entity in entityList">
                         <td><input v-model="outTradeNos" :value="entity" type="checkbox"></td>
                         <td>{{entity.outTradeNo}}</td>
+                        <td>{{entity.orderList}}</td>
                         <td>{{entity.userId}}</td>
                         <td>{{entity.totalFee}}</td>
                         <td>{{entity.tradeState == '1' ? "已支付":"未支付"}}</td>
