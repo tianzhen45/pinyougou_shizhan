@@ -215,17 +215,18 @@ $(function(){
                                     <div class="control-group">
                                         <label for="inputName" class="control-label">昵称：</label>
                                         <div class="controls">
-                                            <input v-model="entity.nickName" type="text" id="inputName" name="email" placeholder="昵称">
+                                            <input v-model="entity.nickName" type="text" id="inputName" name="nickName" placeholder="昵称">
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label class="control-label">性别：</label>
                                         <div class="controls">
                                             <label data-toggle="radio" class="radio-pretty inline">
-                                            <input checked  v-model="entity.sex" type="radio" name="gender" :value="1"><span>男</span>
+                                            <input checked  v-model="entity.sex"  :checked="entity.sex == '1'"
+                                                   type="radio" name="gender" value="1"><span>男</span>
                                         </label>
                                             <label data-toggle="radio" class="radio-pretty inline">
-                                            <input v-model="entity.sex"  type="radio" name="gender" :value="2"><span>女</span>
+                                            <input v-model="entity.sex" :checked="entity.sex == '2'"  type="radio" name="gender" value="2"><span>女</span>
                                         </label>
                                         </div>
                                     </div>
@@ -271,7 +272,7 @@ $(function(){
                                     <div class="control-group">
                                         <label  class="control-label"></label>
                                         <div class="controls">
-                                            <button @click="updateUserInfo()" type="submit" class="sui-btn btn-primary">修改</button>
+                                            <button @click="saveUserInfo()"  class="sui-btn btn-primary">修改</button>
                                         </div>
                                     </div>
                                 </form>

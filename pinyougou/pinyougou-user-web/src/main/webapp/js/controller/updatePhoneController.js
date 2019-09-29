@@ -1,7 +1,7 @@
 var app = new Vue({
-    el: "#app",
+    el: "#account",
     data: {
-        user: {
+        user:{
             username: "",
             password:"",
             nickName: "",
@@ -13,12 +13,10 @@ var app = new Vue({
         entity: {"username": "", "password": "","phone":""},
         password:"",
 
-        picCode:"",
         msgCode:""
     },
     methods: {
-
-        getUsername:function () {
+        getUserInfo:function () {
             axios.get("user/getUserInfo.do").then(function (response) {
                 app.user = response.data.user;
             })
@@ -37,11 +35,7 @@ var app = new Vue({
                 }
             })
         },
-        sendSmsCode: function () {
-            axios.get("user/sendSmsCode.do?phone=" + this.user.phone).then(function (response) {
-                alert(response.data.message);
-            });
-        },
+
         bindNewPhoneNumber:function () {
             axios.get("user/bindNewPhoneNumber.do?msgCode=" + this.msgCode +"&phone=" +this.user.phone).then(function (response) {
                 if (response.data.success){
@@ -51,6 +45,11 @@ var app = new Vue({
                     alert(response.data.message)
                 }
             })
+        },
+        sendSmsCode: function () {
+            axios.get("user/sendSmsCode.do?phone=" + this.user.phone).then(function (response) {
+                alert(response.data.message);
+            });
         }
 
 
