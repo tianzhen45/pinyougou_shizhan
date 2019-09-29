@@ -210,30 +210,13 @@
                     </div>
                     <div class="order-detail">
                         <div class="orders">
-                            <!--<div class="choose-order">
-                                <div class="sui-pagination pagination-large top-pages">
-                                    &lt;!&ndash;<ul>
-                                        <li :class="['prev', pageNum<1?'disabled':'']">
-                                            <a @click.prevent="queryByPageNo(pageNum-1)" href="#">上一页</a></li>
 
-                                        <li v-if="frontDot" class="dotted"><span>...</span></li>
-
-                                        <li v-for="pn in pageNoList" :class="pn==pageNum?'active':''">
-                                            <a @click.prevent="queryByPageNo(pn)" href="#">{{pn}}</a>
-                                        </li>
-
-                                        <li v-if="backDot" class="dotted"><span>...</span></li>
-
-                                        <li :class="['next', pageNum>total?'disabled':'']">
-                                            <a @click.prevent="queryByPageNo(pageNum+1)" href="#">下一页</a></li>
-                                    </ul>&ndash;&gt;
-                                </div>
-                            </div>-->
                             <!--order1-->
                             <div v-for="myOrder in resultMap.myOrderList">
+                                <div v-for="order in myOrder.orderList">
                                 <div class="choose-title">
                                     <label data-toggle="checkbox" class="checkbox-pretty ">
-                                        <input type="checkbox" checked="checked"><span>{{myOrder.tbOrder.createTime}}　订单编号：{{myOrder.tbOrder.orderId}}  店铺：{{myOrder.sellerName}} <a>和我联系</a></span>
+                                        <input type="checkbox" checked="checked"><span>{{order.createTime}}　订单编号：{{order.orderId}}  店铺：{{myOrder.sellerName}} <a>和我联系</a></span>
                                     </label>
                                     <a class="sui-btn btn-info share-btn">分享</a>
                                 </div>
@@ -265,39 +248,32 @@
                                             </td>
                                             <td width="10%" class="center">
                                                 <ul class="unstyled">
-                                                    <li v-if="myOrder.tbOrder.status==1">未付款</li>
-                                                    <li v-if="myOrder.tbOrder.status==2">已付款</li>
-                                                    <li v-if="myOrder.tbOrder.status==3">未发货</li>
-                                                    <li v-if="myOrder.tbOrder.status==4">已发货</li>
-                                                    <li v-if="myOrder.tbOrder.status==5">交易成功</li>
-                                                    <li v-if="myOrder.tbOrder.status==6">交易关闭</li>
-                                                    <li v-if="myOrder.tbOrder.status==7">待评价</li>
+                                                    <li v-if="order.status==1">未付款</li>
+                                                    <li v-if="order.status==2">已付款</li>
+                                                    <li v-if="order.status==3">未发货</li>
+                                                    <li v-if="order.status==4">已发货</li>
+                                                    <li v-if="order.status==5">交易成功</li>
+                                                    <li v-if="order.status==6">交易关闭</li>
+                                                    <li v-if="order.status==7">待评价</li>
                                                     <li><a href="home-orderDetail.html" class="btn">订单详情 </a></li>
                                                 </ul>
                                             </td>
                                             <td width="10%" class="center">
                                                 <ul class="unstyled">
-                                                    <li v-if="myOrder.tbOrder.status==1"><a
-                                                            :href="'../../../../pinyougou-cart-web/src/main/webapp/pay.html?outTradeNo='+(myOrder.tbOrder.orderId)"
+                                                    <li v-if="order.status==1"><a :href="'http://cart.pinyougou.com/pay.html?outTradeNo='+(myOrder.payLog.outTradeNo)"
                                                             class="sui-btn btn-info">立即付款</a></li>
-                                                    <li v-if="myOrder.tbOrder.status==2"><a href=""
-                                                                                            class="sui-btn btn-info">待发货</a>
+                                                    <li v-if="order.status==2"><a href="" class="sui-btn btn-info">待发货</a>
                                                     </li>
-                                                    <li v-if="myOrder.tbOrder.status==3"><a href=""
-                                                                                            class="sui-btn btn-info">待发货</a>
+                                                    <li v-if="order.status==3"><a href="" class="sui-btn btn-info">待发货</a>
                                                     </li>
-                                                    <li v-if="myOrder.tbOrder.status==4"><a href=""
-                                                                                            class="sui-btn btn-info">待收货</a>
+                                                    <li v-if="order.status==4"><a href="" class="sui-btn btn-info">待收货</a>
                                                     </li>
-                                                    <li v-if="myOrder.tbOrder.status==5"><a href=""
-                                                                                            class="sui-btn btn-info">待评价</a>
+                                                    <li v-if="order.status==5"><a href="" class="sui-btn btn-info">待评价</a>
                                                     </li>
-                                                    <li v-if="myOrder.tbOrder.status==7"><a href=""
-                                                                                            class="sui-btn btn-info">立即评价</a>
+                                                    <li v-if="order.status==7"><a href="" class="sui-btn btn-info">立即评价</a>
                                                     </li>
-                                                    <li @click.prevent="deleteOrder(myOrder.tbOrder.orderId)"><a
-                                                            v-if="myOrder.tbOrder.status!=6" href=""
-                                                            class="btn">取消订单</a></li>
+                                                    <li @click.prevent="deleteOrder(order.orderId)"><a
+                                                            v-if="order.status!=6" href="" class="btn">取消订单</a></li>
 
                                                 </ul>
                                             </td>
@@ -306,7 +282,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-
+                                </div>
                             </div>
                         </div>
                         <div class="choose-order">

@@ -42,7 +42,8 @@ public class PayLogServiceImpl extends BaseServiceImpl<TbPayLog> implements PayL
 
         // 支付时间
         if (payLog.getPayTime() != null) {
-            criteria.andLike("payTime",   new SimpleDateFormat("yyyy-MM-dd").format(payLog.getPayTime()) + "%");
+            String payTime = new SimpleDateFormat("yyyy-MM-dd").format(payLog.getPayTime());
+            criteria.andLike("payTime",    payTime + "%");
         }
 
         // 订单号

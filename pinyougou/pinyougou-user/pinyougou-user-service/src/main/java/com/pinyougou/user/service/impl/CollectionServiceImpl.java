@@ -72,4 +72,29 @@ public class CollectionServiceImpl extends BaseServiceImpl<TbCollection> impleme
         collectionMapper.deleteByExample(example);
     }
 
+    @Override
+    public boolean checkCollect(String username, String itemId) {
+        Example example = new Example(TbCollection.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("userId",username);
+        criteria.andEqualTo("itemId",itemId);
+        List<TbCollection> tbCollections = collectionMapper.selectByExample(example);
+        if(tbCollections != null && tbCollections.size() > 0){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public List<TbItem> checkCollectItemList(String username, List<TbItem> itemList) {
+        for (TbItem tbItem : itemList) {
+            if(this.checkCollect(username,tbItem.getId()+"")){
+                //表示被收藏了
+                tbItem.setStatus("2");
+            }
+        }
+        return itemList;
+    }
+
+
 }

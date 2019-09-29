@@ -26,8 +26,9 @@
                     <div class="shortcut">
                         <ul class="fl">
                             <li class="f-item">品优购欢迎您！</li>
-                            <li class="f-item">请<a
-                                    href="http://cas.pinyougou.com?service=http://www.pinyougou.com">登录</a>　<span><a
+                            <li class="f-item" v-if="loginName != 'anonymousUser'">{{loginName}}　<span><a href="/logout/cas">退出  </a></span></li>
+                            <li class="f-item"  v-if="loginName == 'anonymousUser'" ><a
+                                    href="http://cas.pinyougou.com?service=http://search.pinyougou.com/redirect.html">请登录</a>　<span><a
                                     href="http://user.pinyougou.com/register.html" target="_blank">免费注册</a></span></li>
                         </ul>
                         <ul class="fr">
@@ -356,8 +357,9 @@
                                 </div>
                                 <div class="operate">
                                     <a href="success-cart.html" target="_blank" class="sui-btn btn-bordered btn-danger">加入购物车</a>
-                                    <a href="javascript:void(0);" class="sui-btn btn-bordered">对比</a>
-                                    <a href="javascript:void(0);" class="sui-btn btn-bordered">关注</a>
+                                    <!--<a href="javascript:void(0);" class="sui-btn btn-bordered">对比</a>-->
+                                    <a href="javascript:void(0);" v-if="item.status == '1' " class="sui-btn btn-bordered" @click="collect(item.id)">收藏</a>
+                                    <a href="javascript:void(0);" v-if="item.status == '2' " class="sui-btn btn-bordered" @click="uncollect(item.id)">已收藏</a>
                                 </div>
                             </div>
                         </li>

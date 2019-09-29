@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping("/address")
 @RestController
@@ -116,6 +117,21 @@ public class AddressController {
             e.printStackTrace();
         }
         return Result.fail("设置默认地址失败");
+    }
+
+    @GetMapping("/findProvinces")
+    public List<Map<String,Object>> findAllProvinces(){
+        return addressService.findAllProvinces();
+    }
+
+    @GetMapping("/findCitiesByProvince")
+    public List<Map<String,Object>> findCitiesByProvince(String provinceId){
+        return addressService.findCitiesByProvince(provinceId);
+    }
+
+    @GetMapping("/findAreasByCity")
+    public List<Map<String,Object>> findAreasByCity(String cityId){
+        return addressService.findAreasByCity(cityId);
     }
 
 }

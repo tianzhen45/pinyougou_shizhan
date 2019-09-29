@@ -12,8 +12,16 @@ var app = new Vue({
         //选中的地址
         address: {},
         addressList: [],
-        addressEntity: {alias: ''},
-        items:[]
+        addressEntity: {alias: '',provinceId:'1',cityId:'1',townId:'1'},
+        items:[],
+
+        //省份列表
+        provinces:[],
+        //城市列表
+        cities:[],
+        //地区列表
+        areas:[]
+
     },
     methods : {
         //提交订单
@@ -82,6 +90,9 @@ var app = new Vue({
         },
         //增加地址
         addAddress: function () {
+
+
+
             if(this.addressEntity.id != null){
                 this.updateAddress();
                 return;
@@ -132,9 +143,37 @@ var app = new Vue({
                     alert("设置默认地址失败");
                 }
             })
+        },
+        //加载下拉框
+        loadSelect:function () {
+            axios.get("/address/findProvinces.do").then(function (response) {
+                //加载所有的省份
+                app.provinces = response.data;
+            });
+        },
+        findCitiesByProvince:function () {
+            axios.get("/address/findCitiesByProvince.do?provinceId="+app.addressEntity.provinceId).then(function (response) {
+                app.cities  = response.data;
+            });
+        },
+        findAreasByCity:function () {
+            axios.get("/address/findAreasByCity.do?cityId="+app.addressEntity.cityId).then(function (response) {
+                app.areas = response.data;
+            });
+        },
+        //点击编辑时，回显省份
+        backShow:function (address) {
+            app.addressEntity=address;
+            axios.get("/address/findCitiesByProvince.do?provinceId="+app.addressEntity.provinceId).then(function (response) {
+                app.cities  = response.data;
+
+                app.findAreasByCity();
+            });
+
         }
+
     },
-    created(){
+    created:function () {
         this.getUsername();
         // //加载购物车列表
         // this.findCartList();
@@ -144,5 +183,22 @@ var app = new Vue({
 
         //加载地址列表
         this.findAddressList();
+
+        //加载下拉框
+        this.loadSelect();
+    },
+    watch: {
+        "addressEntity.provinceId" :function () {
+            app.cities = [];
+            app.areas = [];
+
+            this.findCitiesByProvince();
+
+        },
+        "addressEntity.cityId":function () {
+            app.areas = [];
+
+            this.findAreasByCity();
+        }
     }
 });

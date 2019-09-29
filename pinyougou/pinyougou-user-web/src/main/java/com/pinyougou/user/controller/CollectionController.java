@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.pinyougou.pojo.TbCollection;
 import com.pinyougou.user.service.CollectionService;
 import com.pinyougou.vo.Result;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -68,26 +69,28 @@ public class CollectionController {
     public Result delete(Long[] ids){
         try {
             collectionService.deleteByIds(ids);
-            return Result.ok("删除成功");
+            return Result.ok("取消收藏成功");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return Result.fail("删除失败");
+        return Result.fail("取消收藏失败");
     }
 
     /**
      * 根据条件搜索
      * @param pageNum 页号
      * @param pageSize 页面大小
-     * @param collection 搜索条件
+     * @param
      * @return 分页信息
      */
     @PostMapping("/search")
     public PageInfo<TbCollection> search(@RequestParam(value = "pageNum", required = false, defaultValue = "1") Integer pageNum,
-                             @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize,
-                           @RequestBody TbCollection collection) {
+                             @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize
+                           ,@RequestParam(value = "username")String username) {
 
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        TbCollection collection = new TbCollection();
+
+       // String username = SecurityContextHolder.getContext().getAuthentication().getName();
         collection.setUserId(username);
 
         return collectionService.search(pageNum, pageSize, collection);
@@ -95,11 +98,11 @@ public class CollectionController {
 
 
     @GetMapping("/collect")
-    @CrossOrigin(origins = "*")
-    public Result collect(String itemId){
+    @CrossOrigin(origins = "*",allowCredentials = "true")
+    public Result collect(String username,String itemId ){
         try {
-            String username = SecurityContextHolder.getContext().getAuthentication().getName();
-            if("anonymous".equals(username)){
+
+            if("anonymousUser".equals(username)){
                 return Result.fail("未登录无法收藏");
             }
             collectionService.collect(username,itemId);
@@ -111,16 +114,36 @@ public class CollectionController {
     }
 
 
-    @GetMapping("/uncollect")
-    @CrossOrigin(origins = "*")
-    public Result uncollect(String itemId){
+
+    @GetMapping("/checkCollect")
+    @CrossOrigin(origins = "*",allowCredentials = "true")
+    public Result checkCollect(String username,String itemId){
         try {
-            String username = SecurityContextHolder.getContext().getAuthentication().getName();
-            if("anonymous".equals(username)){
+            if("anonymousUser".equals(username)){
+                return Result.fail("未登录无法检查收藏");
+            }
+
+            if(collectionService.checkCollect(username,itemId) == true) {
+                return Result.ok("用户收藏了该商品");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Result.fail("用户没有收藏了该商品");
+    }
+
+
+    @GetMapping("/uncollect")
+    @CrossOrigin(origins = "*",allowCredentials = "true")
+    public Result uncollect(String username,String itemId){
+        try {
+            if("anonymousUser".equals(username)){
                 return Result.fail("未登录无法取消收藏");
             }
-            collectionService.uncollect(username,itemId);
-            return Result.ok("取消收藏成功");
+
+           collectionService.uncollect(username,itemId);
+           return Result.ok("取消收藏成功");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
