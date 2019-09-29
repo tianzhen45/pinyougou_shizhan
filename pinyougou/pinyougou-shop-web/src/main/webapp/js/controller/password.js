@@ -15,7 +15,6 @@ function updatePassword() {
                 parent.window.location.href = "http://shop.pinyougou.com/shoplogin.html?logout";
             }
             alert(data.message);
-
         }
     });
 }
